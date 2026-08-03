@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Выживание на Руси</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
+*{box-sizing:border-box}
+body{background:#1c140a;background-image:radial-gradient(ellipse at 50% 30%,#2e2112 0%,#1c140a 75%);color:#3a2814;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;margin:0;padding:18px 10px}
+.game-container{background:#f3e8c8;background-image:linear-gradient(rgba(160,120,60,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(160,120,60,.06) 1px,transparent 1px);background-size:22px 22px;border:9px solid #5c3d1e;border-radius:6px;width:720px;max-width:100%;padding:26px 30px 30px;box-shadow:0 0 0 2px #2a1a0c,0 14px 36px rgba(0,0,0,.75),inset 0 0 50px rgba(120,80,30,.08);position:relative}
+.game-container::before{content:"";position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:1px solid rgba(90,60,30,.28);pointer-events:none;border-radius:3px}
+.progress-counter{position:absolute;top:14px;right:18px;font-size:13px;color:#7a5a30;background:#e8d9b0;border:1px solid #b89860;border-radius:4px;padding:2px 8px;z-index:2}
+.year-header{text-align:center;font-size:30px;font-weight:700;color:#3d2a12;margin:0 0 12px}
+.year-header span{color:#8b2a1a}
+.name-line{text-align:center;font-size:21px;color:#3a2814;margin-bottom:8px;line-height:1.4;font-weight:700}
+.name-line .perk{display:inline-block;background:#dcc9a0;border:1px solid #a07840;border-radius:4px;padding:2px 8px;margin:2px 3px;font-size:15px;font-style:italic;font-weight:400;color:#5a3a18}
+.bio-text{background:#ebe0b8;padding:14px 16px;border-radius:5px;border:1px solid #a07840;font-size:17px;margin-bottom:14px;line-height:1.5;text-align:justify;color:#3a2814}
+.stats{display:flex;justify-content:space-around;background:#e4d4a4;padding:11px 8px;border-radius:5px;border:2px solid #a07840;font-weight:700;margin-bottom:16px;font-size:19px}
+.stat-item span{color:#7a1a1a;display:inline-block;min-width:32px;text-align:center;font-variant-numeric:tabular-nums}
+.question-box{font-size:21px;line-height:1.55;margin-bottom:14px;min-height:60px;color:#2c1c0a;text-align:center}
+.share-btn{background:#4a6a8a!important;margin-top:10px;width:100%;text-align:center!important;font-size:16px!important;display:none}
+.share-btn:hover{background:#3a5a7a!important}
+.choices{display:flex;flex-direction:column;gap:10px}
+button.choice-btn{background:#6a4524;color:#f7efd0;border:2px solid #3d2810;padding:12px 15px;border-radius:5px;font-family:"PT Serif","Times New Roman",serif;font-size:17px;cursor:pointer;text-align:left;transition:background .2s,transform .12s;box-shadow:0 2px 0 #2a180c}
+button.choice-btn:hover{background:#543618;transform:translateY(1px)}
+.result-box{background:#ebe0b8;padding:12px 14px;border-radius:5px;margin-top:12px;display:none;border-left:5px solid #3a6a3a;font-size:16px;line-height:1.45}
+.history-box{background:#e4d4a4;padding:12px 14px;border-radius:5px;margin-top:9px;font-style:italic;display:none;border-left:5px solid #a07840;font-size:15px;line-height:1.45;color:#3a2814}
+.next-btn{background:#3a6a3a!important;margin-top:12px;display:none;width:100%;text-align:center!important;font-size:18px!important}
+.next-btn:hover{background:#2a502a!important}
+.end-title{margin-top:0;color:#3d2a12;font-size:24px;font-weight:700;text-align:center}
+.end-block{text-align:center}
+</style>
+</head>
+<body>
+<div class="game-container" id="gameScreen">
+  <div class="progress-counter" id="progressCounter">0/0</div>
+  <div class="year-header">Лето <span id="year">1354</span></div>
+  <div class="name-line" id="nameLine">
+    <span id="bioName">-</span> <span id="bioNickname">-</span>, <span id="bioAge">-</span> лет
+    <span id="perksContainer"></span>
+  </div>
+  <div class="bio-text" id="bioBox">-</div>
+  <div class="stats">
+    <div class="stat-item">Здоровье: <span id="hp">50</span></div>
+    <div class="stat-item">Серебро: <span id="silver">20</span></div>
+    <div class="stat-item">Почесть: <span id="glory">10</span></div>
+  </div>
+  <div class="question-box" id="questionText">Загрузка летописей...</div>
+  <div class="choices" id="choicesBox"></div>
+  <div class="result-box" id="resultBox"></div>
+  <div class="history-box" id="historyBox"></div>
+  <button class="choice-btn next-btn" id="nextBtn">Далее →</button>
+  <button class="choice-btn share-btn" id="shareBtn" onclick="shareResult()">Поделиться судьбой</button>
+</div>
+
+<script src="questions.js"></script>
+<script>
+const names=["Богдан","Добрыня","Всеволод","Ярополк","Святослав","Владимир","Мстислав","Ростислав","Изяслав","Глеб","Борис","Юрий","Андрей","Микула","Ратибор","Жирослав","Путята","Творимир","Станимир","Бронислав","Вячеслав","Олег","Игорь","Роман","Василий","Пётр","Иван","Максим","Кирилл","Алексей","Дмитрий","Павел","Фома","Лука","Клим","Лазарь","Савва","Тихон","Фрол","Евстафий","Архип","Гордей","Евсей","Захар","Игнат","Кондрат","Макар","Назар","Прохор","Савелий"];
+const nicknames=["Косой","Рябой","Молчун","Бешеный","Храбрый","Меньшой","Большой","Хитрый","Рыжий","Чернявый","Белый","Костлявый","Шило","Тяжелый","Шустрый","Угрюмый","Веселый","Зубатый","Губатый","Костень","Береза","Дуб","Медведь","Волк","Лисица","Кот","Бык","Петух","Зяблик","Крепыш","Глухой","Немой","Слепой","Хромой","Ломаный","Дикий","Удод","Сорока","Филин","Княжич","Скоморох","Пыжик","Ерш","Опаленный","Гроза","Буян","Смелый","Тихий","Борзый","Удалой"];
+const jobs=["пчельник","горшечник","бортник","плотник","рыбак","охотник","кожемяка","кузнец","огородник","пахарь","ткач","сапожник","печник","дёгтекур","угольщик","птицелов","мельник","солевар","бронник","лучник","судостроитель","проводник","скоморох","писарь","оружейник","седельник","бондарь","лоцман","травник","знахарь","мясник","хлебопек","пивовар","медовар","котельщик","извозчик","рубщик","столяр","каменотес","кровельщик","шорник","резчик","ямщик","гончар","шапочник","плетенщик"];
+const historyCores=["рос сиротой в глухом лесу и с детства приучен выживать среди дикого зверья","бежал от злого боярина из южных земель и обосновался на новом месте","сын зажиточного крестьянина, потерявший хозяйство во время весеннего паводка","бывший боевой холоп, получивший вольную за спасение боярина в сече","младший из семи братьев в семье смолокурщиков, знающий тайны лесного огня","племянник деревенского знахаря, с малолетства перенимавший секреты целебных трав","убежал из городского посада от учёбы у сурового и жадного мастера","чудом выжил после жестокой лихорадки, оставившей шрамы и несгибаемую волю","сын обедневшего дружинника, решивший попытать счастья мирным трудом","родился в год великой засухи и с тех пор привык ценить каждый колосок","много странствовал с караванами купцов и повидал чужие города и нравы","потерял избу от случайного пожара и теперь начинает жизнь с чистого листа","тихий и угрюмый малый, чьи руки способны вытесать из дерева любое чудо","задира и буян в прошлом, решивший остепениться и завести честное хозяйство","вырос у самой речной переправы и с ранних лет управлялся с тяжёлыми ладьями","служил сторожем на древнем городище, пока татары не сожгли укрепления","сын искусного бортника, знающий каждое дупло с диким мёдом наперечёт","сбежал от княжеской повинности в глухую волость под чужим именем","остался калекой на одну руку после кулачного боя, но не утратил сметки","всю юность помогал отцу ковать лемеха и чинить боевые топоры","ученик бродячего иконописца, ушедший от наставника искать свою дорогу","сирота, выросший при монастырской богадельне и обученный грамоте и счёту","сын заезжего варяга, осевшего на русской земле и принявшего местный уклад","пережил нападение разбойников, потерял семью, но сберёг отцовский меч","упрямый и молчаливый труженик, поднимающий заброшенный надел у оврага","бывший рыболов с озера Ильмень, пришедший искать удачи на великие реки","весёлый говорун, умеющий заговорить зубы любому княжьему тиуну","сын кузнеца, сбежавший из дома из-за строгого нрава родителя","вырос в семье пчеловодов и понимает язык пчёл лучше человеческого","пережил три эпидемии чумы, за что соседи считают его заговорённым","упрямый спорщик, вечно ищущий правды на деревенских вечах","тихий парень, умеющий шить из кожи крепкую упряжь и мягкие сапоги","сын посадского стражника, обученный стрельбе из простого лука","помогал строить княжеские хоромы и перенял хитрости плотницкого дела","обошёл пешком все земли от Новгорода до самого Киева","встретил старость в душе юноши и упрямо берётся за любую работу","сын обедневшего священника, знающий церковные книги и старые предания","любитель посидеть в кабаке за чашкой медового кваса","с детства ковал железо и знает толк в руде и закалке","умеет починить любую утварь за горсть зерна или доброе слово","сын рыбака, потерявший лодку в бурю и начавший пахать землю","внук старого волхва, тайком сохранивший древние деревянные амулеты","молодой солевар, знавший секрет выпаривания самой чистой соли","рос в большой семье, где хлеб добывался потом и мозолями","помогал купцам сплавлять плоты через опасные речные пороги","сын гончара, способный выкрутить идеальный глиняный кувшин","сбежал от долговой кабалы в дальнюю лесную слободу","тихий парень с крепкими кулаками, не лезущий в драку первым","сын зверолова, с юных лет ставивший силки на куниц","мечтающий скопить серебра и построить большой бревенчатый дом"];
+const ageAdjectives={12:"Двенадцатилетний",13:"Тринадцатилетний",14:"Четырнадцатилетний",15:"Пятнадцатилетний",16:"Шестнадцатилетний",17:"Семнадцатилетний",18:"Восемнадцатилетний",19:"Девятнадцатилетний",20:"Двадцатилетний",21:"Двадцатиоднолетний",22:"Двадцатидвухлетний",23:"Двадцатитрёхлетний",24:"Двадцатичетырёхлетний",25:"Двадцатипятилетний"};
+
+const perkDefinitions={
+  coward:{name:"Страшливый",threshold:2},
+  brave:{name:"Удалой",threshold:2},
+  generous:{name:"Даритель",threshold:2},
+  greedy:{name:"Сребролюбец",threshold:2},
+  merciful:{name:"Милостивый",threshold:2},
+  pious:{name:"Благочестивый",threshold:2},
+  cunning:{name:"Лукавый",threshold:2},
+  hardworker:{name:"Трудолюбивый",threshold:2},
+  nehoroshiy:{name:"Нехороший",threshold:2},
+  skolzkiy:{name:"Скользкий",threshold:2},
+  nasilnik:{name:"Насильник",threshold:2},
+  zhuk:{name:"Жук",threshold:2}
+};
+// Плохие теги: при выборе 50% шанс доп. штрафа к почести
+const badTags=new Set(["nehoroshiy","zhuk","nasilnik","greedy","coward"]);
+
+let currentQuestionIndex=0,availableQuestions=[],currentYear=1354,totalQuestions=0;
+let player={name:"",nickname:"",job:"",age:0,storyCore:"",hp:50,silver:20,glory:10,perkCounts:{},currentPerk:null,perkHistory:[]};
+
+function animateValue(el,start,end,duration){
+  if(start===end){el.textContent=end;return}
+  const range=end-start,startTime=performance.now();
+  function step(now){
+    const progress=Math.min((now-startTime)/duration,1);
+    const eased=1-Math.pow(1-progress,3);
+    el.textContent=Math.round(start+range*eased);
+    if(progress<1)requestAnimationFrame(step);else el.textContent=end;
+  }
+  requestAnimationFrame(step);
+}
+function getAgeAdjective(age){return ageAdjectives[age]||(age+"-летний")}
+function generateBioText(){
+  return getAgeAdjective(player.age)+" "+player.name+" по прозвищу "+player.nickname+" "+player.storyCore+". Возмужав, он взял в руки инструменты своего дела и стал искусным "+player.job+"ом, готовым к трудной жизни на русской земле.";
+}
+function updatePerksDisplay(){
+  const c=document.getElementById("perksContainer");
+  c.innerHTML=player.currentPerk?'<span class="perk">'+player.currentPerk+'</span>':"";
+}
+function processTags(tags){
+  if(!tags||!tags.length)return;
+  tags.forEach(tag=>{
+    if(!perkDefinitions[tag])return;
+    player.perkCounts[tag]=(player.perkCounts[tag]||0)+1;
+    const def=perkDefinitions[tag];
+    if(player.perkCounts[tag]>=def.threshold){
+      // Один перк: меняется на новый, старый уходит в историю
+      if(player.currentPerk!==def.name){
+        if(player.currentPerk&&!player.perkHistory.includes(player.currentPerk)){
+          player.perkHistory.push(player.currentPerk);
+        }
+        player.currentPerk=def.name;
+        if(!player.perkHistory.includes(def.name)){
+          player.perkHistory.push(def.name);
+        }
+      }
+    }
+  });
+  updatePerksDisplay();
+}
+function applyBadLuck(tags){
+  // 50/50: плохой поступок иногда оборачивается хуже
+  if(!tags||!tags.length)return null;
+  const hasBad=tags.some(t=>badTags.has(t));
+  if(!hasBad)return null;
+  if(Math.random()>=0.5)return null; // повезло — без доп. штрафа
+  // не повезло: доп. урон к почести (и иногда здоровью)
+  const roll=Math.random();
+  if(roll<0.5){
+    player.glory-=5;
+    return "Молва разнеслась хуже, чем ты ждал: почесть пострадала (−5).";
+  }else if(roll<0.8){
+    player.glory-=8;
+    player.hp-=3;
+    return "Дело вышло наружу. Соседи отвернулись, а на душе тяжело (−8 почести, −3 здоровья).";
+  }else{
+    player.glory-=3;
+    player.silver=Math.max(0,player.silver-4);
+    return "Пришлось откупаться, чтобы замять историю (−3 почести, −4 серебра).";
+  }
+}
+function updateProgress(){
+  document.getElementById("progressCounter").textContent=Math.min(currentQuestionIndex+1,totalQuestions)+"/"+totalQuestions;
+}
+function startGame(){
+  player.name=names[Math.floor(Math.random()*names.length)];
+  player.nickname=nicknames[Math.floor(Math.random()*nicknames.length)];
+  player.job=jobs[Math.floor(Math.random()*jobs.length)];
+  player.age=Math.floor(Math.random()*14)+12;
+  player.storyCore=historyCores[Math.floor(Math.random()*historyCores.length)];
+  player.hp=50;player.silver=20;player.glory=10;player.perkCounts={};player.currentPerk=null;player.perkHistory=[];currentYear=1354;
+  document.getElementById("bioName").innerText=player.name;
+  document.getElementById("bioNickname").innerText=player.nickname;
+  document.getElementById("bioAge").innerText=player.age;
+  document.getElementById("bioBox").innerText=generateBioText();
+  document.getElementById("bioBox").style.display="block";
+  document.getElementById("nameLine").style.display="block";
+  document.getElementById("progressCounter").style.display="block";
+  updatePerksDisplay();
+  availableQuestions=[...questions].sort(()=>Math.random()-0.5);
+  if(availableQuestions.length>25)availableQuestions=availableQuestions.slice(0,25);
+  totalQuestions=availableQuestions.length;currentQuestionIndex=0;
+  updateStats();updateProgress();
+  document.getElementById("questionText").innerHTML="";
+  document.getElementById("choicesBox").innerHTML="";
+  document.getElementById("resultBox").style.display="none";
+  document.getElementById("historyBox").style.display="none";
+  document.getElementById("nextBtn").style.display="block";
+  document.getElementById("nextBtn").innerText="Начать жизнь →";
+  document.getElementById("nextBtn").onclick=beginLife;
+}
+function beginLife(){
+  document.getElementById("bioBox").style.display="none";
+  document.getElementById("nextBtn").innerText="Далее →";
+  document.getElementById("nextBtn").onclick=nextQuestion;
+  document.getElementById("nextBtn").style.display="none";
+  showQuestion();
+}
+function updateStats(){
+  document.getElementById("year").innerText=currentYear;
+  document.getElementById("hp").innerText=player.hp;
+  document.getElementById("silver").innerText=player.silver;
+  document.getElementById("glory").innerText=player.glory;
+}
+function updateStatsWithAnimation(oH,oS,oG){
+  document.getElementById("year").innerText=currentYear;
+  animateValue(document.getElementById("hp"),oH,player.hp,600);
+  animateValue(document.getElementById("silver"),oS,player.silver,600);
+  animateValue(document.getElementById("glory"),oG,player.glory,600);
+}
+function showQuestion(){
+  if(currentQuestionIndex>=availableQuestions.length||currentYear>1380||player.hp<=0||player.silver<=0||player.glory<0){endGame();return}
+  updateProgress();
+  const q=availableQuestions[currentQuestionIndex];
+  document.getElementById("questionText").innerText=q.text;
+  const shuffled=[...q.opts].sort(()=>Math.random()-0.5).slice(0,4);
+  window._currentOpts=shuffled;
+  document.getElementById("choicesBox").innerHTML=shuffled.map((opt,i)=>'<button class="choice-btn" onclick="makeChoice('+i+')">'+opt.t+'</button>').join("");
+  document.getElementById("resultBox").style.display="none";
+  document.getElementById("historyBox").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+}
+function makeChoice(idx){
+  const opt=window._currentOpts[idx];
+  const q=availableQuestions[currentQuestionIndex];
+  const oH=player.hp,oS=player.silver,oG=player.glory;
+  player.hp+=opt.hp;player.silver+=opt.s;player.glory+=opt.g;
+  if(isNaN(player.hp))player.hp=0;if(isNaN(player.silver))player.silver=0;if(isNaN(player.glory))player.glory=0;
+
+  const badNote=applyBadLuck(opt.tags||[]);
+  processTags(opt.tags||[]);
+  updateStatsWithAnimation(oH,oS,oG);
+  document.getElementById("bioAge").innerText=player.age;
+
+  let resHtml="<strong>Что произошло:</strong> "+opt.r;
+  if(badNote)resHtml+="<br><em style='color:#6b1a1a'>"+badNote+"</em>";
+  document.getElementById("resultBox").innerHTML=resHtml;
+  document.getElementById("resultBox").style.display="block";
+  document.getElementById("historyBox").innerHTML="<strong>Историческая справка:</strong> "+q.history;
+  document.getElementById("historyBox").style.display="block";
+  document.getElementById("choicesBox").innerHTML="";
+
+  if(player.hp<=0||player.silver<=0||player.glory<0)setTimeout(endGame,1800);
+  else document.getElementById("nextBtn").style.display="block";
+}
+function nextQuestion(){
+  currentQuestionIndex++;currentYear++;player.age++;
+  document.getElementById("bioAge").innerText=player.age;
+  showQuestion();
+}
+function getDestiny(){
+  if(player.glory<0)return "🚫 Община не простила. На сельском сходе тебя объявили изгоем: двор опечатали, надел отобрали, путь в родное село закрыт. Теперь ты бродишь по чужим волостям, и всякий сторонится человека без почести.";
+  if(player.hp<=0)return "☠️ Твой жизненный путь оборвался преждевременно. Земля приняла тебя сурово.";
+  if(player.silver<=0)return "💸 Долговая яма сломила дух. Ты закончил дни в кабале.";
+  const g=player.glory,s=player.silver,h=player.hp;
+  if(g>80&&s>50)return "🌟 Легендарный муж! Имя слагают в песнях от Новгорода до Киева.";
+  if(g>80)return "👑 Посадский староста и мудрый советник. Народ чтит твою доблесть.";
+  if(s>80)return "💰 Богатейший купец. Сундуки ломятся, амбары полны.";
+  if(g<10&&s<10)return "🏚️ Захудалый отшельник, забытый всеми.";
+  if(h>70&&g>40)return "🛡️ Здоровый ветеран сходок. Сила и рассудок спасали общину.";
+  if(s>40&&g>40)return "🌾 Зажиточный хозяин. Двор ухожен, слово весит золото.";
+  if(g>50)return "📜 Уважаемый советник. К тебе идут за мудростью.";
+  if(s>50)return "🪙 Успешный торговец. Объездил пол-Руси.";
+  if(h<25)return "🩹 Измождённый труженик. Спина согнута, почесть цела.";
+  if(g<20)return "👤 Нелюдимый мужик. Провожали без слёз.";
+  if(s<20&&g>30)return "🤝 Бедный, но любимый. Соседи всегда делились.";
+  if(s>30&&h<35)return "🧓 Скопидом с подорванным здоровьем.";
+  if(g>30&&s>30)return "🏡 Добропорядочный семьянин и опора волости.";
+  return "🌲 Обычный крестьянин-труженик. Честно пропахал свою землю и оставил добрую память.";
+}
+function endGame(){
+  const destiny=getDestiny();
+  const nickLine=player.perkHistory.length
+    ?('<p style="margin:12px 0;font-size:17px;"><b>'+player.name+'</b> по прозвищу <b>'+player.nickname+'</b>, '+player.age+' лет.<br>За глаза называли: <i>'+player.perkHistory.join(', ')+'</i>.</p>')
+    :('<p style="margin:12px 0;font-size:17px;"><b>'+player.name+'</b> по прозвищу <b>'+player.nickname+'</b>, '+player.age+' лет.</p>');
+  document.getElementById("bioBox").style.display="none";
+  document.getElementById("nameLine").style.display="none";
+  document.getElementById("progressCounter").style.display="none";
+  document.getElementById("questionText").innerHTML='<div class="end-block"><h2 class="end-title">📜 Летопись твоей жизни</h2>'+nickLine+'<p style="font-size:17px;line-height:1.55;">'+destiny+'</p><hr style="border:1px solid #5c3d1e;margin:14px auto;width:80%;"><p style="font-size:17px;">Итоговые показатели:<br>Здоровье: <b>'+player.hp+'</b> &nbsp;|&nbsp; Серебро: <b>'+player.silver+'</b> &nbsp;|&nbsp; Почесть: <b>'+player.glory+'</b></p></div>';
+  document.getElementById("choicesBox").innerHTML='<button class="choice-btn" style="text-align:center;" onclick="location.reload()">Начать новую жизнь</button>';
+  document.getElementById("resultBox").style.display="none";
+  document.getElementById("historyBox").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+  document.getElementById("shareBtn").style.display="block";
+  window._shareText=player.name+' по прозвищу '+player.nickname+', '+player.age+' лет. '+(player.perkHistory.length?('За глаза называли: '+player.perkHistory.join(', ')+'. '):'')+destiny.replace(/[☠️💸🌟👑💰🏚️🛡️🌾📜🪙🩹👤🤝🧓🏡🌲🚫]/g,'')+' Здоровье '+player.hp+', серебро '+player.silver+', почесть '+player.glory+'. #ВыживаниеНаРуси';
+}
+function shareResult(){
+  const text=window._shareText||'Я прожил жизнь на Руси!';
+  if(navigator.share){
+    navigator.share({title:'Выживание на Руси',text:text}).catch(function(){});
+  }else if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      alert('Текст судьбы скопирован — вставь его в соцсеть!');
+    }).catch(function(){
+      prompt('Скопируй текст судьбы:',text);
+    });
+  }else{
+    prompt('Скопируй текст судьбы:',text);
+  }
+}
+startGame();
+</script>
+</body>
+</html>
