@@ -10,24 +10,37 @@
 body{background:#1c140a;background-image:radial-gradient(ellipse at 50% 30%,#2e2112 0%,#1c140a 75%);color:#3a2814;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;margin:0;padding:18px 10px}
 .game-container{background:#f3e8c8;background-image:linear-gradient(rgba(160,120,60,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(160,120,60,.06) 1px,transparent 1px);background-size:22px 22px;border:9px solid #5c3d1e;border-radius:6px;width:720px;max-width:100%;padding:26px 30px 30px;box-shadow:0 0 0 2px #2a1a0c,0 14px 36px rgba(0,0,0,.75),inset 0 0 50px rgba(120,80,30,.08);position:relative}
 .game-container::before{content:"";position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:1px solid rgba(90,60,30,.28);pointer-events:none;border-radius:3px}
-.progress-counter{position:absolute;top:14px;right:18px;font-size:13px;color:#7a5a30;background:#e8d9b0;border:1px solid #b89860;border-radius:4px;padding:2px 8px;z-index:2}
-.year-header{text-align:center;font-size:30px;font-weight:700;color:#3d2a12;margin:0 0 12px}
+.progress-counter{position:absolute;top:12px;right:16px;font-size:12px;color:#7a5a30;background:#e8d9b0;border:1px solid #b89860;border-radius:4px;padding:2px 7px;z-index:2}
+.year-header{position:absolute;top:12px;left:16px;font-size:14px;font-weight:700;color:#5a3a18;margin:0;z-index:2}
 .year-header span{color:#8b2a1a}
-.name-line{text-align:center;font-size:21px;color:#3a2814;margin-bottom:8px;line-height:1.4;font-weight:700}
-.name-line .perk{display:inline-block;background:#dcc9a0;border:1px solid #a07840;border-radius:4px;padding:2px 8px;margin:2px 3px;font-size:15px;font-style:italic;font-weight:400;color:#5a3a18}
+.name-line{color:#3a2814;margin:22px 0 12px;line-height:1.4}
+.name-line .header-row{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:8px}
+.name-line .avatar{width:50px;height:50px;border-radius:6px;border:2px solid #a07840;object-fit:cover;background:#dcc9a0;flex-shrink:0}
+.name-line .name-row{font-size:22px;font-weight:700}
+.name-line .stats-row{font-size:19px;font-weight:700;text-align:center}
+.name-line .perk{display:inline-block;background:#dcc9a0;border:1px solid #a07840;border-radius:4px;padding:1px 7px;margin:0 2px;font-size:14px;font-style:italic;font-weight:400;color:#5a3a18}
+.name-line .sep{color:#a07840;font-weight:400}
+.rank-label{font-weight:700;font-size:22px;color:#5a3a18;margin-left:6px}
+.stat-num{font-variant-numeric:tabular-nums;min-width:28px;display:inline-block;text-align:center}
 .bio-text{background:#ebe0b8;padding:14px 16px;border-radius:5px;border:1px solid #a07840;font-size:17px;margin-bottom:14px;line-height:1.5;text-align:justify;color:#3a2814}
-.stats{display:flex;justify-content:space-around;background:#e4d4a4;padding:11px 8px;border-radius:5px;border:2px solid #a07840;font-weight:700;margin-bottom:16px;font-size:19px}
-.stat-item span{color:#7a1a1a;display:inline-block;min-width:32px;text-align:center;font-variant-numeric:tabular-nums}
-.question-box{font-size:21px;line-height:1.55;margin-bottom:14px;min-height:60px;color:#2c1c0a;text-align:center}
-.share-btn{background:#4a6a8a!important;margin-top:10px;width:100%;text-align:center!important;font-size:16px!important;display:none}
+.stats{display:none}
+.stat-item span{color:#7a1a1a;display:inline-block;min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
+.rank-label{font-weight:400;font-size:15px;color:#5a3a18;margin-left:2px}
+.q-image{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:5px;border:2px solid #a07840;margin:0 auto 12px;background:#dcc9a0}
+.delta-good{color:#2a6a2a;font-weight:700}
+.delta-bad{color:#8b1a1a;font-weight:700}
+.delta-zero{color:#6a5a40}
+.question-box{font-size:21px;line-height:1.55;margin-top:28px;margin-bottom:28px;min-height:60px;color:#2c1c0a;text-align:center}
+.rank-label{font-weight:400;font-size:16px;color:#5a3a18;margin-left:6px}
+.share-btn{background:#4a6a8a!important;color:#ffffff!important;border:none!important;margin-top:10px;width:100%;text-align:center!important;font-size:16px!important;display:none}
 .share-btn:hover{background:#3a5a7a!important}
 .choices{display:flex;flex-direction:column;gap:10px}
-button.choice-btn{background:#6a4524;color:#f7efd0;border:2px solid #3d2810;padding:12px 15px;border-radius:5px;font-family:"PT Serif","Times New Roman",serif;font-size:17px;cursor:pointer;text-align:left;transition:background .2s,transform .12s;box-shadow:0 2px 0 #2a180c}
-button.choice-btn:hover{background:#543618;transform:translateY(1px)}
+button.choice-btn{background:#5b7c5a;color:#ffffff;border:none;padding:12px 15px;border-radius:6px;font-family:"PT Serif","Times New Roman",serif;font-size:17px;cursor:pointer;text-align:center;transition:background .2s,transform .12s;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+button.choice-btn:hover{background:#4a6849;transform:translateY(1px)}
 .result-box{background:#ebe0b8;padding:12px 14px;border-radius:5px;margin-top:12px;display:none;border-left:5px solid #3a6a3a;font-size:16px;line-height:1.45}
 .history-box{background:#e4d4a4;padding:12px 14px;border-radius:5px;margin-top:9px;font-style:italic;display:none;border-left:5px solid #a07840;font-size:15px;line-height:1.45;color:#3a2814}
-.next-btn{background:#3a6a3a!important;margin-top:12px;display:none;width:100%;text-align:center!important;font-size:18px!important}
-.next-btn:hover{background:#2a502a!important}
+.next-btn{background:#3d6b3d!important;color:#ffffff!important;border:none!important;margin-top:12px;display:none;width:100%;text-align:center!important;font-size:18px!important}
+.next-btn:hover{background:#2f5530!important}
 .end-title{margin-top:0;color:#3d2a12;font-size:24px;font-weight:700;text-align:center}
 .end-block{text-align:center}
 </style>
@@ -37,15 +50,24 @@ button.choice-btn:hover{background:#543618;transform:translateY(1px)}
   <div class="progress-counter" id="progressCounter">0/0</div>
   <div class="year-header">Лето <span id="year">1354</span></div>
   <div class="name-line" id="nameLine">
-    <span id="bioName">-</span> <span id="bioNickname">-</span>, <span id="bioAge">-</span> лет
-    <span id="perksContainer"></span>
+    <div class="header-row">
+      <img class="avatar" id="avatarImg" src="avatars/1.jpg" alt="" onerror="this.style.visibility='hidden'">
+      <div class="name-row">
+        <span id="bioName">-</span> <span id="bioNickname">-</span>, <span id="bioAge">-</span> лет
+        <span class="rank-label" id="rankLabel">Смерд</span>
+        <span id="perksContainer"></span>
+      </div>
+    </div>
+    <div class="stats-row">
+      Здоровье: <span class="stat-num" id="hp">50</span>
+      <span class="sep">·</span>
+      Серебро: <span class="stat-num" id="silver">20</span>
+      <span class="sep">·</span>
+      Почесть: <span class="stat-num" id="glory">10</span>
+    </div>
   </div>
   <div class="bio-text" id="bioBox">-</div>
-  <div class="stats">
-    <div class="stat-item">Здоровье: <span id="hp">50</span></div>
-    <div class="stat-item">Серебро: <span id="silver">20</span></div>
-    <div class="stat-item">Почесть: <span id="glory">10</span></div>
-  </div>
+  <img class="q-image" id="qImage" src="" alt="" style="display:none">
   <div class="question-box" id="questionText">Загрузка летописей...</div>
   <div class="choices" id="choicesBox"></div>
   <div class="result-box" id="resultBox"></div>
@@ -92,6 +114,52 @@ function animateValue(el,start,end,duration){
     if(progress<1)requestAnimationFrame(step);else el.textContent=end;
   }
   requestAnimationFrame(step);
+}
+
+
+function getQuestionTheme(text){
+  const t=(text||"").toLowerCase();
+  const map=[
+    ["nalog",["тиун","дань","полюдь","сборщик","налог","недоимк","ульев мало","мёда для князя"]],
+    ["bolezn",["лихорад","болезн","знахар","зелье","отвар","баня","наговор на смерть"]],
+    ["boy",["стенка","кулач","маслениц","поединок","драка","потасов"]],
+    ["urozhay",["засух","дождь","волхв","репа","урожай","пашн","зерн","колодец","голодн"]],
+    ["vorovstvo",["ворует","куриц","вор","краден","кошель","нашёл чужой"]],
+    ["dom",["избу","венец","жертв","домовой","конюш","храм"]],
+    ["torg",["купец","торг","монет","мёд","гребень","зеркаль","сало","конкурента-торговца"]],
+    ["vlast",["десятник","сход","вече","княз","дружинник","тиуном","войну","письмо"]],
+    ["semya",["сын","жена","родины","дочь","брата","ребёнок не от","наложниц"]],
+    ["opasnost",["волк","татар","поход","порог","лодка","эпидем","зараж","тонут","предать город"]],
+    ["vera",["церкв","поп","свящ","крест","юродив","видение","беса"]],
+    ["sudba",["клад","долг","холоп","заговор","беглый","доказательство"]]
+  ];
+  for(const [theme,keys] of map){
+    if(keys.some(k=>t.includes(k))) return theme;
+  }
+  return "prochee";
+}
+function showQuestionImage(text){
+  const theme=getQuestionTheme(text);
+  const img=document.getElementById("qImage");
+  if(!img) return;
+  img.onerror=function(){this.style.display="none"};
+  img.onload=function(){this.style.display="block"};
+  img.src="img/"+theme+".jpg";
+  img.alt=theme;
+}
+
+function getRank(g){
+  if(g<0) return "Изгой";
+  if(g<15) return "Смерд";
+  if(g<30) return "Огородник";
+  if(g<45) return "Пахарь";
+  if(g<60) return "Зажиточный";
+  if(g<75) return "Десятник";
+  if(g<90) return "Дружинник";
+  if(g<110) return "Посадский";
+  if(g<130) return "Боярин";
+  if(g<155) return "Воевода";
+  return "Князь";
 }
 function getAgeAdjective(age){return ageAdjectives[age]||(age+"-летний")}
 function generateBioText(){
@@ -152,7 +220,19 @@ function startGame(){
   player.job=jobs[Math.floor(Math.random()*jobs.length)];
   player.age=Math.floor(Math.random()*14)+12;
   player.storyCore=historyCores[Math.floor(Math.random()*historyCores.length)];
-  player.hp=50;player.silver=20;player.glory=10;player.perkCounts={};player.currentPerk=null;player.perkHistory=[];currentYear=1354;
+  // Случайные параметры: сумма 100, минимум 15 на каждый
+  const mins=[15,15,15];
+  let rest=100-45;
+  const parts=[0,0,0];
+  // раздать rest случайно
+  for(let i=0;i<rest;i++) parts[Math.floor(Math.random()*3)]++;
+  player.hp=mins[0]+parts[0];
+  player.silver=mins[1]+parts[1];
+  player.glory=mins[2]+parts[2];
+  player.perkCounts={};player.currentPerk=null;player.perkHistory=[];currentYear=1354;
+  const avN=Math.floor(Math.random()*20)+1;
+  const av=document.getElementById("avatarImg");
+  if(av){av.style.visibility="visible";av.src="avatars/"+avN+".jpg";}
   document.getElementById("bioName").innerText=player.name;
   document.getElementById("bioNickname").innerText=player.nickname;
   document.getElementById("bioAge").innerText=player.age;
@@ -180,23 +260,49 @@ function beginLife(){
   document.getElementById("nextBtn").style.display="none";
   showQuestion();
 }
+function statColor(v){
+  // >25 зелёный, ближе к 0 — краснее
+  if(v>25) return "#1a7a2a";
+  if(v<=0) return "#8b1010";
+  // 1..25: от оранжево-красного к жёлто-зелёному
+  const t=v/25;
+  const r=Math.round(180-t*120);
+  const g=Math.round(40+t*120);
+  const b=20;
+  return "rgb("+r+","+g+","+b+")";
+}
+function paintStat(id,val){
+  const el=document.getElementById(id);
+  el.innerText=val;
+  el.style.color=statColor(val);
+}
 function updateStats(){
   document.getElementById("year").innerText=currentYear;
-  document.getElementById("hp").innerText=player.hp;
-  document.getElementById("silver").innerText=player.silver;
-  document.getElementById("glory").innerText=player.glory;
+  paintStat("hp",player.hp);
+  paintStat("silver",player.silver);
+  paintStat("glory",player.glory);
+  document.getElementById("rankLabel").innerText=getRank(player.glory);
 }
 function updateStatsWithAnimation(oH,oS,oG){
   document.getElementById("year").innerText=currentYear;
-  animateValue(document.getElementById("hp"),oH,player.hp,600);
-  animateValue(document.getElementById("silver"),oS,player.silver,600);
-  animateValue(document.getElementById("glory"),oG,player.glory,600);
+  const hpEl=document.getElementById("hp");
+  const sEl=document.getElementById("silver");
+  const gEl=document.getElementById("glory");
+  animateValue(hpEl,oH,player.hp,600);
+  animateValue(sEl,oS,player.silver,600);
+  animateValue(gEl,oG,player.glory,600);
+  // цвет обновляем сразу по итоговому значению
+  hpEl.style.color=statColor(player.hp);
+  sEl.style.color=statColor(player.silver);
+  gEl.style.color=statColor(player.glory);
+  document.getElementById("rankLabel").innerText=getRank(player.glory);
 }
 function showQuestion(){
   if(currentQuestionIndex>=availableQuestions.length||currentYear>1380||player.hp<=0||player.silver<=0||player.glory<0){endGame();return}
   updateProgress();
   const q=availableQuestions[currentQuestionIndex];
   document.getElementById("questionText").innerText=q.text;
+  showQuestionImage(q.text);
   const shuffled=[...q.opts].sort(()=>Math.random()-0.5).slice(0,4);
   window._currentOpts=shuffled;
   document.getElementById("choicesBox").innerHTML=shuffled.map((opt,i)=>'<button class="choice-btn" onclick="makeChoice('+i+')">'+opt.t+'</button>').join("");
@@ -216,7 +322,13 @@ function makeChoice(idx){
   updateStatsWithAnimation(oH,oS,oG);
   document.getElementById("bioAge").innerText=player.age;
 
-  let resHtml="<strong>Что произошло:</strong> "+opt.r;
+  function fmtDelta(n,label){
+    if(n>0) return '<span class="delta-good">'+label+' +'+n+'</span>';
+    if(n<0) return '<span class="delta-bad">'+label+' '+n+'</span>';
+    return '<span class="delta-zero">'+label+' 0</span>';
+  }
+  const deltas=[fmtDelta(opt.hp,'здоровье'),fmtDelta(opt.s,'серебро'),fmtDelta(opt.g,'почесть')].join(' · ');
+  let resHtml="<strong>Что произошло:</strong> "+opt.r+"<br>("+deltas+")";
   if(badNote)resHtml+="<br><em style='color:#6b1a1a'>"+badNote+"</em>";
   document.getElementById("resultBox").innerHTML=resHtml;
   document.getElementById("resultBox").style.display="block";
@@ -260,7 +372,9 @@ function endGame(){
   document.getElementById("bioBox").style.display="none";
   document.getElementById("nameLine").style.display="none";
   document.getElementById("progressCounter").style.display="none";
-  document.getElementById("questionText").innerHTML='<div class="end-block"><h2 class="end-title">📜 Летопись твоей жизни</h2>'+nickLine+'<p style="font-size:17px;line-height:1.55;">'+destiny+'</p><hr style="border:1px solid #5c3d1e;margin:14px auto;width:80%;"><p style="font-size:17px;">Итоговые показатели:<br>Здоровье: <b>'+player.hp+'</b> &nbsp;|&nbsp; Серебро: <b>'+player.silver+'</b> &nbsp;|&nbsp; Почесть: <b>'+player.glory+'</b></p></div>';
+  const qi=document.getElementById("qImage"); if(qi) qi.style.display="none";
+  const yh=document.querySelector(".year-header"); if(yh) yh.style.display="none";
+  document.getElementById("questionText").innerHTML='<div class="end-block"><h2 class="end-title">📜 Летопись твоей жизни</h2>'+nickLine+'<p style="font-size:17px;line-height:1.55;">'+destiny+'</p><hr style="border:1px solid #5c3d1e;margin:14px auto;width:80%;"><p style="font-size:17px;">Итоговые показатели:<br>Здоровье: <b>'+player.hp+'</b> &nbsp;|&nbsp; Серебро: <b>'+player.silver+'</b> &nbsp;|&nbsp; Почесть: <b>'+player.glory+'</b> · '+getRank(player.glory)+'</p></div>';
   document.getElementById("choicesBox").innerHTML='<button class="choice-btn" style="text-align:center;" onclick="location.reload()">Начать новую жизнь</button>';
   document.getElementById("resultBox").style.display="none";
   document.getElementById("historyBox").style.display="none";
