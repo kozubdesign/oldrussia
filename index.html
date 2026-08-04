@@ -7,88 +7,155 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 *{box-sizing:border-box}
-body{background:#1c140a;background-image:radial-gradient(ellipse at 50% 30%,#2e2112 0%,#1c140a 75%);color:#3a2814;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;margin:0;padding:18px 10px}
-.game-container{background:#f3e8c8;background-image:linear-gradient(rgba(160,120,60,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(160,120,60,.06) 1px,transparent 1px);background-size:22px 22px;border:9px solid #5c3d1e;border-radius:6px;width:720px;max-width:100%;padding:26px 30px 30px;box-shadow:0 0 0 2px #2a1a0c,0 14px 36px rgba(0,0,0,.75),inset 0 0 50px rgba(120,80,30,.08);position:relative}
-.game-container::before{content:"";position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:1px solid rgba(90,60,30,.28);pointer-events:none;border-radius:3px}
-.progress-counter{position:absolute;top:12px;right:16px;font-size:12px;color:#7a5a30;background:#e8d9b0;border:1px solid #b89860;border-radius:4px;padding:2px 7px;z-index:2}
-.year-header{position:absolute;top:12px;left:16px;font-size:14px;font-weight:700;color:#5a3a18;margin:0;z-index:2}
-.year-header span{color:#8b2a1a}
-.year-event{position:absolute;top:28px;left:16px;right:70px;font-size:12px;color:#6a4a28;line-height:1.3;font-style:italic;z-index:2}
+body{background:#1c140a;background-image:radial-gradient(ellipse at 50% 30%,#2e2112 0%,#1c140a 75%);color:#3a2814;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:flex-start;height:100vh;height:100dvh;margin:0;padding:12px 10px;overflow:hidden}
+.play-layout{position:relative;width:720px;max-width:min(720px,calc(100vw - 24px));height:min(740px,calc(100vh - 24px));height:min(740px,calc(100dvh - 24px))}
+.game-container{background:#f3e8c8;background-image:linear-gradient(rgba(160,120,60,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(160,120,60,.06) 1px,transparent 1px);background-size:22px 22px;border:9px solid #5c3d1e;border-radius:6px;width:100%;height:100%;overflow:hidden;padding:13px 26px 22px;box-shadow:0 0 0 2px #2a1a0c,0 14px 36px rgba(0,0,0,.75),inset 0 0 50px rgba(120,80,30,.08);position:relative;display:flex;flex-direction:column;z-index:1}
+.plaques-rail{position:absolute;left:calc(100% + 10px);top:0;bottom:0;width:200px;display:flex;flex-direction:column;gap:6px;overflow-x:hidden;overflow-y:auto;padding:2px 2px 8px;scrollbar-width:thin;z-index:2;pointer-events:auto}
+.plaques-rail::-webkit-scrollbar{width:4px}
+.plaques-rail::-webkit-scrollbar-thumb{background:#5c3d1e;border-radius:2px}
+.plaque{background:#ebe0b8;border:1px solid #a07840;border-radius:5px;padding:7px 8px;font-size:13px;line-height:1.25;color:#3a2814;box-shadow:0 2px 6px rgba(0,0,0,.35);animation:plaqueIn .35s ease}
+.plaque.good{border-color:#3a6a3a;background:#e4efd8}
+.plaque.bad{border-color:#8b3a2a;background:#f0ddd4}
+.plaque-title{font-weight:700;margin:0 0 2px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plaque-why{font-size:11px;line-height:1.2;color:#6a4a28;margin:0 0 3px;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plaque-mods{font-size:12px;color:#5a3a18;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plaque-mods .up{color:#2a6a2a;font-weight:700}
+.plaque-mods .down{color:#8b1a1a;font-weight:700}
+@keyframes plaqueIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
+@media (max-width:980px){
+  .plaques-rail{width:160px}
+}
+@media (max-width:700px){
+  body{overflow:auto;height:auto;min-height:100dvh}
+  .play-layout{width:100%;max-width:100%;height:auto;max-height:none}
+  .game-container{height:min(740px,calc(100dvh - 24px))}
+  .plaques-rail{position:static;width:100%;max-height:120px;flex-direction:row;flex-wrap:wrap;margin-top:8px}
+  .plaque{flex:1 1 120px}
+}
+.game-container::before{content:"";position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:1px solid rgba(90,60,30,.28);pointer-events:none;border-radius:3px;z-index:0}
+.game-main{flex:1 1 auto;min-height:0;overflow:hidden;position:relative;z-index:1;display:flex;flex-direction:column}
+.game-footer{flex:0 0 auto;height:186px;display:flex;flex-direction:column;justify-content:flex-end;gap:5px;position:relative;z-index:1;padding-top:3px;padding-bottom:0;box-sizing:border-box}
+.game-container.ending .game-footer{height:auto;min-height:0;padding-top:8px}
+.progress-counter{position:absolute;top:8px;right:12px;font-size:12px;color:#7a5a30;background:#e8d9b0;border:1px solid #b89860;border-radius:4px;padding:2px 7px;z-index:2}
+.year-header{position:absolute;top:8px;left:12px;right:70px;font-size:11px;font-weight:400;color:#3a2814;margin:0;z-index:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.year-header span{color:#3a2814}
+.year-event{display:none}
 
-.name-line{color:#3a2814;margin:22px 0 12px;line-height:1.4}
-.name-line .header-row{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:8px}
-.name-line .avatar{width:50px;height:50px;border-radius:8px;border:none;object-fit:cover;background:transparent;flex-shrink:0}
-.name-line .name-row{font-size:22px;font-weight:700}
-.name-line .stats-row{font-size:19px;font-weight:700;text-align:center}
-.name-line .perk{display:inline-block;background:#dcc9a0;border:1px solid #a07840;border-radius:4px;padding:1px 7px;margin:0 2px;font-size:14px;font-style:italic;font-weight:400;color:#5a3a18}
-.name-line .sep{color:#a07840;font-weight:400}
-.rank-label{font-weight:700;font-size:22px;color:#5a3a18;margin-left:6px}
-.stat-num{font-variant-numeric:tabular-nums;min-width:28px;display:inline-block;text-align:center}
-.bio-text{background:#ebe0b8;padding:14px 16px;border-radius:5px;border:1px solid #a07840;font-size:17px;margin-bottom:14px;line-height:1.5;text-align:justify;color:#3a2814}
+.name-line{color:#3a2814;margin:22px 0 5px;line-height:1.3;flex-shrink:0}
+.name-line .header-row{display:flex;align-items:center;gap:10px;justify-content:space-between;width:100%}
+.name-line .header-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 auto}
+.name-line .header-right{display:flex;align-items:center;gap:0;flex:0 0 auto;font-size:16px;font-weight:700;white-space:nowrap;margin-left:12px}
+.name-line .avatar{width:40px;height:40px;border-radius:6px;border:none;object-fit:cover;background:transparent;flex-shrink:0}
+.name-line .name-stats{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.name-line .perk{display:inline-block;background:#dcc9a0;border:1px solid #a07840;border-radius:4px;padding:1px 6px;margin:0 4px;font-size:13px;font-style:italic;font-weight:400;color:#5a3a18}
+.name-line .sep{color:#a07840;font-weight:400;margin:0 2px}
+.rank-label{font-weight:400;font-size:15px;color:#5a3a18;margin-left:4px}
+.job-label{font-weight:400;font-size:15px;color:#5a3a18;margin-left:4px}
+.stat-num{font-variant-numeric:tabular-nums;min-width:22px;display:inline-block;text-align:center}
+.bio-text{padding:0;border:none;border-radius:0;background:transparent;font-size:18px;margin:0;line-height:1.4;text-align:center;color:#2c1c0a;flex:0 1 auto;min-height:0;overflow:hidden}
 .stats{display:none}
 .stat-item span{color:#7a1a1a;display:inline-block;min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
-.rank-label{font-weight:400;font-size:15px;color:#5a3a18;margin-left:2px}
-.q-image{display:block;width:100%;max-height:350px;height:350px;object-fit:cover;border-radius:5px;border:none;margin:0 auto 12px;background:transparent}
+.q-visual{position:relative;flex:0 0 auto;width:100%;height:min(332px,36.1vh);margin:0 auto 0;border-radius:5px;overflow:hidden;display:none}
+.q-visual.splash{flex:0 0 auto;height:min(332px,36.1vh);min-height:0;max-height:min(332px,36.1vh)}
+.q-visual.end{flex:1 1 0;height:auto;min-height:100px;max-height:min(390px,42vh)}
+.game-container.ending .q-visual.end{flex:1 1 0;height:auto;min-height:90px;max-height:min(390px,42vh)}
+.q-image{display:block;width:100%;height:100%;object-fit:cover;border:none;background:transparent}
 .delta-good{color:#2a6a2a;font-weight:700}
 .delta-bad{color:#8b1a1a;font-weight:700}
 .delta-zero{color:#6a5a40}
-.family-line{text-align:center;font-size:15px;color:#5a3a18;margin:4px 0 8px;font-weight:600}
-.family-line .bad{color:#8b1a1a}
-.family-line .ok{color:#2a5a2a}
-.mode-bar{display:flex;flex-wrap:wrap;gap:12px 18px;justify-content:center;margin:8px 0 4px;font-size:14px;color:#3a2814}
-.mode-bar label{cursor:pointer;user-select:none;display:flex;align-items:center;gap:5px}
-.mode-bar input{accent-color:#2f6b32}
+.mode-bar{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:center;margin:0;font-size:17px;color:#3a2814;flex-shrink:0}
+.mode-bar label{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px}
+.mode-bar input{width:18px;height:18px;accent-color:#2f6b32;flex-shrink:0}
+.pitch-text{margin:0;font-size:15px;line-height:1.4;text-align:center;color:#5a3a18;font-style:italic;flex-shrink:0}
 
-.question-box{font-size:21px;line-height:1.55;margin-top:28px;margin-bottom:28px;min-height:60px;color:#2c1c0a;text-align:center}
-.rank-label{font-weight:400;font-size:16px;color:#5a3a18;margin-left:6px}
-.share-btn{background:#4a6a8a!important;color:#ffffff!important;border:none!important;margin-top:10px;width:100%;text-align:center!important;font-size:16px!important;display:none}
-.share-btn:hover{background:#3a5a7a!important}
-.choices{display:flex;flex-direction:column;gap:10px}
-button.choice-btn{background:#2f6b32;color:#ffffff;border:none;padding:12px 15px;border-radius:6px;font-family:"PT Serif","Times New Roman",serif;font-size:17px;cursor:pointer;text-align:center;transition:background .2s,transform .12s;box-shadow:0 2px 6px rgba(0,0,0,.22)}
+.prompt-area{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:stretch;gap:8px;padding:8px 0;overflow:hidden}
+.game-container.playing .prompt-area{justify-content:center;padding:0;overflow:hidden}
+.game-container.ending .prompt-area{flex:0 1 auto;justify-content:center;padding:4px 0 0;overflow:hidden;min-height:0}
+.game-container:not(.playing):not(.ending) .game-footer{height:auto;min-height:0;padding-top:10px}
+.game-container:not(.playing):not(.ending) .prompt-area{flex:1 1 auto;justify-content:center;gap:14px;padding:12px 0;min-height:0}
+.game-container:not(.playing):not(.ending) .bio-text{font-size:18px;line-height:1.4;flex:0 1 auto;overflow:hidden}
+.game-container:not(.playing):not(.ending) .pitch-text{font-size:17px;line-height:1.4}
+.game-container:not(.playing):not(.ending) .mode-bar{margin-top:4px;font-size:18px;gap:12px 28px}
+.game-container.ending .question-box{flex:0 1 auto;overflow:hidden}
+.game-container.ending .end-block{max-height:100%;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.game-container.ending .end-block .chronicle-wrap{flex:1 1 auto;min-height:80px;max-height:min(240px,32vh)}
+.game-container.ending.chronicle-open .q-visual.end{max-height:min(180px,22vh);min-height:60px}
+.question-box{font-size:19px;line-height:1.4;margin:0;min-height:0;color:#2c1c0a;text-align:center;flex-shrink:0}
+.question-box:empty{display:none}
+.choices{display:flex;flex-direction:column;align-items:stretch;gap:5px;flex-shrink:0;width:100%}
+.choices:empty{display:none}
+button.choice-btn{background:#2f6b32;color:#ffffff;border:none;padding:11px 14px;border-radius:6px;font-family:"PT Serif","Times New Roman",serif;font-size:16px;cursor:pointer;text-align:center;width:100%;transition:background .2s,transform .12s;box-shadow:0 2px 6px rgba(0,0,0,.22);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 button.choice-btn:hover{background:#245528;transform:translateY(1px)}
-.result-box{background:#ebe0b8;padding:12px 14px;border-radius:5px;margin-top:12px;display:none;border-left:5px solid #3a6a3a;font-size:16px;line-height:1.45}
-.history-box{background:#e4d4a4;padding:12px 14px;border-radius:5px;margin-top:9px;font-style:italic;display:none;border-left:5px solid #a07840;font-size:15px;line-height:1.45;color:#3a2814}
-.next-btn{background:#2f6b32!important;color:#ffffff!important;border:none!important;margin-top:12px;display:none;width:100%;text-align:center!important;font-size:18px!important}
+button.choice-btn.hero-btn,button.choice-btn.villain-btn{background:#2f6b32}
+button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:#245528}
+.result-box{background:#ebe0b8;padding:10px 14px;border-radius:5px;margin:0;display:none;border-left:5px solid #3a6a3a;font-size:16px;line-height:1.45;flex:1 1 auto;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;white-space:normal;overflow-wrap:anywhere;word-wrap:break-word}
+.result-box::-webkit-scrollbar{width:0;height:0}
+.history-box{position:absolute;left:0;right:0;bottom:0;margin:0;padding:10px 14px 12px;font-style:italic;display:none;border:none;border-radius:0;font-size:15px;line-height:1.35;color:#f3e8c8;background:linear-gradient(transparent,rgba(28,20,10,.55) 18%,rgba(28,20,10,.82));max-height:48%;overflow:hidden;z-index:2;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.45)}
+.history-box strong{color:#f3e8c8;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.45)}
+.next-btn{background:#2f6b32!important;color:#ffffff!important;border:none!important;margin-top:0;display:none;width:100%!important;align-self:stretch;text-align:center!important;font-size:17px!important;flex-shrink:0}
 .next-btn:hover{background:#245528!important}
-.end-title{margin-top:0;color:#3d2a12;font-size:24px;font-weight:700;text-align:center}
-.end-block{text-align:center}
+.end-title{margin:0 0 4px;color:#3d2a12;font-size:20px;font-weight:700;text-align:center}
+.end-block{text-align:center;overflow:hidden}
+.chronicle-wrap{margin:6px 0 0;text-align:left;max-height:min(220px,28vh);overflow-y:auto;border:1px solid #a07840;border-radius:5px;background:#ebe0b8;padding:6px 8px;scrollbar-width:thin}
+.chronicle-wrap::-webkit-scrollbar{width:6px}
+.chronicle-wrap::-webkit-scrollbar-thumb{background:#a07840;border-radius:3px}
+.chronicle-title{text-align:center;font-size:15px;font-weight:700;margin:0 0 6px;color:#3a2814}
+.chronicle-row{font-size:13px;line-height:1.35;padding:3px 4px;border-radius:3px;color:#3a2814;font-variant-numeric:tabular-nums}
+.chronicle-row.me{font-weight:700;background:rgba(47,107,50,.18)}
+.chronicle-empty{text-align:center;font-size:14px;color:#5a3a18;padding:8px;font-style:italic}
+.choices.ending-actions{gap:6px}
+.choices.ending-actions .choice-btn{width:100%}
+.choices.ending-actions .choice-btn.secondary{background:#6b5428}
+.choices.ending-actions .choice-btn.secondary:hover{background:#554220}
+.choices.ending-actions .choice-btn:disabled{opacity:.55;cursor:default;transform:none}
 </style>
 </head>
 <body>
+<div class="play-layout">
 <div class="game-container" id="gameScreen">
   <div class="progress-counter" id="progressCounter">0/0</div>
-  <div class="year-header">Лето <span id="year">1354</span></div>
-  <div class="year-event" id="yearEvent"></div>
-  <div class="name-line" id="nameLine">
-    <div class="header-row">
-      <img class="avatar" id="avatarImg" src="avatars/1.png" alt="" onerror="this.style.visibility='hidden'">
-      <div class="name-row">
-        <span id="bioName">-</span> <span id="bioNickname">-</span>, <span id="bioAge">-</span> лет
-        <span class="rank-label" id="rankLabel">Смерд</span>
-        <span id="perksContainer"></span>
+  <div class="year-header" id="yearHeader">Лето <span id="year">1354</span> — <span id="yearEvent">…</span></div>
+  <div class="game-main">
+    <div class="name-line" id="nameLine">
+      <div class="header-row">
+        <div class="header-left">
+          <img class="avatar" id="avatarImg" src="avatars/1.png" alt="" onerror="this.style.visibility='hidden'">
+          <div class="name-stats">
+            <span id="bioName">-</span> <span id="bioNickname">-</span>, <span id="bioAge">-</span> лет
+            <span class="rank-label" id="rankLabel">-</span>
+            <span id="perksContainer"></span>
+          </div>
+        </div>
+        <div class="header-right" id="headerStats">
+          ❤️ <span class="stat-num" id="hp">50</span>
+          <span class="sep">·</span>
+          🪙 <span class="stat-num" id="silver">20</span>
+          <span class="sep">·</span>
+          🏅 <span class="stat-num" id="glory">10</span>
+        </div>
       </div>
     </div>
-    <div class="stats-row">
-      Здоровье: <span class="stat-num" id="hp">50</span>
-      <span class="sep">·</span>
-      Серебро: <span class="stat-num" id="silver">20</span>
-      <span class="sep">·</span>
-      Почесть: <span class="stat-num" id="glory">10</span>
+    <div class="q-visual" id="qVisual">
+      <img class="q-image" id="qImage" src="" alt="">
+      <div class="history-box" id="historyBox"></div>
     </div>
-    <div class="family-line" id="familyLine">Семья: жена цела · сын цел · отец цел</div>
+    <div class="prompt-area">
+      <div class="bio-text" id="bioBox">-</div>
+      <p class="pitch-text" id="pitchText">Сможешь ли ты прожить четверть века в русской деревне XIII века? Каждый твой выбор — целый год жизни: от сева и суда общины до мора и княжьего гнева.</p>
+      <div class="mode-bar" id="modeBar">
+        <label><input type="checkbox" id="ironMode"> Режим хардкор</label>
+        <label><input type="checkbox" id="skipHistory"> Пропустить справку</label>
+      </div>
+      <div class="question-box" id="questionText">Загрузка летописей...</div>
+    </div>
   </div>
-  <div class="mode-bar" id="modeBar">
-    <label><input type="checkbox" id="ironMode"> Хардкор</label>
-    <label><input type="checkbox" id="skipHistory"> Пропустить справку</label>
+  <div class="game-footer">
+    <div class="choices" id="choicesBox"></div>
+    <div class="result-box" id="resultBox"></div>
+    <button class="choice-btn next-btn" id="nextBtn">Далее →</button>
   </div>
-  <div class="bio-text" id="bioBox">-</div>
-  <img class="q-image" id="qImage" src="" alt="" style="display:none">
-  <div class="question-box" id="questionText">Загрузка летописей...</div>
-  <div class="choices" id="choicesBox"></div>
-  <div class="result-box" id="resultBox"></div>
-  <div class="history-box" id="historyBox"></div>
-  <button class="choice-btn next-btn" id="nextBtn">Далее →</button>
-  <button class="choice-btn share-btn" id="shareBtn" onclick="shareResult()">Поделиться судьбой</button>
+</div>
+<aside class="plaques-rail" id="plaquesRail" aria-label="Перки"></aside>
 </div>
 
 <script src="questions.js"></script>
@@ -96,72 +163,83 @@ button.choice-btn:hover{background:#245528;transform:translateY(1px)}
 const names=["Богдан","Добрыня","Всеволод","Ярополк","Святослав","Владимир","Мстислав","Ростислав","Изяслав","Глеб","Борис","Юрий","Андрей","Микула","Ратибор","Жирослав","Путята","Творимир","Станимир","Бронислав","Вячеслав","Олег","Игорь","Роман","Василий","Пётр","Иван","Максим","Кирилл","Алексей","Дмитрий","Павел","Фома","Лука","Клим","Лазарь","Савва","Тихон","Фрол","Евстафий","Архип","Гордей","Евсей","Захар","Игнат","Кондрат","Макар","Назар","Прохор","Савелий"];
 const nicknames=["Косой","Рябой","Молчун","Бешеный","Храбрый","Меньшой","Большой","Хитрый","Рыжий","Чернявый","Белый","Костлявый","Шило","Тяжелый","Шустрый","Угрюмый","Веселый","Зубатый","Губатый","Костень","Береза","Дуб","Медведь","Волк","Лисица","Кот","Бык","Петух","Зяблик","Крепыш","Глухой","Немой","Слепой","Хромой","Ломаный","Дикий","Удод","Сорока","Филин","Княжич","Скоморох","Пыжик","Ерш","Опаленный","Гроза","Буян","Смелый","Тихий","Борзый","Удалой"];
 const jobs=["пчельник","горшечник","бортник","плотник","рыбак","охотник","кожемяка","кузнец","огородник","пахарь","ткач","сапожник","печник","дёгтекур","угольщик","птицелов","мельник","солевар","бронник","лучник","судостроитель","проводник","скоморох","писарь","оружейник","седельник","бондарь","лоцман","травник","знахарь","мясник","хлебопек","пивовар","медовар","котельщик","извозчик","рубщик","столяр","каменотес","кровельщик","шорник","резчик","ямщик","гончар","шапочник","плетенщик"];
-const historyCores=["рос сиротой в глухом лесу и с детства приучен выживать среди дикого зверья","бежал от злого боярина из южных земель и обосновался на новом месте","сын зажиточного крестьянина, потерявший хозяйство во время весеннего паводка","бывший боевой холоп, получивший вольную за спасение боярина в сече","младший из семи братьев в семье смолокурщиков, знающий тайны лесного огня","племянник деревенского знахаря, с малолетства перенимавший секреты целебных трав","убежал из городского посада от учёбы у сурового и жадного мастера","чудом выжил после жестокой лихорадки, оставившей шрамы и несгибаемую волю","сын обедневшего дружинника, решивший попытать счастья мирным трудом","родился в год великой засухи и с тех пор привык ценить каждый колосок","много странствовал с караванами купцов и повидал чужие города и нравы","потерял избу от случайного пожара и теперь начинает жизнь с чистого листа","тихий и угрюмый малый, чьи руки способны вытесать из дерева любое чудо","задира и буян в прошлом, решивший остепениться и завести честное хозяйство","вырос у самой речной переправы и с ранних лет управлялся с тяжёлыми ладьями","служил сторожем на древнем городище, пока татары не сожгли укрепления","сын искусного бортника, знающий каждое дупло с диким мёдом наперечёт","сбежал от княжеской повинности в глухую волость под чужим именем","остался калекой на одну руку после кулачного боя, но не утратил сметки","всю юность помогал отцу ковать лемеха и чинить боевые топоры","ученик бродячего иконописца, ушедший от наставника искать свою дорогу","сирота, выросший при монастырской богадельне и обученный грамоте и счёту","сын заезжего варяга, осевшего на русской земле и принявшего местный уклад","пережил нападение разбойников, потерял семью, но сберёг отцовский меч","упрямый и молчаливый труженик, поднимающий заброшенный надел у оврага","бывший рыболов с озера Ильмень, пришедший искать удачи на великие реки","весёлый говорун, умеющий заговорить зубы любому княжьему тиуну","сын кузнеца, сбежавший из дома из-за строгого нрава родителя","вырос в семье пчеловодов и понимает язык пчёл лучше человеческого","пережил три эпидемии чумы, за что соседи считают его заговорённым","упрямый спорщик, вечно ищущий правды на деревенских вечах","тихий парень, умеющий шить из кожи крепкую упряжь и мягкие сапоги","сын посадского стражника, обученный стрельбе из простого лука","помогал строить княжеские хоромы и перенял хитрости плотницкого дела","обошёл пешком все земли от Новгорода до самого Киева","встретил старость в душе юноши и упрямо берётся за любую работу","сын обедневшего священника, знающий церковные книги и старые предания","любитель посидеть в кабаке за чашкой медового кваса","с детства ковал железо и знает толк в руде и закалке","умеет починить любую утварь за горсть зерна или доброе слово","сын рыбака, потерявший лодку в бурю и начавший пахать землю","внук старого волхва, тайком сохранивший древние деревянные амулеты","молодой солевар, знавший секрет выпаривания самой чистой соли","рос в большой семье, где хлеб добывался потом и мозолями","помогал купцам сплавлять плоты через опасные речные пороги","сын гончара, способный выкрутить идеальный глиняный кувшин","сбежал от долговой кабалы в дальнюю лесную слободу","тихий парень с крепкими кулаками, не лезущий в драку первым","сын зверолова, с юных лет ставивший силки на куниц","мечтающий скопить серебра и построить большой бревенчатый дом"];
+const historyCores=["рос сиротой в глухом лесу и с детства приучен выживать среди дикого зверья","бежал от злого боярина из южных земель и обосновался на новом месте","сын зажиточного крестьянина, потерявший хозяйство во время весеннего паводка","бывший боевой холоп, получивший вольную за спасение боярина в сече","младший из семи братьев в семье смолокурщиков, знающий тайны лесного огня","племянник деревенского знахаря, с малолетства перенимавший секреты целебных трав","убежал из городского посада от учёбы у сурового и жадного мастера","чудом выжил после жестокой лихорадки, оставившей шрамы и несгибаемую волю","сын обедневшего дружинника, решивший попытать счастья мирным трудом","родился в год великой засухи и с тех пор привык ценить каждый колосок","много странствовал с караванами купцов и повидал чужие города и нравы","потерял избу от случайного пожара и теперь начинает жизнь с чистого листа","тихий и угрюмый малый, чьи руки способны вытесать из дерева любое чудо","задира и буян в прошлом, решивший остепениться и завести честное хозяйство","вырос у самой речной переправы и с ранних лет управлялся с тяжёлыми ладьями","служил сторожем на древнем городище, пока татары не сожгли укрепления","сын искусного бортника, знающий каждое дупло с диким мёдом наперечёт","сбежал от княжеской повинности в глухую волость под чужим именем","остался калекой на одну руку после кулачного боя, но не утратил сметки","всю юность помогал отцу ковать лемеха и чинить боевые топоры","ученик бродячего иконописца, ушедший от наставника искать свою дорогу","сирота, выросший при монастырской богадельне и обученный грамоте и счёту","сын заезжего варяга, осевшего на русской земле и принявшего местный уклад","пережил нападение разбойников, потерял семью, но сберёг отцовский меч","упрямый и молчаливый труженик, поднимающий заброшенный надел у оврага","бывший рыболов с озера Ильмень, пришедший искать удачи на великие реки","весёлый говорун, умеющий заговорить зубы любому княжьему приказчику","сын кузнеца, сбежавший из дома из-за строгого нрава родителя","вырос в семье пчеловодов и понимает язык пчёл лучше человеческого","пережил три эпидемии чумы, за что соседи считают его заговорённым","упрямый спорщик, вечно ищущий правды на деревенских вечах","тихий парень, умеющий шить из кожи крепкую упряжь и мягкие сапоги","сын посадского стражника, обученный стрельбе из простого лука","помогал строить княжеские хоромы и перенял хитрости плотницкого дела","обошёл пешком все земли от Новгорода до самого Киева","встретил старость в душе юноши и упрямо берётся за любую работу","сын обедневшего священника, знающий церковные книги и старые предания","любитель посидеть в кабаке за чашкой медового кваса","с детства ковал железо и знает толк в руде и закалке","умеет починить любую утварь за горсть зерна или доброе слово","сын рыбака, потерявший лодку в бурю и начавший пахать землю","внук старого волхва, тайком сохранивший древние деревянные амулеты","молодой солевар, знавший секрет выпаривания самой чистой соли","рос в большой семье, где хлеб добывался потом и мозолями","помогал купцам сплавлять плоты через опасные речные пороги","сын гончара, способный выкрутить идеальный глиняный кувшин","сбежал от долговой кабалы в дальнюю лесную слободу","тихий парень с крепкими кулаками, не лезущий в драку первым","сын зверолова, с юных лет ставивший силки на куниц","мечтающий скопить серебра и построить большой бревенчатый дом"];
 const ageAdjectives={12:"Двенадцатилетний",13:"Тринадцатилетний",14:"Четырнадцатилетний",15:"Пятнадцатилетний",16:"Шестнадцатилетний",17:"Семнадцатилетний",18:"Восемнадцатилетний",19:"Девятнадцатилетний",20:"Двадцатилетний",21:"Двадцатиоднолетний",22:"Двадцатидвухлетний",23:"Двадцатитрёхлетний",24:"Двадцатичетырёхлетний",25:"Двадцатипятилетний",26:"Двадцатишестилетний",27:"Двадцатисемилетний",28:"Двадцативосьмилетний",29:"Двадцатидевятилетний",30:"Тридцатилетний",31:"Тридцатиоднолетний",32:"Тридцатидвухлетний",33:"Тридцатитрёхлетний",34:"Тридцатичетырёхлетний",35:"Тридцатипятилетний"};
 
 const perkDefinitions={
-  coward:{name:"Страшливый",threshold:2},
-  brave:{name:"Удалой",threshold:2},
-  generous:{name:"Даритель",threshold:2},
-  greedy:{name:"Сребролюбец",threshold:2},
-  merciful:{name:"Милостивый",threshold:2},
-  pious:{name:"Благочестивый",threshold:2},
-  cunning:{name:"Лукавый",threshold:2},
-  hardworker:{name:"Трудолюбивый",threshold:2},
-  nehoroshiy:{name:"Нехороший",threshold:2},
-  skolzkiy:{name:"Скользкий",threshold:2},
-  nasilnik:{name:"Насильник",threshold:2},
-  zhuk:{name:"Жук",threshold:2}
+  coward:{name:"Страшливый",threshold:5},
+  brave:{name:"Удалой",threshold:5},
+  generous:{name:"Даритель",threshold:5},
+  greedy:{name:"Сребролюбец",threshold:5},
+  merciful:{name:"Милостивый",threshold:5},
+  pious:{name:"Благочестивый",threshold:5},
+  cunning:{name:"Лукавый",threshold:5},
+  hardworker:{name:"Трудолюбивый",threshold:5},
+  nehoroshiy:{name:"Нехороший",threshold:5},
+  skolzkiy:{name:"Скользкий",threshold:5},
+  nasilnik:{name:"Насильник",threshold:5},
+  zhuk:{name:"Жук",threshold:5}
 };
 // Плохие теги: при выборе 50% шанс доп. штрафа к почести
 
 const blackEvents=[
 {
-  text:"ЧЁРНОЕ ЛЕТО: Мор пришёл в волость. Соседи падают за день. Что сделаешь?",
+  text:"Чёрное лето: Мор пришёл в волость. Соседи падают за день. Что сделаешь?",
   history:"Эпидемии регулярно опустошали русские земли. Карантин, бегство и молитвы были главными средствами.",
   isBlack:true,
+  imgs:["мор чума массовая смерть","эпидемия мор чума"],
   opts:[
     {t:"Сжечь заражённые дворы",r:"Огонь остановил заразу, но пепел лёг на половину села.",hp:-10,s:-8,g:12,tags:["brave","hardworker"],family:null},
     {t:"Бежать с семьёй в лес",r:"Семья спаслась в шалашах, деревня вымерла за спиной.",hp:-5,s:-5,g:-10,tags:["coward"],family:{father:"в бегах"}},
-    {t:"Молиться и ждать",r:"Чудо обошло стороной. Потерял близких и здоровье.",hp:-20,s:0,g:-5,tags:["pious"],family:{wife:"больна",son:"болен"}},
+    {t:"Молиться и ждать",r:"Чудо обошло стороной. Потерял близких и здоровье.",hp:-20,s:0,g:-5,tags:["pious"],family:{wife:"больна",son:"болен",daughter:"больна"}},
     {t:"Помогать больным",r:"Спас нескольких, сам едва не лёг в землю.",hp:-15,s:-3,g:20,tags:["merciful","brave"],family:null},
-    {t:"Закрыть свой двор",r:"Свои живы, соседи прокляли эгоизм.",hp:0,s:0,g:-15,tags:["greedy"],family:null},
-    {t:"Уйти к знахарю",r:"Знахарь взял последнее серебро. Мор отступил от твоего порога.",hp:5,s:-12,g:3,tags:["cunning"],family:null}
+    {t:"Закрыть свой двор",r:"Свои живы, соседи прокляли эгоизм.",hp:0,s:8,g:-15,tags:["greedy"],family:null},
+    {t:"Уйти к знахарю",r:"Знахарь взял последнее серебро. Мор отступил от твоего порога.",hp:5,s:-12,g:3,tags:["cunning"],family:null},
+    {t:"🦸 Обойти дворы с водой хлебом",r:"Таскал живых из мертвецких изб до потери пульса. Мор не простил тела — слава простила всё.",hp:-22,s:-10,g:30,tags:["merciful","brave","generous"],extreme:"hero",family:null},
+    {t:"😈 Жечь дворы вместе с больными",r:"Огонь «чистил» людей. Ты грел руки у чужого серебра — волость прокляла имя навек.",hp:-4,s:20,g:-32,tags:["nasilnik","nehoroshiy","greedy"],extreme:"villain",family:null}
   ]
 },
 {
-  text:"ЧЁРНОЕ ЛЕТО: Татарский отряд окружил деревню. Требуют всё серебро и людей.",
+  text:"Чёрное лето: Татарский отряд окружил деревню. Требуют всё серебро и людей.",
   history:"Набеги ордынцев и разбойных отрядов были постоянной угрозой окраинных волостей.",
   isBlack:true,
+  imgs:["нападение татар","татары напали","осада города татарами"],
   opts:[
     {t:"Отдать всё без боя",r:"Деревня цела, но казна и честь выжжены дотла.",hp:0,s:-20,g:-15,tags:["coward"],family:null},
     {t:"Поднять мужиков на бой",r:"Многие пали, отряд отогнали. Имя гремит, тело в ранах.",hp:-25,s:0,g:25,tags:["brave","nasilnik"],family:{son:"болен"}},
-    {t:"Спрятать семью и добро",r:"Семья уцелела, двор разграбили.",hp:-5,s:-10,g:5,tags:["cunning"],family:{wife:"в бегах",son:"в бегах"}},
+    {t:"Спрятать семью и добро",r:"Семья уцелела, двор разграбили.",hp:-5,s:-10,g:5,tags:["cunning"],family:{wife:"в бегах",son:"в бегах",daughter:"в бегах"}},
     {t:"Сам в заложники",r:"Тебя увели. Семья и село остались целы.",hp:-10,s:0,g:18,tags:["brave","merciful"],family:null},
     {t:"Засада в лесу",r:"Часть отряда уничтожена. Риск мести теперь висит над волостью.",hp:-12,s:5,g:15,tags:["cunning","brave"],family:null},
-    {t:"Бежать одному",r:"Спасся. Семью увели, дом сожгли.",hp:5,s:-5,g:-25,tags:["coward","nehoroshiy"],family:{wife:"в бегах",son:"в бегах",father:"мертв"}}
+    {t:"Бежать одному",r:"Спасся. Семью увели, дом сожгли.",hp:5,s:-5,g:-25,tags:["coward","nehoroshiy"],family:{wife:"в бегах",son:"в бегах",daughter:"в бегах",father:"мертв"}},
+    {t:"🦸 Выйти один с кольём выкупить",r:"Стал щитом у ворот. Изрешетили, но отряд ушёл без полона — имя осталось на устах уцелевших.",hp:-28,s:-5,g:32,tags:["brave","merciful"],extreme:"hero",family:null},
+    {t:"😈 Указать ордынцам богатые дворы чужих",r:"Купил себе жизнь чужими. Серебро вернули мелкой горстью — проклятие всей волости тяжелее ларца.",hp:2,s:10,g:-35,tags:["zhuk","nehoroshiy","coward"],extreme:"villain",family:null}
   ]
 },
 {
-  text:"ЧЁРНОЕ ЛЕТО: Пожар охватил всю деревню ночью. Крик, дым, хаос.",
-  history:"Деревянные поселения горелили часто. Пожар мог уничтожить волость за несколько часов.",
+  text:"Чёрное лето: Пожар охватил всю деревню ночью. Крик, дым, хаос.",
+  history:"Деревянные поселения горели часто. Пожар мог уничтожить волость за несколько часов.",
   isBlack:true,
+  imgs:["пожар горе","пожар у соседей"],
   opts:[
     {t:"Спасать людей",r:"Вытащил троих из огня. Сам обгорел, но слава огромна.",hp:-18,s:0,g:22,tags:["brave","merciful"],family:null},
-    {t:"Спасать своё добро",r:"Сундук цел, соседи запомнили, кого ты выбрал.",hp:0,s:5,g:-18,tags:["greedy"],family:null},
+    {t:"Спасать своё добро",r:"Сундук цел, соседи запомнили, кого ты выбрал.",hp:0,s:12,g:-18,tags:["greedy"],family:null},
     {t:"Искать семью",r:"Нашёл жену и сына. Отец не вышел из горящей избы.",hp:-8,s:-5,g:8,tags:["merciful"],family:{father:"мертв"}},
     {t:"Тушить общим рядом",r:"Сообща отстояли половину села. Силы на исходе.",hp:-12,s:-3,g:14,tags:["hardworker","brave"],family:null},
-    {t:"Бежать за околицу",r:"Жив. Деревня сгорела, семья потеряна в дыму.",hp:5,s:0,g:-20,tags:["coward"],family:{wife:"в бегах",son:"в бегах",father:"в бегах"}},
-    {t:"Спасти церковь",r:"Храм уцелел. Люди видят в тебе опору веры.",hp:-10,s:-2,g:16,tags:["pious","brave"],family:null}
+    {t:"Бежать за околицу",r:"Жив. Деревня сгорела, семья потеряна в дыму.",hp:5,s:0,g:-20,tags:["coward"],family:{wife:"в бегах",son:"в бегах",daughter:"в бегах",father:"в бегах"}},
+    {t:"Спасти церковь",r:"Храм уцелел. Люди видят в тебе опору веры.",hp:-10,s:-2,g:16,tags:["pious","brave"],family:null},
+    {t:"🦸 Войти в самый жар снова",r:"Возвращался в пламя, пока голос не сел. Вытащил больше всех — шрамы навеки, слава тоже.",hp:-24,s:-3,g:30,tags:["brave","merciful"],extreme:"hero",family:null},
+    {t:"😈 Завалить чужие двери изнутри грабить",r:"Запер соседей в огне и таскал сундуки. Пепел скрыл улики — люди всё равно узнают запах твоих рук.",hp:-3,s:22,g:-34,tags:["nasilnik","nehoroshiy","greedy"],extreme:"villain",family:null}
   ]
 }
 ];
 
 const badTags=new Set(["nehoroshiy","zhuk","nasilnik","greedy","coward"]);
-
 let currentQuestionIndex=0,availableQuestions=[],currentYear=1320,totalQuestions=0;
+let gameOver=false,choiceLocked=false,endGameTimer=null,historyWritten=false,lastHistoryId=null;
+const HISTORY_KEY="oldrussia_chronicle_v1";
+const HISTORY_MAX=200;
 const yearEvents={"1320": ["Новгородский поход на Торжок", "Усиление позиций Ивана Калиты", "Литовский набег на псковичей", "Каменное строительство в Ростове", "Борьба Дмитрия в Орде"], "1321": ["Закладка храма Спаса на Бору", "Конфликт Твери с Новгородом", "Княжеские поездки в Сарай", "Ревизия баскаков на Руси", "Набеги кочевников на юг"], "1322": ["Ярлык передан Дмитрию Тверскому", "Строительство новгородского Орешка", "Поддержка ордынских договорённостей Калитой", "Отражение литовских набегов", "Приток переселенцев в Москву"], "1323": ["Отеховский мирный договор", "Завершение строительства крепости Орешек", "Убийство Юрия Московского", "Арест Дмитрия Тверского ханом", "Переход руководства к Калите"], "1324": ["Поездка Калиты к хану", "Напряжение в Тверском княжестве", "Внутриполитическая борьба в Новгороде", "Литовская экспансия на запад", "Рост производства оружия"], "1325": ["Воцарение Ивана Калиты", "Москва — резиденция митрополита", "Казнь Дмитрия Тверского", "Замедление литовских набегов", "Оживление Волжской торговли"], "1326": ["Закладка московского Успенского собора", "Александру Тверскому дали ярлык", "Сотрудничество Калиты с Ордой", "Новые храмы Кремля", "Отражение литовского набега Псковом"], "1327": ["Антиордынское восстание в Твери", "Карательный поход Калиты", "Разорение Твери, бегство Александра", "Ярлык передан Ивану Калите", "Временный раздел великокняжеских земель"], "1328": ["Калита стал великим князем", "Требования выдачи Александра Псковом", "Угроза отлучения Пскова от церкви", "Наступление «великой тишины»", "Концентрация дани в Москве"], "1329": ["Бегство Александра Тверского в Литву", "Поездка Калиты в Сарай", "Освящение Успенского собора", "Новгород признал старшинство Москвы", "Усмирение удельных князей"], "1330": ["Возведение укреплений Московского Кремля", "Возвращение Александра в Тверь", "Въезд Калиты во Владимир", "Рост ремесленных слобод", "Династические браки московского дома"], "1331": ["Споры вокруг митрополии", "Суд князей в Сарае", "Присоединение волостей к Москве", "Осада пригородов Гедимином", "Ведение летописных сводов"], "1332": ["Отказ Новгорода платить дань", "Занятие Торжка и Белоозера", "Расширение влияния на севере", "Возобновление стройки в Твери", "Укрепление стен псковского Крома"], "1333": ["Мир Москвы с Новгородом", "Закладка Архангельского собора", "Бегство новгородской оппозиции", "Подтверждение привилегий Калиты", "Локальный голод на Руси"], "1334": ["Поездка Калиты в Орду", "Попытки восстановления Твери", "Отражение нападений Ливонии", "Централизация церковных доходов", "Развитие дорожной сети"], "1335": ["Рост напряжения вокруг Твери", "Постройка церкви Иоанна Лествичника", "Укрепление Костромы с Переяславлем", "Перемирие с Литовским княжеством", "Контроль сбора дани Калитой"], "1336": ["Паломничество Калиты в Сарай", "Споры с новгородским вече", "Основание новых монастырей", "Рост числа московских ремесленников", "Литовский набег на Смоленск"], "1337": ["Основание Троице-Сергиева монастыря", "Поездка Александра в Сарай", "Доносы Калиты на тверского князя", "Лавирование смоленских князей", "Закрепление статуса Москвы"], "1338": ["Неудачная литовская осада Смоленска", "Постройка Сергием деревянной Троицкой церкви", "Покупка части Ростовского княжества", "Торговые соглашения с Ордой", "Подготовка удара по Твери"], "1339": ["Казнь Александра Тверского", "Раздробление Тверского княжества", "Завершение строительства Архангельского собора", "Смерть Ивана I Калиты", "Воцарение Семёна Гордого"], "1340": ["Начало правления Семёна Гордого", "Получение ярлыка Семёном", "Поход русской рати на Смоленск", "Набег Ольгерда на Торжок", "Смерть хана Узбека, смуты"], "1341": ["Джанибек воцарился в Орде", "Переговоры Семёна с Новгородом", "Отражение татарских набегов", "Отстаивание княжеских прав Семёном", "Украшение Московского Кремля"], "1342": ["Поход Семёна на Торжок", "Подтверждение церковных привилегий", "Московское влияние на Белоозере", "Литовские походы на Псков", "Рост каменных построек"], "1343": ["Ливонская осада Пскова", "Помощь Семёна псковичам", "Княжеский съезд в Москве", "Укрепление денежного обращения", "Строительство новых храмов"], "1344": ["Мир Пскова с Ливонией", "Поездка Семёна в Сарай", "Совершенствование сбора пошлин", "Создание тверских летописей", "Укрепление авторитета Семёна"], "1345": ["Начало правления Ольгерда в Литве", "Поездка Семёна к хану", "Стычки на литовской границе", "Рост торговых пошлин Москвы", "Укрепление обороны южных рубежей"], "1346": ["Смена власти в Орде (хан Джанибек)", "Подтверждение великокняжеских прав Симеона", "Поход литовцев на Псков", "Укрепление позиций Москвы на Севере", "Развитие церковного строительства"], "1347": ["Отражение набегов кочевников", "Дипломатическая миссия Москвы в Орду", "Разграничение земель с Новгородом", "Укрепление союза с уделами", "Расширение московских ремесленных слобод"], "1348": ["Болотовский договор Пскова с Новгородом", "Потеря Новгородом части самостоятельности", "Нападение шведов на земли карел", "Усиление контроля Москвы над севером", "Строительство новых каменных церквей"], "1349": ["Династический союз Москвы и Твери", "Поездка Семёна Гордого в Сарай", "Отражение набегов литовских отрядов", "Рост влияния митрополичьей кафедры", "Развитие внутренней торговли"], "1350": ["Эпидемия чумы («Чёрная смерть») в Европе", "Проникновение эпидемии на Русь", "Строительство новых храмов-молебнов", "Дипломатические контакты с Ордой", "Стабилизация границ после моровой язвы"], "1351": ["Литовский поход Ольгерда на Ржев", "Ответный поход Семёна Гордого", "Возобновление укрепления Ржева", "Переговоры о мире с Литвой", "Укрепление московских гарнизонов"], "1352": ["Эпидемия чумы в Пскове и Новгороде", "Начало каменного строительства в Пскове", "Смерть псковского князя Ивана Александровича", "Осада Пскова литовскими войсками", "Дипломатическая поддержка Пскова Москвой"], "1353": ["Смерть князя Семёна Гордого от чумы", "Смерть сыновей Семёна от мора", "Смерть митрополита Феогноста", "Борьба за ярлык между Москвой и Суздалем", "Переход престола к Ивану II Красному"], "1354": ["Поездка Ивана II в Сарай за ярлыком", "Получение Иваном великого княжения", "Возведение Алексия в митрополиты", "Обострение борьбы за влияние в Новгороде", "Набеги литовцев на приграничные волости"], "1355": ["Усиление позиций Ивана II Красного", "Поездки митрополита Алексия в Орду", "Укрепление мира с Тверским княжеством", "Земельные приобретения московского дома", "Строительство новых монастырей"], "1356": ["Литовский захват Брянска Ольгердом", "Переход чернигово-северских земель под Литву", "Поездка Ивана II в Орду", "Внутренние усобицы в Рязанском княжестве", "Укрепление южных границ Московского княжества"], "1357": ["Поездка митрополита Алексия в Орду", "Чудесное исцеление Тайдулы митрополитом", "Убийство хана Джанибека, смуты в Орде", "Укрепление авторитета митрополичьей власти", "Дипломатические манёвры Москвы"], "1358": ["Набег литовских войск на южные земли", "Строительство Спасского монастыря в Москве", "Укрепление позиций митрополита Алексия", "Смерть хана Бердибека в Орде", "Ослабление центральной власти в Орде"], "1359": ["Смерть московского князя Ивана II Красного", "Начало правления Дмитрия Ивановича (Донского)", "Малолетство Дмитрия, усиление роли Алексия", "Переход ярлыка к суздальскому князю", "Начало «великой замятни» в Золотой Орде"], "1360": ["Переход великого владимирского ярлыка к Дмитрию Суздальскому", "Обострение борьбы за великокняжеский престол", "Московские бояре добиваются поддержки Орды", "Набеги нижегородцев и суздальцев", "Укрепление Москвы при поддержке митрополита"], "1361": ["Захват Владимиром московскими силами ярлыка", "Раздел ордынскими претендентами власти в Сарае", "Нападение татарских отрядов на Нижегородчину", "Дипломатические победы митрополита Алексия", "Рост влияния юного Дмитрия Московского"], "1362": ["Битва на Синих Водах (победа Ольгерда)", "Вхождение Юго-Западной Руси в состав Литвы", "Возвращение ярлыка Дмитрию Московскому", "Изгнание Дмитрия Суздальского из Владимира", "Объединение владимирского и московского престолов"], "1363": ["Поход москвичей на Суздаль и Нижний Новгород", "Окончательное закрепление великого княжения за Москвой", "Примирение Дмитрия Московского с Дмитрием Суздальским", "Литовские нападения на смоленские земли", "Строительство новых укреплений в городах"], "1364": ["Эпидемия чумы в ряде русских земель", "Поездка Дмитрия Московского в Орду", "Укрепление союза Москвы с Ростовом", "Набеги ушкуйников на волжские города", "Отражение литовских набегов на запад"], "1365": ["«Всехсвятский пожар» в Москве", "Начало обсуждения строительства каменного Кремля", "Сражение у Шишевского леса с рязанцами", "Пожар в Нижнем Новгороде", "Укрепление южных рубежей Рязанского княжества"], "1366": ["Нападение новгородских ушкуйников на Кострому", "Поход москвичей против новгородских ушкуйников", "Строительство новых оборонительных укреплений", "Обострение отношений с Тверским княжеством", "Дипломатические манёвры литовского князя Ольгерда"], "1367": ["Закладка белокаменного Московского Кремля", "Поход москвичей на Тверь", "Заключение мира с тверским князем", "Нападение литовцев на южные рубежи", "Отражение набегов объединённых сил"], "1368": ["Первый поход Ольгерда на Москву", "Осада белокаменного Кремля литовскими войсками", "Отступление Ольгерда без взятия Кремля", "Опустошение московских волостей литовцами", "Заключение временного перемирия с Литвой"], "1369": ["Союз Москвы с Тверью против Литвы", "Поход москвичей на владения Ольгерда", "Подготовка к новым столкновениям с Литвой", "Укрепление связей с северными землями", "Рост авторитета митрополита Алексия"], "1370": ["Второй поход Ольгерда на Москву", "Осада Волоколамска тверскими и литовскими войсками", "Переговоры Москвы с литовскими послами", "Поездка тверского князя Михаила в Орду за ярлыком", "Получение тверским князем ярлыка на великое княжение"], "1371": ["Отказ Дмитрия признать ярлык Твери", "Поездка Дмитрия Московского в Орду к хану", "Получение Дмитрием ярлыка обратно", "Конфликт с Олегом Рязанским", "Битва при Скорнищеве (победа москвичей над рязанцами)"], "1372": ["Поход Ольгерда на Москву в третий раз", "Стояние на реке Тьме под Любутском", "Заключение «вечного мира» с Литвой", "Признание Тверью старшинства Москвы", "Укрепление позиций Дмитрия Ивановича"], "1373": ["Набег ордынского мурзы Арапши на Рязань", "Поход московского войска к Оке", "Укрепление пограничной стражи на юге", "Стычки с литовскими отрядами на западе", "Строительство новых монастырей вокруг Москвы"], "1374": ["Съезд русских князей в Переяславле-Залесском", "Отказ Москвы платить дань Орде", "Избиение татарских купцов в Нижнем Новгороде", "Разрыв отношений с ханом Мамаем", "Поход тверского князя за ярлыком в Орду"], "1375": ["Общерусский поход на Тверское княжество", "Осада Твери соединёнными силами князей", "Подписание Тверского договора о подчинении Москве", "Окончательное признание старшинства Москвы над Тверью", "Укрепление антиордынской коалиции Северо-Востока"], "1376": ["Поход москвичей и суздальцев на Волжскую Булгарию", "Назначение московских таможенников в Булгаре", "Смерть митрополита Алексия Московского", "Укрепление позиций Дмитрия на Волге", "Стычки с отрядами Мамая на границах"], "1377": ["Битва на реке Пьяне (поражение от Арапши)", "Разорение Нижегородского и Рязанского княжеств татарами", "Внезапное нападение ордынцев на русские силы", "Усиление бдительности московских войск", "Сбор сил после поражения"], "1378": ["Битва на реке Воже (первая крупная победа над Ордой)", "Разгром ордынского войска Бегича москвичами", "Смерть литовского князя Ольгерда", "Начало междоусобиц в Литовском княжестве", "Подготовка Мамая к масштабному походу на Русь"], "1379": ["Поход москвичей на Брянск и Стародуб", "Переход князя Дмитрия Брянского на службу к Москве", "Нападение литовцев на московские границы", "Сбор сил общерусского ополчения", "Дипломатическая изоляция Мамая"], "1380": ["Куликовская битва (разгром Мамая)", "Объединение русских сил под Москвой", "Благословение Сергием Радонежским Дмитрия Донского", "Падение власти Мамая, воцарение Тохтамыша", "Начало восстановления после грандиозной битвы"], "1381": ["Восстановление ордынского единства при Тохтамыше", "Возвращение князя Дмитрия Тверского из Орды", "Подтверждение Тверью вассалитета от Москвы", "Поездка Дмитрия Донского в Орду с дарами", "Восстановление разрушенных войной городов"], "1382": ["Поход хана Тохтамыша на Москву", "Осада и взятие Москвы обманом", "Разорение города и окрестных земель ордынцами", "Восстановление выплаты дани Орде", "Временное ослабление позиций Москвы"], "1383": ["Получение тверским князем ярлыка на великое княжение", "Поездка князя Владимира Андреевича в Орду", "Восстановление разрушенного Кремля и Москвы", "Дипломатическая борьба за великокняжеские права", "Заключение союзов между русскими княжествами"], "1384": ["Строительство новых оборонительных линий на юге", "Переговоры Москвы с Литовским княжеством", "Укрепление волоцких и можайских рубежей", "Сбор средств на уплату ордынского выхода", "Развитие торговли с Новгородской землёй"], "1385": ["Кревская уния (союз Литвы и Польши)", "Нападение Олега Рязанского на Коломну", "Поход москвичей на Рязанское княжество", "Миротворческая миссия Сергия Радонежского в Рязани", "Заключение вечного мира с Рязанью"], "1386": ["Поход Дмитрия Донского на Новгород", "Осада Новгорода московским ополчением", "Выплата новгородцами огромной контрибуции («чёрный бор»)", "Укрепление позиций Москвы на Севере", "Заключение мира с Новгородской республикой"], "1387": ["Возвращение княжеских сыновей из ордынского заложничества", "Укрепление литовско-польского союза (Ягайло)", "Возобновление строительства каменных храмов", "Рост авторитета московского митрополита", "Стабилизация финансовой системы княжества"], "1388": ["Съезд русских князей в Москве", "Урегулирование споров о вотчинах и границах", "Подготовка к отражению угрозы со стороны Тамерлана", "Укрепление оборонительных сооружений Владимира", "Развитие летописного дела в Москве"], "1389": ["Смерть великого князя Дмитрия Донского", "Начало правления Василия I Дмитриевича", "Завещание Дмитрия о передаче великого княжения без Орды", "Поездка Василия I в Золотую Орду", "Утверждение позиций нового московского князя"]};
-let player={name:"",nickname:"",job:"",age:0,storyCore:"",hp:50,silver:20,glory:10,perkCounts:{},currentPerk:null,perkHistory:[],family:{wife:"цела",son:"цел",father:"цел"},chronicle:[],iron:false,skipHistory:false};
+let player={name:"",nickname:"",job:"",age:0,storyCore:"",hp:50,silver:20,glory:10,perkCounts:{},currentPerk:null,perkHistory:[],family:{wife:"цела",son:"цел",daughter:"цела",father:"цел"},chronicle:[],plaques:[],lastEvent:null,iron:false,skipHistory:false};
 
 function animateValue(el,start,end,duration){
   if(start===end){el.textContent=end;return}
@@ -176,100 +254,29 @@ function animateValue(el,start,end,duration){
 }
 
 
-// Картинки: img/<имя>.jpg|png — жёсткая привязка по тексту вопроса
-function getQuestionImage(text, isBlack){
-  const t=(text||"").toLowerCase();
-  if(isBlack){
-    if(t.includes("мор")||t.includes("эпидем")) return "mor";
-    if(t.includes("татар")) return "0023_napadenie_tatary";
-    if(t.includes("пожар")) return "0011_gore_pojar";
-    return "osada";
-  }
-  const rules=[
-    ["0040_bolezn", ["лихорад","захворал","зелье","знахар","наговор на смерть"]],
-    ["mor", ["эпидемия","сжечь дома","моровая","чума"]],
-    ["reka_ladya", ["тонут","перевернулась","лодка","пороги","византию","поход дружины"]],
-    ["osada", ["татарский отряд","предать город","осада"]],
-    ["khan", ["стать тиуном","князь лично","письмо","замышляет","ярлык"]],
-    ["0039_kulachny_boy", ["маслениц","стенка","кулач"]],
-    ["0009_maslenitsa", ["маслениц"]],
-    ["0026_zasukha", ["засух","волхв"]],
-    ["0038_vor", ["ворует","вор ","краденое","ворующего","спрятать краденое"]],
-    ["0024_nakhodka", ["кошель на дороге","нашёл чужой"]],
-    ["0022_stroyka", ["строишь избу","под венец","размыло дорогу","починить"]],
-    ["0000_izba", ["строишь избу","под венец","домовой"]],
-    ["0013_rabota_v_pole", ["убирать репу"]],
-    ["0036_veche", ["на сходе","десятника","на вече","варягов"]],
-    ["0004_pole_stado_korovy_krestyanin", ["волки подошли","пропала коза"]],
-    ["0002_devushka", ["гребень","жена просит отдать сало"]],
-    ["0037_kupec", ["купец","на торгу","конкурента-торговца","кругляши"]],
-    ["0016_knyaz_zloy", ["тиун просит перенести","через грязь"]],
-    ["0031_kabak", ["в кабаке","проклятием","ограбили купца"]],
-    ["0010_armia", ["выставить воина","на войну"]],
-    ["0025_good_uroj", ["зерна вдвое","колдовство"]],
-    ["0028_otec_i_sin", ["забрать сына","один сын","сын умер","в холопы"]],
-    ["0032_klad", ["клад","дирхем"]],
-    ["0020_vzyat_v_dolg", ["в долг","просит в долг"]],
-    ["0012_prazdnik", ["жена родила","родины"]],
-    ["0003_bogatyr_straja_ohrana", ["стража"]],
-    ["0034_vera_tserkov", ["храм","юродив","видение","беса","священник"]],
-    ["0030_sud", ["свидетельствовать","на суде","брат убил","община требует"]],
-    ["0021_golod", ["голодный год","голода","во время голода"]],
-    ["0007_zlodey_s_nojom_dom", ["дружинник требует","твою жену"]],
-    ["0006_zlodey_s_nojom_les", ["боярин бьёт","бьёт холопа"]],
-    ["0041_nalog", ["тиун требует","сборщик","ульев","дань","недоимк"]],
-    ["0029_bratya", ["беглый холоп"]],
-    ["0027_otec_i_doch", ["дочь","наложниц"]],
-    ["0035_semya", ["ребёнок не от тебя","в приданое"]],
-    ["0008_svadba", ["приданое за землю"]],
-    ["0023_napadenie_tatary", ["татар"]],
-    ["0011_gore_pojar", ["пожар"]],
-    ["0018_knyaz", ["князь"]],
-    ["0014_bedny_krestyanin", ["последние"]]
-  ];
-  for(let r=0;r<rules.length;r++){
-    const file=rules[r][0], keys=rules[r][1];
-    for(let k=0;k<keys.length;k++){
-      if(t.indexOf(keys[k])!==-1) return file;
-    }
-  }
-  return "0014_bedny_krestyanin";
+// Картинки задаются в questions.js (imgs[]) и у blackEvents; при нескольких — случайный выбор
+const FALLBACK_IMGS=["в избе 1","семья","праздник","бедный крестьянин","сход мужчины"];
+function pickImageName(q){
+  const list=Array.isArray(q&&q.imgs)?q.imgs:(q&&q.img?[q.img]:[]);
+  const pool=list.length?list:FALLBACK_IMGS;
+  const name=pool[Math.floor(Math.random()*pool.length)];
+  return String(name||FALLBACK_IMGS[0]).replace(/\.(jpg|jpeg|png|webp)$/i,"").trim();
 }
-function showQuestionImage(text, isBlack){
-  const baseName=getQuestionImage(text, isBlack);
+function showQuestionImage(q){
+  const baseName=pickImageName(q);
   const img=document.getElementById("qImage");
-  if(!img) return;
-  // пути: img/name.jpg, img/name.png, name.jpg (рядом с index)
-  // name, без нулей, короткий хвост после _ (vor, stroyka, kulachny_boy)
-  const short=baseName.replace(/^\d+_/, "");
-  const names=[baseName, baseName.replace(/^0+/, ""), short];
-  const folders=["img/","images/",""];
-  const exts=[".jpg",".png",".jpeg",".webp"];
-  const candidates=[];
-  const seen={};
-  for(let f=0;f<folders.length;f++){
-    for(let n=0;n<names.length;n++){
-      if(!names[n]) continue;
-      for(let e=0;e<exts.length;e++){
-        const p=folders[f]+names[n]+exts[e];
-        if(!seen[p]){ seen[p]=1; candidates.push(p); }
-      }
-    }
-  }
-  let attempt=0;
-  img.style.display="block";
-  img.onload=function(){ img.style.display="block"; };
+  const wrap=document.getElementById("qVisual");
+  if(!img||!wrap) return;
+  const src="img/"+baseName+".jpg";
+  wrap.classList.remove("splash");
+  wrap.classList.remove("end");
+  img.onload=function(){ wrap.style.display="block"; };
   img.onerror=function(){
-    attempt++;
-    if(attempt<candidates.length){
-      img.src=candidates[attempt];
-    } else {
-      img.style.display="none";
-      if(window.console) console.warn("Нет картинки для:", text, "искали:", baseName);
-    }
+    img.onerror=null;
+    wrap.style.display="none";
   };
-  attempt=0;
-  img.src=candidates[0];
+  wrap.style.display="block";
+  img.src=encodeURI(src);
   img.alt=baseName;
 }
 
@@ -297,13 +304,15 @@ function getRank(g){
   return "Князь";
 }
 
+function familyMemberGone(st){
+  return /^(мертв|мертва|в бегах|прогнан|прогнана|в холопах|у боярина)$/.test(st||"");
+}
 function familyLost(){
-  const f=player.family;
-  return f.wife==="мертва"&&f.son==="мертв"&&f.father==="мертв";
+  return familyAllGone();
 }
 function familyAllGone(){
-  const bad=new Set(["мертв","мертва","в бегах"]);
-  return bad.has(player.family.wife)&&bad.has(player.family.son)&&bad.has(player.family.father);
+  const f=player.family;
+  return familyMemberGone(f.wife)&&familyMemberGone(f.son)&&familyMemberGone(f.daughter)&&familyMemberGone(f.father);
 }
 function updateFamilyDisplay(){
   const f=player.family;
@@ -313,7 +322,7 @@ function updateFamilyDisplay(){
   }
   const el=document.getElementById("familyLine");
   if(!el) return;
-  el.innerHTML="Семья: жена <span class=\""+cls(f.wife)+"\">"+f.wife+"</span> · сын <span class=\""+cls(f.son)+"\">"+f.son+"</span> · отец <span class=\""+cls(f.father)+"\">"+f.father+"</span>";
+  el.innerHTML="Семья: жена <span class=\""+cls(f.wife)+"\">"+f.wife+"</span> · сын <span class=\""+cls(f.son)+"\">"+f.son+"</span> · дочь <span class=\""+cls(f.daughter)+"\">"+f.daughter+"</span> · отец <span class=\""+cls(f.father)+"\">"+f.father+"</span>";
 }
 function applyFamilyChange(fam){
   if(!fam) return;
@@ -321,6 +330,69 @@ function applyFamilyChange(fam){
     if(player.family[k]!==undefined) player.family[k]=fam[k];
   });
   updateFamilyDisplay();
+}
+function yearsWord(n){
+  const n10=n%10,n100=n%100;
+  if(n100>=11&&n100<=14) return "лет";
+  if(n10===1) return "год";
+  if(n10>=2&&n10<=4) return "года";
+  return "лет";
+}
+function describeFamilyStatus(role,st){
+  const maps={
+    wife:{
+      "цела":"жива и здорова",
+      "больна":"хворает",
+      "в бегах":"в бегах",
+      "мертва":"покойна",
+      "поругана":"поругана лихолетьем",
+      "прогнана":"прогнана из дому"
+    },
+    son:{
+      "цел":"жив и здоров",
+      "болен":"хворает",
+      "в бегах":"в бегах",
+      "мертв":"лежит в земле",
+      "в дружине":"ушёл в дружину",
+      "калека":"вернулся калекой",
+      "в холопах":"угодил в холопы",
+      "в учении":"в учении у мастера",
+      "в монастыре":"укрыт в монастыре",
+      "прогнан":"прогнан из отчего дома"
+    },
+    daughter:{
+      "цела":"жива и здорова",
+      "больна":"хворает",
+      "в бегах":"в бегах",
+      "мертва":"покойна",
+      "замужем":"вышла замуж",
+      "в монастыре":"укрыта в монастыре",
+      "у боярина":"отдана боярину",
+      "прогнана":"ушла из дому с зятем"
+    },
+    father:{
+      "цел":"жив и здоров",
+      "болен":"хворает",
+      "в бегах":"в бегах",
+      "мертв":"опочил",
+      "в монастыре":"ушёл в монастырь"
+    }
+  };
+  return (maps[role]&&maps[role][st])||st;
+}
+function getFamilyStory(){
+  const f=player.family;
+  const ok=function(st){return st==="цела"||st==="цел";};
+  if(ok(f.wife)&&ok(f.son)&&ok(f.daughter)&&ok(f.father)){
+    return "Его семья была цела: жена, сын, отец и дочь живы и здоровы.";
+  }
+  const bits=[
+    "жена "+describeFamilyStatus("wife",f.wife),
+    "сын "+describeFamilyStatus("son",f.son),
+    "дочь "+describeFamilyStatus("daughter",f.daughter),
+    "отец "+describeFamilyStatus("father",f.father)
+  ];
+  return "О семье его летопись помнит так: "+bits.join(", ")+".";
 }
 function addChronicle(opt,q){
   // ключевые решения: сильный сдвиг или чёрное событие
@@ -336,11 +408,167 @@ function addChronicle(opt,q){
 
 function getAgeAdjective(age){return ageAdjectives[age]||(age+"-летний")}
 function generateBioText(){
-  return getAgeAdjective(player.age)+" "+player.name+" по прозвищу "+player.nickname+" "+player.storyCore+". Возмужав, он взял в руки инструменты своего дела и стал искусным "+player.job+"ом, готовым к трудной жизни на русской земле.";
+  return getAgeAdjective(player.age)+" "+player.name+" по прозвищу "+player.nickname+" "+player.storyCore+". Возмужав, он взял в руки инструменты своего дела и стал известен как "+player.job+", готовый к трудной жизни на русской земле.";
 }
 function updatePerksDisplay(){
   const c=document.getElementById("perksContainer");
-  c.innerHTML=player.currentPerk?'<span class="perk">'+player.currentPerk+'</span>':"";
+  if(c) c.innerHTML=player.currentPerk?'<span class="perk">'+player.currentPerk+'</span>':"";
+}
+function updateRankDisplay(){
+  const el=document.getElementById("rankLabel");
+  if(el) el.textContent=getRank(player.glory);
+}
+function plaqueModHtml(p){
+  const bits=[];
+  if(p.hp) bits.push('<span class="'+(p.hp>0?"up":"down")+'">'+(p.hp>0?"+":"")+p.hp+" ❤️</span>");
+  if(p.s) bits.push('<span class="'+(p.s>0?"up":"down")+'">'+(p.s>0?"+":"")+p.s+" 🪙</span>");
+  if(p.g) bits.push('<span class="'+(p.g>0?"up":"down")+'">'+(p.g>0?"+":"")+p.g+" 🏅</span>");
+  bits.push('<span style="color:#7a5a30">/ход</span>');
+  return bits.join(" ");
+}
+function plaquePower(p){
+  if(!p) return 0;
+  if(p.power!=null) return p.power|0;
+  return Math.abs(p.hp|0)*2+Math.abs(p.s|0)*2+Math.abs(p.g|0)*2+4;
+}
+function updatePlaquesDisplay(){
+  const rail=document.getElementById("plaquesRail");
+  if(!rail) return;
+  const list=player.plaques||[];
+  if(!list.length){ rail.innerHTML=""; return; }
+  rail.innerHTML=list.map(function(p){
+    const net=(p.hp|0)+(p.s|0)+(p.g|0);
+    const cls=net>0?" good":(net<0?" bad":"");
+    const why=p.why?'<div class="plaque-why">'+escapeHtml(p.why)+'</div>':"";
+    return '<div class="plaque'+cls+'"><div class="plaque-title">'+escapeHtml(p.title)+'</div>'+why+'<div class="plaque-mods">'+plaqueModHtml(p)+'</div></div>';
+  }).join("");
+}
+function addPlaque(def){
+  if(!def||!def.id||!def.title) return null;
+  if(!player.plaques) player.plaques=[];
+  if(player.plaques.some(function(p){ return p.id===def.id; })) return null;
+  const p={
+    id:def.id,
+    title:def.title,
+    why:def.why||"",
+    hp:def.hp|0,
+    s:def.s|0,
+    g:def.g|0,
+    power:plaquePower(def)
+  };
+  // Максимум 5 самых сильных перков
+  if(player.plaques.length>=5){
+    let weakIdx=0;
+    for(let i=1;i<player.plaques.length;i++){
+      if(plaquePower(player.plaques[i])<plaquePower(player.plaques[weakIdx])) weakIdx=i;
+    }
+    if(p.power<=plaquePower(player.plaques[weakIdx])) return null;
+    player.plaques.splice(weakIdx,1);
+  }
+  player.plaques.push(p);
+  // Сразу применить за текущий ход
+  player.hp+=p.hp;player.silver+=p.s;player.glory+=p.g;
+  clampStats();
+  updatePlaquesDisplay();
+  return p;
+}
+function tickPlaques(){
+  if(!player.plaques||!player.plaques.length) return;
+  player.plaques.forEach(function(p){
+    player.hp+=p.hp|0;
+    player.silver+=p.s|0;
+    player.glory+=p.g|0;
+  });
+  clampStats();
+  updateStats();
+}
+function considerPlaques(opt,q){
+  // Сильные перки справа (макс. 5); «Жук» и т.п. — только у имени
+  const gained=[];
+  function tryAdd(def){ const p=addPlaque(def); if(p) gained.push(p); }
+  if(opt&&opt.plaque){ tryAdd(opt.plaque); return gained; }
+
+  const tags=opt.tags||[];
+  const has=function(t){ return tags.indexOf(t)>=0; };
+  const rt=((opt.r||"")+" "+(opt.t||"")+" "+((q&&q.text)||"")).toLowerCase();
+  const impact=Math.abs(opt.hp|0)+Math.abs(opt.s|0)+Math.abs(opt.g|0);
+  const isExtreme=!!opt.extreme;
+  const isBlack=!!(q&&q.isBlack);
+
+  // Нужен заметный исход или тег характера
+  if(!isExtreme && !isBlack && impact<10 && !tags.length) return gained;
+
+  const candidates=[];
+  function cand(def){ if(def) candidates.push(def); }
+
+  if(isExtreme&&opt.extreme==="hero")
+    cand({id:"village_savior",title:"Спаситель деревни",why:"Встал за волость — село помнит имя",hp:1,g:2,power:14});
+  if(isExtreme&&opt.extreme==="villain")
+    cand({id:"cursed_name",title:"Проклятый",why:"Зло таково, что шепчут твоё имя",s:1,g:-2,power:13});
+
+  if(/татар|орд|баскак|ясак|полон/.test(rt) && (has("zhuk")||has("nehoroshiy")||has("coward")) && (opt.g|0)<0)
+    cand({id:"tatar_lackey",title:"Татарский прихвостень",why:"Продал своих орде — есть серебро",s:2,g:-2,power:12});
+  if(/татар|орд|набег|осад|полон/.test(rt) && (has("brave")||has("merciful")||isExtreme) && (opt.g|0)>=6)
+    cand({id:"village_savior",title:"Спаситель деревни",why:"Отбил беду — волость зовёт щитом",hp:1,g:2,power:14});
+
+  if(/княз|дружин|ярлык|тиун|двор/.test(rt) && (opt.g|0)>=5 && !has("nehoroshiy"))
+    cand({id:"prince_shield",title:"Под защитой князя",why:"Князь заметил — сила за спиной",s:1,g:2,power:13});
+
+  if(/леч|знахар|лихорад|болн|мор|чум|трав|маз|исцел|зелье|отвар|бан/.test(rt) && ((opt.hp|0)>=6 || has("merciful") || has("pious")))
+    cand({id:"healer",title:"Лекарь",why:"Лечил людей — зовут к больным",hp:2,g:1,power:12});
+
+  if(has("greedy") && (opt.s|0)>=5)
+    cand({id:"zhadoba",title:"Жадоба",why:"Хапал сверх меры — душа стынет",s:2,g:-2,power:11});
+
+  if(has("coward") && (opt.g|0)<=-5)
+    cand({id:"village_fool",title:"Деревенский дурачок",why:"Струсил так, что село смеётся",hp:-1,g:-2,power:9});
+
+  if(has("pious") && (/церк|храм|поп|молит|пост|икон|монаст|бог/.test(rt) || (opt.g|0)>=4))
+    cand({id:"faith_keeper",title:"Хранитель веры",why:"За храм стоял — попы поминают",hp:1,g:2,power:11});
+
+  if(has("nasilnik") && ((opt.g|0)<=-6 || (opt.s|0)>=6))
+    cand({id:"bloody_fist",title:"Кровавый кулак",why:"Брал силой — боятся открыть рот",s:1,g:-2,power:11});
+
+  if((has("zhuk")||has("skolzkiy")) && (opt.s|0)>=4)
+    cand({id:"road_swindler",title:"Дорожный плут",why:"Обманом живёт — в торге ищут ложь",s:2,g:-1,power:10});
+
+  if(/пожар|огонь|плам|сжёг|сжечь/.test(rt) && (has("brave")||has("merciful")) && (opt.g|0)>=4)
+    cand({id:"fire_saver",title:"Спаситель из огня",why:"Из огня таскал — слава и шрамы",hp:-1,g:2,power:12});
+
+  if(/кабал|закуп|холоп|долг|тиун|дань|недоим/.test(rt) && (opt.s|0)<=-5)
+    cand({id:"bond_slave",title:"Кабальный",why:"Кабала на шее — серебро утекает",s:-2,g:-1,power:10});
+
+  if(has("brave") && (opt.g|0)>=5 && (opt.hp|0)<=-4)
+    cand({id:"scarred_glory",title:"Шрам удальца",why:"Кровь пролил — слава не сходит",hp:-1,g:1,power:10});
+
+  if(has("merciful") && (opt.g|0)>=3)
+    cand({id:"warm_hearth",title:"Тёплый очаг",why:"Пощадил своих — дом даёт силы",hp:1,g:1,power:9});
+
+  if(has("generous") && (opt.s|0)<=-4)
+    cand({id:"open_hand",title:"Щедрая рука",why:"Отдал своё — о тебе говорят добром",g:1,s:-1,power:8});
+
+  if(has("hardworker") && impact>=10)
+    cand({id:"strong_back",title:"Крепкая спина",why:"Тяжкий труд — тело привыкло",hp:1,power:8});
+
+  if(has("cunning") && (opt.s|0)>=3 && (opt.g|0)>=0)
+    cand({id:"fox_mind",title:"Лисий ум",why:"Хитростью выгадал — ум цепок",s:1,power:8});
+
+  if(has("nehoroshiy") && (opt.g|0)<=-6)
+    cand({id:"bad_name",title:"Дурная слава",why:"Подлость не забывают — молва ест честь",g:-1,power:9});
+
+  if(!candidates.length) return gained;
+
+  // Не каждый раз: чаще при сильном/чёрном/крайнем выборе
+  let chance=0.42;
+  if(isExtreme) chance=1;
+  else if(isBlack) chance=0.72;
+  else if(impact>=20) chance=0.58;
+  else if(impact<12) chance=0.28;
+  if(Math.random()>chance) return gained;
+
+  candidates.sort(function(a,b){ return plaquePower(b)-plaquePower(a); });
+  tryAdd(candidates[0]);
+  return gained;
 }
 function processTags(tags){
   if(!tags||!tags.length)return;
@@ -363,9 +591,35 @@ function processTags(tags){
   });
   updatePerksDisplay();
 }
+function dirtyGetawayChance(){
+  // 15%..30%: богаче и лукавее — чаще сходит с рук
+  const wealth=Math.min(1,Math.max(0,player.silver)/80);
+  const sneak=Math.min(1,((player.perkCounts.zhuk||0)+(player.perkCounts.cunning||0)+(player.perkCounts.skolzkiy||0))/8);
+  return 0.15+0.15*(0.5*wealth+0.5*sneak);
+}
+function applyDirtyGetaway(opt,tags){
+  // Подлый поступок иногда даёт прибыль без потери чести
+  if(!opt||!tags||!tags.length) return null;
+  if(!tags.some(t=>badTags.has(t))) return null;
+  if(Math.random()>=dirtyGetawayChance()) return null;
+  let dgFix=0;
+  if(opt.g<0){
+    player.glory-=opt.g; // откат потери чести
+    dgFix=-opt.g;
+  }
+  let bonus=0;
+  if(opt.s>0) bonus=Math.max(2,Math.floor(opt.s*0.3));
+  else bonus=3+Math.floor(Math.random()*5); // 3..7
+  player.silver+=bonus;
+  const notes=[
+    "Сошло с рук: поживился, а молва будто оглохла.",
+    "Следы замели серебром и тишиной — честь цела, кошель тяжёл.",
+    "Подлость окупилась без шума: никто не связал дело с тобой."
+  ];
+  return {dh:0,ds:bonus,dg:dgFix,note:notes[Math.floor(Math.random()*notes.length)],getaway:true};
+}
 function applyBadLuck(tags){
-  // 50/50: плохой поступок иногда оборачивается хуже
-  // возвращает {dh,ds,dg,note} или null
+  // плохой поступок иногда оборачивается хуже (если не «сошло с рук»)
   if(!tags||!tags.length)return null;
   const hasBad=tags.some(t=>badTags.has(t));
   if(!hasBad)return null;
@@ -406,8 +660,12 @@ function startGame(){
   player.iron=false;
   player.skipHistory=false;
   player.perkCounts={};player.currentPerk=null;player.perkHistory=[];
-  player.family={wife:"цела",son:"цел",father:"цел"};
+  player.family={wife:"цела",son:"цел",daughter:"цела",father:"цел"};
   player.chronicle=[];
+  player.plaques=[];
+  player.lastEvent=null;
+  gameOver=false;choiceLocked=false;
+  if(endGameTimer){clearTimeout(endGameTimer);endGameTimer=null;}
   currentYear=1320+Math.floor(Math.random()*45); // 1320..1364
   const avN=Math.floor(Math.random()*20)+1;
   const av=document.getElementById("avatarImg");
@@ -415,12 +673,29 @@ function startGame(){
   document.getElementById("bioName").innerText=player.name;
   document.getElementById("bioNickname").innerText=player.nickname;
   document.getElementById("bioAge").innerText=player.age;
+  updateRankDisplay();
+  updatePerksDisplay();
+  updatePlaquesDisplay();
   document.getElementById("bioBox").innerText=generateBioText();
   document.getElementById("bioBox").style.display="block";
+  const mbStart=document.getElementById("modeBar");
+  if(mbStart) mbStart.style.display="flex";
+  const pitch=document.getElementById("pitchText");
+  if(pitch) pitch.style.display="block";
   document.getElementById("nameLine").style.display="block";
   document.getElementById("progressCounter").style.display="block";
+  const splash=document.getElementById("qVisual");
+  const splashImg=document.getElementById("qImage");
+  if(splash&&splashImg){
+    splashImg.src=encodeURI("img/крестьянин застолье.jpg");
+    splashImg.alt="крестьянин застолье";
+    splash.classList.remove("end");
+    splash.classList.add("splash");
+    splash.style.display="block";
+  }
+  document.getElementById("historyBox").style.display="none";
   updatePerksDisplay();
-  availableQuestions=[...questions].sort(()=>Math.random()-0.5);
+  availableQuestions=shuffleArray(questions);
   if(availableQuestions.length>24)availableQuestions=availableQuestions.slice(0,24);
   // одно чёрное событие в середине жизни
   const black=blackEvents[Math.floor(Math.random()*blackEvents.length)];
@@ -435,6 +710,8 @@ function startGame(){
   document.getElementById("nextBtn").style.display="block";
   document.getElementById("nextBtn").innerText="Начать жизнь →";
   document.getElementById("nextBtn").onclick=beginLife;
+  document.getElementById("gameScreen").classList.remove("playing");
+  document.getElementById("gameScreen").classList.remove("ending");
 }
 function beginLife(){
   // читаем режимы в момент старта жизни (не при загрузке страницы)
@@ -450,6 +727,8 @@ function beginLife(){
   }
   document.getElementById("bioBox").style.display="none";
   const mb=document.getElementById("modeBar"); if(mb) mb.style.display="none";
+  const pitch=document.getElementById("pitchText"); if(pitch) pitch.style.display="none";
+  document.getElementById("gameScreen").classList.add("playing");
   document.getElementById("nextBtn").innerText="Далее →";
   document.getElementById("nextBtn").onclick=nextQuestion;
   document.getElementById("nextBtn").style.display="none";
@@ -477,7 +756,7 @@ function updateStats(){
   paintStat("hp",player.hp);
   paintStat("silver",player.silver);
   paintStat("glory",player.glory);
-  document.getElementById("rankLabel").innerText=getRank(player.glory);
+  updateRankDisplay();
 }
 function updateStatsWithAnimation(oH,oS,oG){
   document.getElementById("year").innerText=currentYear;
@@ -491,9 +770,49 @@ function updateStatsWithAnimation(oH,oS,oG){
   hpEl.style.color=statColor(player.hp);
   sEl.style.color=statColor(player.silver);
   gEl.style.color=statColor(player.glory);
-  document.getElementById("rankLabel").innerText=getRank(player.glory);
+  updateRankDisplay();
+}
+function shuffleArray(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    const t=a[i];a[i]=a[j];a[j]=t;
+  }
+  return a;
+}
+function pickOpts(opts,n){
+  const list=Array.isArray(opts)?opts.filter(Boolean):[];
+  const want=n||4;
+  const isHero=o=>o.extreme==="hero"||/^🦸/.test(o.t||"");
+  const isVillain=o=>o.extreme==="villain"||/^😈/.test(o.t||"");
+  const heroes=list.filter(isHero);
+  const villains=list.filter(isVillain);
+  const pinned=list.filter(o=>o.pinned&&!isHero(o)&&!isVillain(o));
+  const normal=list.filter(o=>!isHero(o)&&!isVillain(o)&&!o.pinned);
+  // Герой и подлец по отдельности, шанс 5% на каждого
+  const special=[];
+  if(heroes[0]&&Math.random()<0.05) special.push(heroes[0]);
+  if(villains[0]&&Math.random()<0.05) special.push(villains[0]);
+  const need=Math.max(0,want-special.length);
+  const pool=shuffleArray(pinned.concat(shuffleArray(normal)));
+  return shuffleArray(special.concat(pool.slice(0,need))).slice(0,want);
+}
+function choiceBtnClass(opt){
+  if(!opt) return "choice-btn";
+  if(opt.extreme==="hero"||/^🦸/.test(opt.t||"")) return "choice-btn hero-btn";
+  if(opt.extreme==="villain"||/^😈/.test(opt.t||"")) return "choice-btn villain-btn";
+  return "choice-btn";
+}
+function clampStats(){
+  if(isNaN(player.hp))player.hp=0;
+  if(isNaN(player.silver))player.silver=0;
+  if(isNaN(player.glory))player.glory=0;
+  player.hp=Math.max(0,player.hp);
+  player.silver=Math.max(0,player.silver);
 }
 function showQuestion(){
+  if(gameOver) return;
+  choiceLocked=false;
   if(currentQuestionIndex>=availableQuestions.length||currentYear>1389||player.hp<=0||player.silver<=0||player.glory<0||familyAllGone()){endGame();return}
   updateProgress();
   document.getElementById("year").innerText=currentYear;
@@ -501,51 +820,95 @@ function showQuestion(){
   document.getElementById("bioAge").innerText=player.age;
   const q=availableQuestions[currentQuestionIndex];
   document.getElementById("questionText").innerText=q.text;
-  showQuestionImage(q.text, q.isBlack);
-  const shuffled=[...q.opts].sort(()=>Math.random()-0.5).slice(0,4);
+  showQuestionImage(q);
+  const shuffled=pickOpts(q.opts,4);
   window._currentOpts=shuffled;
-  document.getElementById("choicesBox").innerHTML=shuffled.map((opt,i)=>'<button class="choice-btn" onclick="makeChoice('+i+')">'+opt.t+'</button>').join("");
+  document.getElementById("choicesBox").innerHTML=shuffled.map((opt,i)=>'<button class="'+choiceBtnClass(opt)+'" onclick="makeChoice('+i+')">'+opt.t+'</button>').join("");
   document.getElementById("resultBox").style.display="none";
   document.getElementById("historyBox").style.display="none";
   document.getElementById("nextBtn").style.display="none";
 }
+function resolveOpt(opt){
+  if(!opt||!Array.isArray(opt.roll)||!opt.roll.length) return opt;
+  let total=0;
+  for(let i=0;i<opt.roll.length;i++) total+=Math.max(0,Number(opt.roll[i].w)||1);
+  if(total<=0) return Object.assign({},opt,opt.roll[0]);
+  let r=Math.random()*total;
+  let picked=opt.roll[opt.roll.length-1];
+  for(let i=0;i<opt.roll.length;i++){
+    r-=Math.max(0,Number(opt.roll[i].w)||1);
+    if(r<=0){picked=opt.roll[i];break;}
+  }
+  // roll-поля перекрывают базовые; t/tags с базы остаются, если в исходе не заданы
+  const out=Object.assign({},opt,picked);
+  delete out.roll;
+  if(picked.tags) out.tags=picked.tags;
+  else if(opt.tags) out.tags=opt.tags;
+  return out;
+}
 function makeChoice(idx){
-  const opt=window._currentOpts[idx];
+  if(gameOver||choiceLocked) return;
+  choiceLocked=true;
+  const raw=window._currentOpts[idx];
+  if(!raw){choiceLocked=false;return;}
+  const opt=resolveOpt(raw);
+  window._currentOpts[idx]=opt;
   const q=availableQuestions[currentQuestionIndex];
   const oH=player.hp,oS=player.silver,oG=player.glory;
   player.hp+=opt.hp;player.silver+=opt.s;player.glory+=opt.g;
-  if(isNaN(player.hp))player.hp=0;if(isNaN(player.silver))player.silver=0;if(isNaN(player.glory))player.glory=0;
+  clampStats();
 
-  // Железная Русь: чаще доп. штраф
+  // Подлость: шанс 15–30% «сошло с рук» (прибыль, честь не падает)
   let bad=null;
-  if(player.iron){
-    const oldRand=Math.random;
-    // повысим шанс: временно подменим порог через повторный вызов логики
-    bad=applyBadLuck(opt.tags||[]);
-    if(!bad && opt.tags && opt.tags.some(t=>badTags.has(t)) && Math.random()<0.35){
+  const tags=opt.tags||[];
+  bad=applyDirtyGetaway(opt,tags);
+  if(!bad){
+    bad=applyBadLuck(tags);
+    if(player.iron && !bad && tags.some(t=>badTags.has(t)) && Math.random()<0.35){
       player.glory-=4;
-      bad={dh:0,ds:0,dg:-4,note:"На Железной Руси ошибка дорого стоит."};
+      bad={dh:0,ds:0,dg:-4,note:"В режиме хардкор ошибка дорого стоит."};
     }
-  } else {
-    bad=applyBadLuck(opt.tags||[]);
   }
+  clampStats();
   if(opt.family) applyFamilyChange(opt.family);
-  // эвристика по тексту результата / варианта
-  const rt=((opt.r||"")+" "+(opt.t||"")).toLowerCase();
+  // эвристика по тексту результата / варианта / вопроса
+  const qt=(q.text||"").toLowerCase();
+  const ot=(opt.t||"").toLowerCase();
+  const rt=((opt.r||"")+" "+ot+" "+qt).toLowerCase();
+  if(/сын умер|единственный сын умер/.test(qt)) applyFamilyChange({son:"мертв"});
   if(/отец не вышел|отца не стало|отец погиб/.test(rt)) applyFamilyChange({father:"мертв"});
-  if(/семью увели|семья потеряна|семья в бегах/.test(rt)) applyFamilyChange({wife:"в бегах",son:"в бегах"});
-  if(/жену прогнал|прогнал жену|жену с ребёнком/.test(rt)) applyFamilyChange({wife:"в бегах",son:"в бегах"});
-  if(/сын ушёл с дружиной|отправил сына|сын ушёл/.test(rt)) applyFamilyChange({son:"в бегах"});
-  if(/сына в холопы|забрать сына|сын в неволе|увели сына/.test(rt)) applyFamilyChange({son:"в бегах"});
-  if(/сам вместо сына|взяли тебя на год|вместо сына/.test(rt)) applyFamilyChange({son:"цел"});
-  if(/сын цел|сын остался дома|сын под родной/.test(rt)) applyFamilyChange({son:"цел"});
-  if(/дочь ушла|дочь отдана|в наложницы/.test(rt)) {} // дочери нет в модели
+  if(/старый отец просит|отпустить в монастырь|ушёл в монастырь/.test(rt) && /отец/.test(qt)) applyFamilyChange({father:"в монастыре"});
+  if(/семью увели|семья потеряна|семья в бегах|семья потеряна в дыму/.test(rt)) applyFamilyChange({wife:"в бегах",son:"в бегах",daughter:"в бегах"});
+  if(/жену прогнал|прогнал жену|жену с ребёнком/.test(rt)) applyFamilyChange({wife:"прогнана"});
+  if(/сын ушёл с дружиной|отправил сына в поход|отдать сына в дружину|отправить сына/.test(rt)) applyFamilyChange({son:"в дружине"});
+  if(/сына в холопы|забрать сына|сын в неволе|увели сына|сын ушёл в неволю|выдать сына/.test(rt)) applyFamilyChange({son:"в холопах"});
+  if(/сам вместо сына|взяли тебя на год|вместо сына|сын остался дома|сын цел|сын под родной|сын свободен|сын спасён/.test(rt)) applyFamilyChange({son:"цел"});
+  if(/сын вернулся из похода калекой/.test(qt) || /сын.*калек/.test(rt)) applyFamilyChange({son:"калека"});
+  if(/отправить в монастырь/.test(ot) && /калек/.test(qt)) applyFamilyChange({son:"в монастыре"});
+  if(/сын в учении|ушёл.*мастер|сын в учении, кошель|отпустил\. сын ушёл, дом/.test(rt)) applyFamilyChange({son:"в учении"});
+  if(/прогнал\. сын ушёл|прогнать сына|связь прервана|потерял сына|сын ушёл к ней|прогнал сына совсем/.test(rt)) applyFamilyChange({son:"прогнан"});
+  if(/дочь ушла к боярину|дочь отдана|взял большой выкуп/.test(rt)) applyFamilyChange({daughter:"у боярина"});
+  if(/дочь в монастыре|спрятал дочь в монастыре|спрятать дочь в монастыре/.test(rt)) applyFamilyChange({daughter:"в монастыре"});
+  if(/зятя/.test(qt) && !/выгнать обоих|выгнал/.test(ot+" "+(opt.r||"").toLowerCase())) applyFamilyChange({daughter:"замужем"});
+  if(/дочь и зять ушли|выгнал\. дочь|выгнать обоих/.test(rt)) applyFamilyChange({daughter:"прогнана"});
+  if(/потребовать законный брак/.test(ot)) applyFamilyChange({daughter:"замужем"});
   if(/убил любовника/.test(rt)) applyFamilyChange({wife:"больна"});
-  if(/простить и.*ребёнка|принял ребёнка|усыновил/.test(rt)) applyFamilyChange({son:"цел"});
-  if(/жена поругана/.test(rt)) applyFamilyChange({wife:"больна"});
-  if(/мор.*близких|потерял близких/.test(rt)) applyFamilyChange({wife:"больна",son:"болен"});
+  if(/простить и.*ребёнка|принял ребёнка|усыновил|принял и усыновил/.test(rt)) applyFamilyChange({son:"цел"});
+  if(/жена поругана/.test(rt)) applyFamilyChange({wife:"поругана"});
+  if(/мор.*близких|потерял близких/.test(rt)) applyFamilyChange({wife:"больна",son:"болен",daughter:"больна"});
   if(/сын.*ранен|сын.*болен|многие пали/.test(rt) && /бой|отряд|дружин/.test(rt)) applyFamilyChange({son:"болен"});
+  if(/дочь.*замуж|вышла замуж/.test(rt)) applyFamilyChange({daughter:"замужем"});
   processTags(opt.tags||[]);
+  const newPlaques=considerPlaques(opt,q);
+  addChronicle(opt,q);
+  player.lastEvent={
+    year:currentYear,
+    age:player.age,
+    q:q.text||"",
+    choice:opt.t||"",
+    result:opt.r||"",
+    badNote:bad?bad.note:""
+  };
   updateStatsWithAnimation(oH,oS,oG);
   document.getElementById("bioAge").innerText=player.age;
 
@@ -554,13 +917,23 @@ function makeChoice(idx){
     if(n<0) return '<span class="delta-bad">'+label+' '+n+'</span>';
     return '<span class="delta-zero">'+label+' 0</span>';
   }
-  const dH=opt.hp+(bad?bad.dh:0);
-  const dS=opt.s+(bad?bad.ds:0);
-  const dG=opt.g+(bad?bad.dg:0);
-  const deltas=[fmtDelta(dH,'здоровье'),fmtDelta(dS,'серебро'),fmtDelta(dG,'почесть')].join(' · ');
+  let pH=0,pS=0,pG=0;
+  if(newPlaques&&newPlaques.length){
+    newPlaques.forEach(function(p){ pH+=p.hp|0; pS+=p.s|0; pG+=p.g|0; });
+  }
+  const dH=opt.hp+(bad?bad.dh:0)+pH;
+  const dS=opt.s+(bad?bad.ds:0)+pS;
+  const dG=opt.g+(bad?bad.dg:0)+pG;
+  const deltas=[fmtDelta(dH,'❤️ здоровье'),fmtDelta(dS,'🪙 деньги'),fmtDelta(dG,'🏅 почесть')].join(' · ');
   let resHtml="<strong>Что произошло:</strong> "+opt.r;
   if(bad) resHtml+=" "+bad.note;
-  resHtml+="<br>("+deltas+")";
+  if(newPlaques&&newPlaques.length){
+    resHtml+="<br>"+newPlaques.map(function(p){
+      const why=p.why?' <i style="color:#6a4a28">('+escapeHtml(p.why)+')</i>':"";
+      return '<span style="color:#5a3a18">Перк:</span> <b>'+escapeHtml(p.title)+'</b> '+plaqueModHtml(p)+why;
+    }).join("<br>");
+  }
+  resHtml+="<br>"+deltas;
   document.getElementById("resultBox").innerHTML=resHtml;
   document.getElementById("resultBox").style.display="block";
   if(!player.skipHistory){
@@ -571,72 +944,231 @@ function makeChoice(idx){
   }
   document.getElementById("choicesBox").innerHTML="";
 
-  if(player.hp<=0||player.silver<=0||player.glory<0||familyAllGone())setTimeout(endGame,1800);
-  else document.getElementById("nextBtn").style.display="block";
+  if(player.hp<=0||player.silver<=0||player.glory<0||familyAllGone()){
+    if(endGameTimer) clearTimeout(endGameTimer);
+    endGameTimer=setTimeout(endGame,1800);
+  } else {
+    choiceLocked=false;
+    document.getElementById("nextBtn").style.display="block";
+  }
 }
+
 function nextQuestion(){
   currentQuestionIndex++;currentYear++;player.age++;
   document.getElementById("bioAge").innerText=player.age;
+  tickPlaques();
   showQuestion();
 }
+function getLastFateStory(){
+  const e=player.lastEvent;
+  if(!e) return "";
+  const ruined=player.hp<=0||player.silver<=0||player.glory<0||familyAllGone();
+  if(!ruined) return "";
+
+  let situ=String(e.q||"").replace(/[?？]+$/,"").trim();
+  if(situ) situ=situ.charAt(0).toLowerCase()+situ.slice(1);
+
+  let res=String(e.result||"").trim();
+  if(res && !/[.!?…]$/.test(res)) res+=".";
+  if(e.badNote){
+    let n=String(e.badNote).trim();
+    if(n && !/[.!?…]$/.test(n)) n+=".";
+    if(n) res=(res?res+" ":"")+n;
+  }
+  if(!situ && !res) return "";
+
+  let body="";
+  if(situ && res) body="В лето "+e.year+" судьба подвела тебя к такому: "+situ+". "+res;
+  else if(res) body="В лето "+e.year+" пришёл последний удар. "+res;
+  else body="В лето "+e.year+" случилось: "+situ+".";
+
+  if(familyAllGone()) return body+" Кровные узы порвались, и двор опустел.";
+  if(player.glory<0) return body+" После этого сход отвернулся — и дороги назад не стало.";
+  if(player.hp<=0) return body+" С этой беды ты уже не поднялся.";
+  if(player.silver<=0) return body+" Казна иссякла, и свобода ушла вместе с серебром.";
+  return body;
+}
 function getDestiny(){
-  if(familyAllGone())return "🏚️ Семья потеряна: кто умер, кто в бегах. Пустой двор и холодный очаг — ты остался один, и это хуже любой кабалы.";
-  if(player.glory<0)return "🚫 Община не простила. На сельском сходе тебя объявили изгоем: двор опечатали, надел отобрали, путь в родное село закрыт. Теперь ты бродишь по чужим волостям, и всякий сторонится человека без почести.";
-  if(player.hp<=0)return "☠️ Твой жизненный путь оборвался преждевременно. Земля приняла тебя сурово.";
-  if(player.silver<=0)return "💸 Долговая яма сломила дух. Ты закончил дни в кабале.";
+  if(familyAllGone())return "Семья потеряна: кто умер, кто в бегах. Пустой двор и холодный очаг — ты остался один, и это хуже любой кабалы.";
+  if(player.hp<=0)return "Твой жизненный путь оборвался преждевременно. Земля приняла тебя сурово.";
+  if(player.silver<=0)return "Долговая яма сломила дух. Ты закончил дни в кабале.";
   const g=player.glory,s=player.silver,h=player.hp;
-  if(g>80&&s>50)return "🌟 Легендарный муж! Имя слагают в песнях от Новгорода до Киева.";
-  if(g>80)return "👑 Посадский староста и мудрый советник. Народ чтит твою доблесть.";
-  if(s>80)return "💰 Богатейший купец. Сундуки ломятся, амбары полны.";
-  if(g<10&&s<10)return "🏚️ Захудалый отшельник, забытый всеми.";
-  if(h>70&&g>40)return "🛡️ Здоровый ветеран сходок. Сила и рассудок спасали общину.";
-  if(s>40&&g>40)return "🌾 Зажиточный хозяин. Двор ухожен, слово весит золото.";
-  if(g>50)return "📜 Уважаемый советник. К тебе идут за мудростью.";
-  if(s>50)return "🪙 Успешный торговец. Объездил пол-Руси.";
-  if(h<25)return "🩹 Измождённый труженик. Спина согнута, почесть цела.";
-  if(g<20)return "👤 Нелюдимый мужик. Провожали без слёз.";
-  if(s<20&&g>30)return "🤝 Бедный, но любимый. Соседи всегда делились.";
-  if(s>30&&h<35)return "🧓 Скопидом с подорванным здоровьем.";
-  if(g>30&&s>30)return "🏡 Добропорядочный семьянин и опора волости.";
-  return "🌲 Обычный крестьянин-труженик. Честно пропахал свою землю и оставил добрую память.";
+  if(g>80&&s>50)return "Легендарный муж! Имя слагают в песнях от Новгорода до Киева.";
+  if(g>80)return "Посадский староста и мудрый советник. Народ чтит твою доблесть.";
+  if(s>80)return "Богатейший купец. Сундуки ломятся, амбары полны.";
+  if(g<10&&s<10)return "Захудалый отшельник, забытый всеми.";
+  if(h>70&&g>40)return "Здоровый ветеран сходок. Сила и рассудок спасали общину.";
+  if(s>40&&g>40)return "Зажиточный хозяин. Двор ухожен, слово весит золото.";
+  if(g>50)return "Уважаемый советник. К тебе идут за мудростью.";
+  if(s>50)return "Успешный торговец. Объездил пол-Руси.";
+  if(h<25)return "Измождённый труженик. Спина согнута, почесть цела.";
+  if(g<20)return "Нелюдимый мужик. Провожали без слёз.";
+  if(s<20&&g>30)return "Бедный, но любимый. Соседи всегда делились.";
+  if(s>30&&h<35)return "Скопидом с подорванным здоровьем.";
+  if(g>30&&s>30)return "Добропорядочный семьянин и опора волости.";
+  return "Обычный крестьянин-труженик. Честно пропахал свою землю и оставил добрую память.";
+}
+function getDestinyImage(){
+  if(familyAllGone())return "грустный крестьянин";
+  if(player.glory<0)return "беглый холоп";
+  if(player.hp<=0)return "мор чума массовая смерть";
+  if(player.silver<=0)return "рабы";
+  const g=player.glory,s=player.silver,h=player.hp;
+  if(g>80&&s>50)return "княз радость гордость";
+  if(g>80)return "сход мужчины";
+  if(s>80)return "сундук с сокровищами";
+  if(g<10&&s<10)return "страшный лес";
+  if(h>70&&g>40)return "богатырь охраняет";
+  if(s>40&&g>40)return "крестьянин застолье";
+  if(g>50)return "князь говорит";
+  if(s>50)return "купец";
+  if(h<25)return "болезнь мужик";
+  if(g<20)return "мужчина ночь окно смотрит";
+  if(s<20&&g>30)return "бедный крестьянин";
+  if(s>30&&h<35)return "мужик и бочка задумался";
+  if(g>30&&s>30)return "семья";
+  return "работа в пшеничном поле";
+}
+function escapeHtml(s){
+  return String(s==null?"":s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+function scoreOf(e){ return (e.hp|0)+(e.silver|0)+(e.glory|0); }
+function loadChronicle(){
+  try{
+    const raw=localStorage.getItem(HISTORY_KEY);
+    const arr=raw?JSON.parse(raw):[];
+    return Array.isArray(arr)?arr:[];
+  }catch(e){ return []; }
+}
+function saveChronicle(list){
+  try{ localStorage.setItem(HISTORY_KEY,JSON.stringify(list)); }catch(e){}
+}
+function sortChronicle(list){
+  return list.slice().sort(function(a,b){
+    const ds=scoreOf(b)-scoreOf(a);
+    if(ds) return ds;
+    const dg=(b.glory|0)-(a.glory|0);
+    if(dg) return dg;
+    const dsil=(b.silver|0)-(a.silver|0);
+    if(dsil) return dsil;
+    return (b.ts|0)-(a.ts|0);
+  });
+}
+function jobTitle(job,fallbackRank){
+  const j=String(job||"").trim();
+  if(!j) return fallbackRank||"Смерд";
+  return j.charAt(0).toUpperCase()+j.slice(1);
+}
+function formatChronicleLine(e,place){
+  const job=jobTitle(e.job,"");
+  const rank=e.rank||getRank(e.glory|0);
+  const who=job?(job+", "+rank):rank;
+  return place+" "+e.name+" "+e.nickname+", "+who+" "+e.age+" лет ❤️"+e.hp+" 🪙"+e.silver+"🏅"+e.glory;
+}
+function renderChronicleList(list,meId){
+  if(!list.length){
+    return '<div class="chronicle-wrap"><div class="chronicle-title">Летопись судеб</div><div class="chronicle-empty">Пока пусто — будь первым.</div></div>';
+  }
+  const rows=list.map(function(e,i){
+    const place=i+1;
+    const me=e.id===meId;
+    return '<div class="chronicle-row'+(me?" me":"")+'"'+(me?' id="chronicleMe"':"")+'>'+escapeHtml(formatChronicleLine(e,place))+'</div>';
+  }).join("");
+  return '<div class="chronicle-wrap" id="chronicleWrap"><div class="chronicle-title">Летопись судеб · по сумме ❤️+🪙+🏅</div>'+rows+'</div>';
+}
+function writeToHistory(){
+  if(historyWritten||!gameOver) return;
+  const entry={
+    id:"r"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),
+    name:player.name,
+    nickname:player.nickname,
+    job:player.job,
+    rank:getRank(player.glory),
+    age:player.age,
+    hp:player.hp|0,
+    silver:player.silver|0,
+    glory:player.glory|0,
+    iron:!!player.iron,
+    ts:Date.now()
+  };
+  let list=loadChronicle();
+  list.push(entry);
+  list=sortChronicle(list);
+  if(list.length>HISTORY_MAX) list=list.slice(0,HISTORY_MAX);
+  saveChronicle(list);
+  historyWritten=true;
+  lastHistoryId=entry.id;
+  showEndActions(true);
+  document.getElementById("gameScreen").classList.add("chronicle-open");
+  const host=document.getElementById("questionText");
+  if(!host) return;
+  const end=host.querySelector(".end-block");
+  if(!end) return;
+  let slot=document.getElementById("chronicleSlot");
+  if(!slot){
+    slot=document.createElement("div");
+    slot.id="chronicleSlot";
+    end.appendChild(slot);
+  }
+  const inList=list.some(function(e){ return e.id===entry.id; });
+  slot.innerHTML=renderChronicleList(list,entry.id)+(inList?"":'<p style="font-size:13px;margin:6px 0 0;color:#6b1a1a;">Счёт слишком мал — в топ-'+HISTORY_MAX+' не вошёл, но запись была учтена при отборе.</p>');
+  const me=document.getElementById("chronicleMe");
+  const wrap=document.getElementById("chronicleWrap");
+  if(me&&wrap){
+    requestAnimationFrame(function(){
+      me.scrollIntoView({block:"center",behavior:"smooth"});
+    });
+  }
+}
+function showEndActions(written){
+  const box=document.getElementById("choicesBox");
+  if(!box) return;
+  box.className="choices ending-actions";
+  const writeBtn=written
+    ?'<button class="choice-btn secondary" disabled>Вписан в историю</button>'
+    :'<button class="choice-btn secondary" onclick="writeToHistory()">Вписать в историю</button>';
+  box.innerHTML=writeBtn+'<button class="choice-btn" onclick="location.reload()">Начать новую жизнь</button>';
 }
 function endGame(){
+  if(gameOver) return;
+  gameOver=true;choiceLocked=true;historyWritten=false;lastHistoryId=null;
+  if(endGameTimer){clearTimeout(endGameTimer);endGameTimer=null;}
+  document.getElementById("gameScreen").classList.remove("playing");
   const destiny=getDestiny();
-  const nickLine=player.perkHistory.length
-    ?('<p style="margin:12px 0;font-size:17px;"><b>'+player.name+'</b> по прозвищу <b>'+player.nickname+'</b>, '+player.age+' лет.<br>За глаза называли: <i>'+player.perkHistory.join(', ')+'</i>.</p>')
-    :('<p style="margin:12px 0;font-size:17px;"><b>'+player.name+'</b> по прозвищу <b>'+player.nickname+'</b>, '+player.age+' лет.</p>');
+  const fateStory=getLastFateStory();
+  const perkBit=player.perkHistory.length?(' За глаза называли: <i>'+player.perkHistory.join(', ')+'</i>.'):'';
+  const nickLine='<p style="margin:8px 0;font-size:15px;"><b>'+player.name+'</b> по прозвищу <b>'+player.nickname+'</b>, прожил '+player.age+' '+yearsWord(player.age)+'.'+perkBit+'</p>';
   document.getElementById("bioBox").style.display="none";
   document.getElementById("nameLine").style.display="none";
   document.getElementById("progressCounter").style.display="none";
-  const qi=document.getElementById("qImage"); if(qi) qi.style.display="none";
-  const fl=document.getElementById("familyLine"); if(fl) fl.style.display="none";
   const mb=document.getElementById("modeBar"); if(mb) mb.style.display="none";
+  const pitch=document.getElementById("pitchText"); if(pitch) pitch.style.display="none";
   const yh=document.querySelector(".year-header"); if(yh) yh.style.display="none";
   const ye=document.getElementById("yearEvent"); if(ye) ye.style.display="none";
-  const fam=player.family;
-  const famLine='<p style="font-size:16px;">Семья: жена <b>'+fam.wife+'</b>, сын <b>'+fam.son+'</b>, отец <b>'+fam.father+'</b></p>';
-  const ironNote=player.iron?'<p style="font-size:14px;color:#6b1a1a;">Режим: Железная Русь</p>':'';
-  document.getElementById("questionText").innerHTML='<div class="end-block"><h2 class="end-title">📜 Летопись твоей жизни</h2>'+nickLine+ironNote+'<p style="font-size:17px;line-height:1.55;">'+destiny+'</p>'+famLine+'<hr style="border:1px solid #5c3d1e;margin:14px auto;width:80%;"><p style="font-size:17px;">Итоговые показатели:<br>Здоровье: <b>'+player.hp+'</b> &nbsp;|&nbsp; Серебро: <b>'+player.silver+'</b> &nbsp;|&nbsp; Почесть: <b>'+player.glory+'</b> · '+getRank(player.glory)+'</p></div>';
-  document.getElementById("choicesBox").innerHTML='<button class="choice-btn" style="text-align:center;" onclick="location.reload()">Начать новую жизнь</button>';
-  document.getElementById("resultBox").style.display="none";
   document.getElementById("historyBox").style.display="none";
-  document.getElementById("nextBtn").style.display="none";
-  document.getElementById("shareBtn").style.display="block";
-  window._shareText=player.name+' по прозвищу '+player.nickname+', '+player.age+' лет. '+(player.perkHistory.length?('За глаза называли: '+player.perkHistory.join(', ')+'. '):'')+destiny.replace(/[☠️💸🌟👑💰🏚️🛡️🌾📜🪙🩹👤🤝🧓🏡🌲🚫]/g,'')+' Здоровье '+player.hp+', серебро '+player.silver+', почесть '+player.glory+'. #ВыживаниеНаРуси';
-}
-function shareResult(){
-  const text=window._shareText||'Я прожил жизнь на Руси!';
-  if(navigator.share){
-    navigator.share({title:'Выживание на Руси',text:text}).catch(function(){});
-  }else if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(function(){
-      alert('Текст судьбы скопирован — вставь его в соцсеть!');
-    }).catch(function(){
-      prompt('Скопируй текст судьбы:',text);
-    });
-  }else{
-    prompt('Скопируй текст судьбы:',text);
+  document.getElementById("gameScreen").classList.add("ending");
+  const qv=document.getElementById("qVisual");
+  const img=document.getElementById("qImage");
+  if(qv&&img){
+    const baseName=getDestinyImage();
+    qv.classList.remove("splash");
+    qv.classList.add("end");
+    img.onload=function(){ qv.style.display="block"; };
+    img.onerror=function(){ img.onerror=null; qv.style.display="none"; };
+    qv.style.display="block";
+    img.src=encodeURI("img/"+baseName+".jpg");
+    img.alt=baseName;
   }
+  const famLine='<p style="font-size:14px;margin:6px 0;">'+getFamilyStory()+'</p>';
+  const ironNote=player.iron?'<p style="font-size:13px;color:#6b1a1a;margin:4px 0;">Режим: хардкор</p>':'';
+  const fateLine=fateStory?'<p style="font-size:15px;line-height:1.45;margin:8px 0;">'+fateStory+'</p>':'';
+  const score=player.hp+player.silver+player.glory;
+  document.getElementById("questionText").innerHTML='<div class="end-block">'+nickLine+ironNote+'<p style="font-size:15px;line-height:1.45;margin:6px 0;">'+destiny+'</p>'+fateLine+famLine+'<hr style="border:1px solid #5c3d1e;margin:8px auto;width:80%;"><p style="font-size:15px;margin:6px 0;">Итоговые показатели:<br>❤️ <b>'+player.hp+'</b> &nbsp;|&nbsp; 🪙 <b>'+player.silver+'</b> &nbsp;|&nbsp; 🏅 <b>'+player.glory+'</b> · '+getRank(player.glory)+'<br><span style="font-size:14px;color:#5a3a18;">Сумма для летописи: <b>'+score+'</b></span></p><div id="chronicleSlot"></div></div>';
+  showEndActions(false);
+  document.getElementById("resultBox").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
 }
 startGame();
 </script>
