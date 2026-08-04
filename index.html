@@ -10,20 +10,20 @@
 body{background:#1c140a;background-image:radial-gradient(ellipse at 50% 30%,#2e2112 0%,#1c140a 75%);color:#3a2814;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:flex-start;height:100vh;height:100dvh;margin:0;padding:12px 10px;overflow:hidden}
 .play-layout{position:relative;width:720px;max-width:min(720px,calc(100vw - 24px));height:min(740px,calc(100vh - 24px));height:min(740px,calc(100dvh - 24px))}
 .game-container{background:#f3e8c8;background-image:linear-gradient(rgba(160,120,60,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(160,120,60,.06) 1px,transparent 1px);background-size:22px 22px;border:9px solid #5c3d1e;border-radius:6px;width:100%;height:100%;overflow:hidden;padding:13px 26px 22px;box-shadow:0 0 0 2px #2a1a0c,0 14px 36px rgba(0,0,0,.75),inset 0 0 50px rgba(120,80,30,.08);position:relative;display:flex;flex-direction:column;z-index:1}
-.plaques-rail{position:absolute;left:calc(100% + 10px);top:0;bottom:0;width:200px;display:flex;flex-direction:column;gap:6px;overflow-x:hidden;overflow-y:auto;padding:2px 2px 8px;scrollbar-width:thin;z-index:2;pointer-events:auto}
+.plaques-rail{position:absolute;left:calc(100% + 10px);top:0;bottom:0;width:220px;display:flex;flex-direction:column;gap:6px;overflow-x:hidden;overflow-y:auto;padding:2px 2px 8px;scrollbar-width:thin;z-index:2;pointer-events:auto}
 .plaques-rail::-webkit-scrollbar{width:4px}
 .plaques-rail::-webkit-scrollbar-thumb{background:#5c3d1e;border-radius:2px}
 .plaque{background:#ebe0b8;border:1px solid #a07840;border-radius:5px;padding:7px 8px;font-size:13px;line-height:1.25;color:#3a2814;box-shadow:0 2px 6px rgba(0,0,0,.35);animation:plaqueIn .35s ease}
 .plaque.good{border-color:#3a6a3a;background:#e4efd8}
 .plaque.bad{border-color:#8b3a2a;background:#f0ddd4}
-.plaque-title{font-weight:700;margin:0 0 2px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.plaque-why{font-size:11px;line-height:1.2;color:#6a4a28;margin:0 0 3px;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plaque-title{font-weight:700;margin:0 0 2px;font-size:13px;line-height:1.2;overflow-wrap:anywhere}
+.plaque-why{font-size:11px;line-height:1.25;color:#6a4a28;margin:0 0 3px;font-style:italic;overflow-wrap:anywhere}
 .plaque-mods{font-size:12px;color:#5a3a18;font-variant-numeric:tabular-nums;white-space:nowrap}
 .plaque-mods .up{color:#2a6a2a;font-weight:700}
 .plaque-mods .down{color:#8b1a1a;font-weight:700}
 @keyframes plaqueIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
 @media (max-width:980px){
-  .plaques-rail{width:160px}
+  .plaques-rail{width:180px}
 }
 @media (max-width:700px){
   body{overflow:auto;height:auto;min-height:100dvh}
@@ -502,14 +502,14 @@ function considerPlaques(opt,q){
   function cand(def){ if(def) candidates.push(def); }
 
   if(isExtreme&&opt.extreme==="hero")
-    cand({id:"village_savior",title:"Спаситель деревни",why:"Встал за волость — село помнит имя",hp:1,g:2,power:14});
+    cand({id:"village_savior",title:"Спаситель деревни",why:"Село помнит: встал за волость",hp:1,g:2,power:14});
   if(isExtreme&&opt.extreme==="villain")
-    cand({id:"cursed_name",title:"Проклятый",why:"Зло таково, что шепчут твоё имя",s:1,g:-2,power:13});
+    cand({id:"cursed_name",title:"Проклятый",why:"Шепчут имя — зло не сходит",s:1,g:-2,power:13});
 
   if(/татар|орд|баскак|ясак|полон/.test(rt) && (has("zhuk")||has("nehoroshiy")||has("coward")) && (opt.g|0)<0)
-    cand({id:"tatar_lackey",title:"Татарский прихвостень",why:"Продал своих орде — есть серебро",s:2,g:-2,power:12});
+    cand({id:"tatar_lackey",title:"Татарский прихвостень",why:"Продал своих — серебро звенит",s:2,g:-2,power:12});
   if(/татар|орд|набег|осад|полон/.test(rt) && (has("brave")||has("merciful")||isExtreme) && (opt.g|0)>=6)
-    cand({id:"village_savior",title:"Спаситель деревни",why:"Отбил беду — волость зовёт щитом",hp:1,g:2,power:14});
+    cand({id:"village_savior",title:"Спаситель деревни",why:"Отбил беду — зовут щитом",hp:1,g:2,power:14});
 
   if(/княз|дружин|ярлык|тиун|двор/.test(rt) && (opt.g|0)>=5 && !has("nehoroshiy"))
     cand({id:"prince_shield",title:"Под защитой князя",why:"Князь заметил — сила за спиной",s:1,g:2,power:13});
@@ -521,31 +521,31 @@ function considerPlaques(opt,q){
     cand({id:"zhadoba",title:"Жадоба",why:"Хапал сверх меры — душа стынет",s:2,g:-2,power:11});
 
   if(has("coward") && (opt.g|0)<=-5)
-    cand({id:"village_fool",title:"Деревенский дурачок",why:"Струсил так, что село смеётся",hp:-1,g:-2,power:9});
+    cand({id:"village_fool",title:"Деревенский дурачок",why:"Струсил — село смеётся",hp:-1,g:-2,power:9});
 
   if(has("pious") && (/церк|храм|поп|молит|пост|икон|монаст|бог/.test(rt) || (opt.g|0)>=4))
     cand({id:"faith_keeper",title:"Хранитель веры",why:"За храм стоял — попы поминают",hp:1,g:2,power:11});
 
   if(has("nasilnik") && ((opt.g|0)<=-6 || (opt.s|0)>=6))
-    cand({id:"bloody_fist",title:"Кровавый кулак",why:"Брал силой — боятся открыть рот",s:1,g:-2,power:11});
+    cand({id:"bloody_fist",title:"Кровавый кулак",why:"Брал силой — боятся рот открыть",s:1,g:-2,power:11});
 
   if((has("zhuk")||has("skolzkiy")) && (opt.s|0)>=4)
-    cand({id:"road_swindler",title:"Дорожный плут",why:"Обманом живёт — в торге ищут ложь",s:2,g:-1,power:10});
+    cand({id:"road_swindler",title:"Дорожный плут",why:"Живёт обманом — в торге ловят",s:2,g:-1,power:10});
 
   if(/пожар|огонь|плам|сжёг|сжечь/.test(rt) && (has("brave")||has("merciful")) && (opt.g|0)>=4)
-    cand({id:"fire_saver",title:"Спаситель из огня",why:"Из огня таскал — слава и шрамы",hp:-1,g:2,power:12});
+    cand({id:"fire_saver",title:"Спаситель из огня",why:"Таскал из огня — слава и шрамы",hp:-1,g:2,power:12});
 
   if(/кабал|закуп|холоп|долг|тиун|дань|недоим/.test(rt) && (opt.s|0)<=-5)
-    cand({id:"bond_slave",title:"Кабальный",why:"Кабала на шее — серебро утекает",s:-2,g:-1,power:10});
+    cand({id:"bond_slave",title:"Кабальный",why:"Кабала на шее — серебро течёт",s:-2,g:-1,power:10});
 
   if(has("brave") && (opt.g|0)>=5 && (opt.hp|0)<=-4)
-    cand({id:"scarred_glory",title:"Шрам удальца",why:"Кровь пролил — слава не сходит",hp:-1,g:1,power:10});
+    cand({id:"scarred_glory",title:"Шрам удальца",why:"Кровь пролил — слава держится",hp:-1,g:1,power:10});
 
   if(has("merciful") && (opt.g|0)>=3)
     cand({id:"warm_hearth",title:"Тёплый очаг",why:"Пощадил своих — дом даёт силы",hp:1,g:1,power:9});
 
   if(has("generous") && (opt.s|0)<=-4)
-    cand({id:"open_hand",title:"Щедрая рука",why:"Отдал своё — о тебе говорят добром",g:1,s:-1,power:8});
+    cand({id:"open_hand",title:"Щедрая рука",why:"Отдал своё — молва добрая",g:1,s:-1,power:8});
 
   if(has("hardworker") && impact>=10)
     cand({id:"strong_back",title:"Крепкая спина",why:"Тяжкий труд — тело привыкло",hp:1,power:8});
@@ -554,7 +554,7 @@ function considerPlaques(opt,q){
     cand({id:"fox_mind",title:"Лисий ум",why:"Хитростью выгадал — ум цепок",s:1,power:8});
 
   if(has("nehoroshiy") && (opt.g|0)<=-6)
-    cand({id:"bad_name",title:"Дурная слава",why:"Подлость не забывают — молва ест честь",g:-1,power:9});
+    cand({id:"bad_name",title:"Дурная слава",why:"Подлость помнят — честь тает",g:-1,power:9});
 
   if(!candidates.length) return gained;
 
