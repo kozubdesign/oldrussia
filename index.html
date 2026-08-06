@@ -651,25 +651,37 @@ function applyDirtyGetaway(opt,tags){
   return {dh:0,ds:bonus,dg:dgFix,note:notes[Math.floor(Math.random()*notes.length)],getaway:true};
 }
 function applyBadLuck(tags){
-  // плохой поступок иногда оборачивается хуже (если не «сошло с рук»)
+  // публичный позор — только за явную подлость/насилие, не за трусость/жадность втихаря
   if(!tags||!tags.length)return null;
-  const hasBad=tags.some(t=>badTags.has(t));
-  if(!hasBad)return null;
+  const publicBad=tags.some(t=>t==="nehoroshiy"||t==="zhuk"||t==="nasilnik");
+  const pettyBad=tags.some(t=>t==="greedy"||t==="coward");
+  if(!publicBad&&!pettyBad)return null;
   if(Math.random()>=0.5)return null;
-  const roll=Math.random();
-  if(roll<0.5){
-    player.glory-=5;
-    return {dh:0,ds:0,dg:-5,note:"Молва разнесла поступок шире, чем ты думал: честь упала сильнее."};
-  }else if(roll<0.8){
-    player.glory-=8;
-    player.hp-=3;
-    return {dh:-3,ds:0,dg:-8,note:"На сходе припомнили это дело вслух — стыд ударил сильнее обычного."};
-  }else{
-    player.glory-=3;
-    const took=Math.min(4,player.silver);
-    player.silver=Math.max(0,player.silver-4);
-    return {dh:0,ds:-took,dg:-3,note:"Чтобы замять историю, пришлось откупаться серебром."};
+  if(publicBad){
+    const roll=Math.random();
+    if(roll<0.5){
+      player.glory-=5;
+      return {dh:0,ds:0,dg:-5,note:"Молва разнесла поступок шире, чем ты думал: честь упала сильнее."};
+    }else if(roll<0.8){
+      player.glory-=8;
+      player.hp-=3;
+      return {dh:-3,ds:0,dg:-8,note:"На сходе припомнили это дело вслух — стыд ударил сильнее обычного."};
+    }else{
+      player.glory-=3;
+      const took=Math.min(4,player.silver);
+      player.silver=Math.max(0,player.silver-4);
+      return {dh:0,ds:-took,dg:-3,note:"Чтобы замять историю, пришлось откупаться серебром."};
+    }
   }
+  // greedy/coward: хуже по кошельку/силам, без публичного стыда
+  const roll=Math.random();
+  if(roll<0.55){
+    player.hp-=2;
+    return {dh:-2,ds:0,dg:0,note:"Вышло хуже, чем казалось: силы сели сильнее обычного."};
+  }
+  const took=Math.min(3,player.silver);
+  player.silver=Math.max(0,player.silver-3);
+  return {dh:0,ds:-took,dg:0,note:"Промах обошёлся дороже: серебро утекло впустую."};
 }
 function updateProgress(){
   document.getElementById("progressCounter").textContent=Math.min(currentQuestionIndex+1,totalQuestions)+"/"+totalQuestions;
@@ -868,10 +880,28 @@ function getQuestionOpts(q){
   return (q&&q.opts)||[];
 }
 function optAvailable(o){
-  if(!o) return false;
-  if((o.minHp|0)>0 && player.hp<(o.minHp|0)) return false;
-  if((o.minS|0)>0 && player.silver<(o.minS|0)) return false;
-  return true;
+  // Варианты с minS/minHp всегда показываем; нехватка серебра/сил — при выборе (gateOpt)
+  return !!o;
+}
+function gateOpt(opt){
+  if(!opt) return opt;
+  const needS=opt.minS|0;
+  const needH=opt.minHp|0;
+  if(needS>0 && player.silver<needS){
+    return Object.assign({},opt,{
+      r:"Ты полез в мошну — серебра не хватило на эту бумагу. Писарь усмехнулся и спрятал свиток: «Приходи, как разбогатеешь.»",
+      hp:0,s:0,g:-2,tags:["coward"],
+      family:undefined
+    });
+  }
+  if(needH>0 && player.hp<needH){
+    return Object.assign({},opt,{
+      r:"Ты кинулся силой, но тело слабо. Писарь отбился и ушёл — стыд и синяк, признания нет.",
+      hp:-4,s:0,g:-4,tags:["coward"],
+      family:undefined
+    });
+  }
+  return opt;
 }
 function buildHordeDefeatOpts(y){
   const afterKulikovo=y>=1380;
@@ -950,7 +980,12 @@ function pickOpts(opts,n){
   if(villains[0]&&Math.random()<0.05) special.push(villains[0]);
   const need=Math.max(0,want-special.length);
   const fill=shuffleArray(normal);
-  const base=pinned.concat(fill).slice(0,need);
+  let base=pinned.concat(fill).slice(0,need);
+  // Если мало обычных (всё отфильтровали) — добираем из оставшихся не-extreme
+  if(base.length<need){
+    const rest=list.filter(o=>!isHero(o)&&!isVillain(o)&&base.indexOf(o)<0);
+    base=base.concat(shuffleArray(rest)).slice(0,need);
+  }
   return shuffleArray(special.concat(base)).slice(0,want);
 }
 function choiceBtnClass(opt){
@@ -1007,7 +1042,7 @@ function makeChoice(idx){
   choiceLocked=true;
   const raw=window._currentOpts[idx];
   if(!raw){choiceLocked=false;return;}
-  const opt=resolveOpt(raw);
+  const opt=gateOpt(resolveOpt(raw));
   window._currentOpts[idx]=opt;
   const q=availableQuestions[currentQuestionIndex];
   const oH=player.hp,oS=player.silver,oG=player.glory;
