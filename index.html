@@ -874,10 +874,24 @@ function buildMoscowPrinceOpts(y){
   };
   return wrong.concat([right,hero,villain]);
 }
+function isMedicalQuestion(q){
+  return !!(q&&q.text&&/как лечить|как помочь|чем закрыть/i.test(q.text));
+}
+function stripExtremeOpts(opts){
+  return (opts||[]).filter(function(o){
+    if(!o) return false;
+    if(o.extreme==="hero"||o.extreme==="villain") return false;
+    if(/^[🦸😈]/.test(o.t||"")) return false;
+    return true;
+  });
+}
 function getQuestionOpts(q){
   if(q&&q.dynamic==="moscowPrince") return buildMoscowPrinceOpts(currentYear);
   if(q&&q.dynamic==="hordeDefeat") return buildHordeDefeatOpts(currentYear);
-  return (q&&q.opts)||[];
+  const opts=(q&&q.opts)||[];
+  // Лечение — только обычные ответы, без 🦸/😈
+  if(isMedicalQuestion(q)) return stripExtremeOpts(opts);
+  return opts;
 }
 function optAvailable(o){
   // Варианты с minS/minHp всегда показываем; нехватка серебра/сил — при выборе (gateOpt)
