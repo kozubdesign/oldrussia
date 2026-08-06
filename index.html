@@ -502,9 +502,10 @@ function considerPlaques(opt,q){
   const impact=Math.abs(opt.hp|0)+Math.abs(opt.s|0)+Math.abs(opt.g|0);
   const isExtreme=!!opt.extreme;
   const isBlack=!!(q&&q.isBlack);
+  const maybeDisability=/хромот|кривизна остал|без ноги|без руки|лишился кисти|изувеч|увечн|калек|слепот|слепил|едва видит|почти не открывал|кость — в осколк|кость в осколк/.test(rt);
 
-  // Нужен заметный исход или тег характера
-  if(!isExtreme && !isBlack && impact<10 && !tags.length) return gained;
+  // Нужен заметный исход, тег характера или явное увечье
+  if(!isExtreme && !isBlack && impact<10 && !tags.length && !maybeDisability) return gained;
 
   const candidates=[];
   function cand(def){ if(def) candidates.push(def); }
@@ -565,11 +566,33 @@ function considerPlaques(opt,q){
   if(has("nehoroshiy") && (opt.g|0)<=-8)
     cand({id:"bad_name",title:"Дурная слава",why:"Молва гложет честь каждый сезон",g:-1,power:9});
 
+  // Радикальный промах → увечье: постоянная плохая плашка
+  const hpHit=opt.hp|0;
+  const nearMiss=/едва не|чуть не/.test(rt);
+  const isBlind=/слепот|слепил|едва видит|почти не открывал/.test(rt);
+  const isLame=/хромот|кривизна остал|ногу лошадь|кость — в осколк|кость в осколк/.test(rt)
+    || (/без ноги/.test(rt) && !nearMiss);
+  const isHandMaim=/лишился кисти|без руки|без кисти/.test(rt) && !nearMiss;
+  const isCripple=/изувеч|увечн|размозж/.test(rt)
+    || (/калек/.test(rt) && !/сын|дочь|отец|тесть|зять/.test(rt));
+  const disability=
+    (hpHit<=-4 && isLame) ||
+    (hpHit<=-8 && isBlind) ||
+    (hpHit<=-10 && isHandMaim) ||
+    (hpHit<=-10 && isCripple);
+  if(disability){
+    candidates.length=0;
+    if(isBlind) cand({id:"blind_eye",title:"Кривой",why:"Глаз повреждён: слабее в труде и в почёте",hp:-1,g:-1,power:12});
+    else if(isHandMaim) cand({id:"maimed_hand",title:"Кривая рука",why:"Кисть не та: работа тяжелее, уважения меньше",hp:-2,g:-1,power:13});
+    else if(isLame) cand({id:"lame_leg",title:"Хромой",why:"Нога не держит: силы меньше, насмешки чаще",hp:-2,g:-1,power:13});
+    else cand({id:"cripple",title:"Увечный",why:"Тело покалечено: каждый сезон давит сильнее",hp:-2,g:-2,power:15});
+  }
+
   if(!candidates.length) return gained;
 
   // Не каждый раз: чаще при сильном/чёрном/крайнем выборе
   let chance=0.42;
-  if(isExtreme) chance=1;
+  if(isExtreme||disability) chance=1;
   else if(isBlack) chance=0.72;
   else if(impact>=20) chance=0.58;
   else if(impact<12) chance=0.28;
@@ -844,6 +867,12 @@ function getQuestionOpts(q){
   if(q&&q.dynamic==="hordeDefeat") return buildHordeDefeatOpts(currentYear);
   return (q&&q.opts)||[];
 }
+function optAvailable(o){
+  if(!o) return false;
+  if((o.minHp|0)>0 && player.hp<(o.minHp|0)) return false;
+  if((o.minS|0)>0 && player.silver<(o.minS|0)) return false;
+  return true;
+}
 function buildHordeDefeatOpts(y){
   const afterKulikovo=y>=1380;
   const correct=afterKulikovo
@@ -907,7 +936,7 @@ function buildHordeDefeatOpts(y){
   return wrong.concat([correct,hero,villain]);
 }
 function pickOpts(opts,n){
-  const list=Array.isArray(opts)?opts.filter(Boolean):[];
+  const list=Array.isArray(opts)?opts.filter(Boolean).filter(optAvailable):[];
   const want=n||4;
   const isHero=o=>o.extreme==="hero"||/^🦸/.test(o.t||"");
   const isVillain=o=>o.extreme==="villain"||/^😈/.test(o.t||"");
