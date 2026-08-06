@@ -163,7 +163,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 <aside class="plaques-rail" id="plaquesRail" aria-label="Перки"></aside>
 </div>
 
-<script src="questions.js"></script>
+<script src="questions.js?v=20260806c"></script>
 <script>
 const names=["Богдан","Добрыня","Всеволод","Ярополк","Святослав","Владимир","Мстислав","Ростислав","Изяслав","Глеб","Борис","Юрий","Андрей","Микула","Ратибор","Жирослав","Путята","Творимир","Станимир","Бронислав","Вячеслав","Олег","Игорь","Роман","Василий","Пётр","Иван","Максим","Кирилл","Алексей","Дмитрий","Павел","Фома","Лука","Клим","Лазарь","Савва","Тихон","Фрол","Евстафий","Архип","Гордей","Евсей","Захар","Игнат","Кондрат","Макар","Назар","Прохор","Савелий"];
 const nicknames=["Косой","Рябой","Молчун","Бешеный","Храбрый","Меньшой","Большой","Хитрый","Рыжий","Чернявый","Белый","Костлявый","Шило","Тяжелый","Шустрый","Угрюмый","Веселый","Зубатый","Губатый","Костень","Береза","Дуб","Медведь","Волк","Лисица","Кот","Бык","Петух","Зяблик","Крепыш","Глухой","Немой","Слепой","Хромой","Ломаный","Дикий","Удод","Сорока","Филин","Княжич","Скоморох","Пыжик","Ерш","Опаленный","Гроза","Буян","Смелый","Тихий","Борзый","Удалой"];
@@ -739,11 +739,13 @@ function startGame(){
   }
   document.getElementById("historyBox").style.display="none";
   updatePerksDisplay();
-  availableQuestions=shuffleArray(questions);
-  if(availableQuestions.length>24)availableQuestions=availableQuestions.slice(0,24);
+  // Сколько вопросов в жизни: по оставшимся годам до 1389 (не режем банк до 24)
+  const yearsLeft=Math.max(20,1390-currentYear);
+  const lifeLen=Math.min(questions.length,Math.max(28,Math.min(45,yearsLeft)));
+  availableQuestions=shuffleArray(questions).slice(0,lifeLen);
   // одно чёрное событие в середине жизни
   const black=blackEvents[Math.floor(Math.random()*blackEvents.length)];
-  const insertAt=8+Math.floor(Math.random()*8); // 8..15
+  const insertAt=Math.floor(availableQuestions.length*0.35)+Math.floor(Math.random()*Math.max(1,Math.floor(availableQuestions.length*0.25)));
   availableQuestions.splice(Math.min(insertAt,availableQuestions.length),0,black);
   totalQuestions=availableQuestions.length;currentQuestionIndex=0;
   updateStats();updateFamilyDisplay();updateProgress();
