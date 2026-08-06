@@ -488,9 +488,13 @@ function considerPlaques(opt,q){
   function tryAdd(def){ const p=addPlaque(def); if(p) gained.push(p); }
   if(opt&&opt.plaque){ tryAdd(opt.plaque); return gained; }
 
+  // Викторины «угадай предмет» — без плашек: ошибка не делает тебя грозой дворов
+  const qtext=(q&&q.text)||"";
+  if(/^Сосед просит дать ему /.test(qtext)) return gained;
+
   const tags=opt.tags||[];
   const has=function(t){ return tags.indexOf(t)>=0; };
-  const rt=((opt.r||"")+" "+(opt.t||"")+" "+((q&&q.text)||"")).toLowerCase();
+  const rt=((opt.r||"")+" "+(opt.t||"")+" "+qtext).toLowerCase();
   const impact=Math.abs(opt.hp|0)+Math.abs(opt.s|0)+Math.abs(opt.g|0);
   const isExtreme=!!opt.extreme;
   const isBlack=!!(q&&q.isBlack);
@@ -526,7 +530,8 @@ function considerPlaques(opt,q){
   if(has("pious") && (/церк|храм|поп|молит|пост|икон|монаст|бог/.test(rt) || (opt.g|0)>=4))
     cand({id:"faith_keeper",title:"Божий человек",why:"Церковь за тебя: помин и кусок хлеба",hp:1,g:2,power:11});
 
-  if(has("nasilnik") && ((opt.g|0)<=-6 || (opt.s|0)>=6))
+  // Гроза дворов — только за явное насилие, не за «не тот предмет»
+  if(has("nasilnik") && ((opt.g|0)<=-8 || (opt.s|0)>=6) && /изби|уби|заруб|пыр|кров|сил(ой|ою)|кулак|плеть|повеш|сжёг жив|сжечь жив/.test(rt))
     cand({id:"bloody_fist",title:"Гроза дворов",why:"Берут из страха — платят, но ненавидят",s:1,g:-2,power:11});
 
   if((has("zhuk")||has("skolzkiy")) && (opt.s|0)>=4)
@@ -541,19 +546,19 @@ function considerPlaques(opt,q){
   if(has("brave") && (opt.g|0)>=5 && (opt.hp|0)<=-4)
     cand({id:"scarred_glory",title:"Шрам удальца",why:"Раны ноют, зато имя гремит",hp:-1,g:1,power:10});
 
-  if(has("merciful") && (opt.g|0)>=3)
+  if(has("merciful") && (opt.g|0)>=3 && impact>=10)
     cand({id:"warm_hearth",title:"Добрый хозяин",why:"Дом в ладу: сытнее спится и живётся",hp:1,g:1,power:9});
 
-  if(has("generous") && (opt.s|0)<=-4)
+  if(has("generous") && (opt.s|0)<=-4 && impact>=8)
     cand({id:"open_hand",title:"Щедрая рука",why:"Раздаёшь своё — беднее, но любимее",g:1,s:-1,power:8});
 
   if(has("hardworker") && impact>=10)
     cand({id:"strong_back",title:"Крепкая спина",why:"Привык к труду: тело держится лучше",hp:1,power:8});
 
-  if(has("cunning") && (opt.s|0)>=3 && (opt.g|0)>=0)
+  if(has("cunning") && (opt.s|0)>=3 && (opt.g|0)>=0 && impact>=8)
     cand({id:"fox_mind",title:"Лисий ум",why:"Хитрость кормит: лишняя монета в год",s:1,power:8});
 
-  if(has("nehoroshiy") && (opt.g|0)<=-6)
+  if(has("nehoroshiy") && (opt.g|0)<=-8)
     cand({id:"bad_name",title:"Дурная слава",why:"Молва гложет честь каждый сезон",g:-1,power:9});
 
   if(!candidates.length) return gained;
