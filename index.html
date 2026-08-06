@@ -621,7 +621,7 @@ function applyDirtyGetaway(opt,tags){
   else bonus=3+Math.floor(Math.random()*5); // 3..7
   player.silver+=bonus;
   const notes=[
-    "На этот раз пронесло: добыча у тебя, а соседи пока молчат.",
+    "На этот раз пронесло: добыча у тебя, а молва ещё спит.",
     "Следы замели серебром и тишиной. Честь пока цела, кошель тяжелее.",
     "Подлость прошла без шума: никто не связал это дело с тобой."
   ];
@@ -636,11 +636,11 @@ function applyBadLuck(tags){
   const roll=Math.random();
   if(roll<0.5){
     player.glory-=5;
-    return {dh:0,ds:0,dg:-5,note:"Молва оказалась злее самого поступка: о тебе говорят хуже, чем ты ждал."};
+    return {dh:0,ds:0,dg:-5,note:"Молва разнесла поступок шире, чем ты думал: честь упала сильнее."};
   }else if(roll<0.8){
     player.glory-=8;
     player.hp-=3;
-    return {dh:-3,ds:0,dg:-8,note:"Дело вышло наружу. Соседи отвернулись и смотрят в спину."};
+    return {dh:-3,ds:0,dg:-8,note:"На сходе припомнили это дело вслух — стыд ударил сильнее обычного."};
   }else{
     player.glory-=3;
     const took=Math.min(4,player.silver);
@@ -789,6 +789,123 @@ function shuffleArray(arr){
   }
   return a;
 }
+function moscowPrinceForYear(y){
+  // Московский стол (игра ведётся «от Москвы»)
+  if(y<1325) return {id:"yuri",t:"Юрий Данилович"};
+  if(y<1340) return {id:"kalita",t:"Иван Данилович Калита"};
+  if(y<1353) return {id:"semyon",t:"Семён Иванович Гордый"};
+  if(y<1359) return {id:"ivan2",t:"Иван Иванович Красный"};
+  if(y<1389) return {id:"dmitry",t:"Дмитрий Иванович"};
+  return {id:"vasily1",t:"Василий Дмитриевич"};
+}
+function buildMoscowPrinceOpts(y){
+  const correct=moscowPrinceForYear(y);
+  const all=[
+    {id:"yuri",t:"Юрий Данилович"},
+    {id:"kalita",t:"Иван Данилович Калита"},
+    {id:"semyon",t:"Семён Иванович Гордый"},
+    {id:"ivan2",t:"Иван Иванович Красный"},
+    {id:"dmitry",t:"Дмитрий Иванович"},
+    {id:"vasily1",t:"Василий Дмитриевич"},
+    {id:"nevsky",t:"Александр Невский"},
+    {id:"uzbek",t:"Хан Узбек"},
+    {id:"olgerd",t:"Ольгерд Литовский"},
+    {id:"vladimir",t:"Владимир Красное Солнышко"},
+    {id:"suzdal",t:"Дмитрий Суздальский"}
+  ];
+  const wrong=shuffleArray(all.filter(p=>p.id!==correct.id)).slice(0,5).map(function(p){
+    let r;
+    if(p.id==="nevsky") r="Ты назвал Александра Невского. Сход ржет: тот уже больше полувека в земле — год "+y+", а ты в старине застрял.";
+    else if(p.id==="uzbek"||p.id==="olgerd") r="Ты назвал «"+p.t+"». Люди смотрят косо: то сила чужая, не наш московский князь. Стыд на сходе.";
+    else if(p.id==="vladimir") r="Ты назвал Владимира Красное Солнышко. Былина — не ярлык: на дворе "+y+" год, а ты сказки путаешь с князем.";
+    else if(p.id==="suzdal") r="Ты назвал Дмитрия Суздальского. Тот ярлык иногда рвал, но ныне на Москве другой стол — сход качает головами.";
+    else r="Ты назвал «"+p.t+"». Неверно: сейчас на Москве "+correct.t+". Сход запомнил твою оплошность.";
+    return {t:p.t,r:r,hp:0,s:0,g:-6,tags:[]};
+  });
+  const right={
+    t:correct.t,
+    r:"Ты верно сказал: ныне наш князь — "+correct.t+". Сход кивнул: год "+y+", и ты не спутал ярлык с былиной.",
+    hp:0,s:0,g:12,tags:["cunning"],pinned:true
+  };
+  const hero={
+    t:"🦸 Назвать верно и ещё напомнить права ярлыка сходу",
+    r:"Ты верно назвал "+correct.t+" и коротко разъяснил, чей ярлык нынче. Сход слушал: честь грамотея выросла.",
+    hp:0,s:0,g:24,tags:["cunning","brave"],extreme:"hero"
+  };
+  const villain={
+    t:"😈 Назвать себя князем и требовать поклон",
+    r:"Ты назвал князем себя и потребовал поклон. Смех сменился злостью — едва не побили за бесовскую гордыню.",
+    hp:-6,s:0,g:-30,tags:["nehoroshiy"],extreme:"villain"
+  };
+  return wrong.concat([right,hero,villain]);
+}
+function getQuestionOpts(q){
+  if(q&&q.dynamic==="moscowPrince") return buildMoscowPrinceOpts(currentYear);
+  if(q&&q.dynamic==="hordeDefeat") return buildHordeDefeatOpts(currentYear);
+  return (q&&q.opts)||[];
+}
+function buildHordeDefeatOpts(y){
+  const afterKulikovo=y>=1380;
+  const correct=afterKulikovo
+    ? {
+        t:"Дмитрий Иванович разбил Мамая — Орду не уничтожил",
+        r:"Ты сказал верно: в "+y+" году помнят Куликово поле — Дмитрий разбил Мамая, но Золотая Орда после того ещё стояла, а Тохтамыш жёг Москву. Сход кивнул грамотею.",
+        hp:0,s:0,g:14,tags:["cunning"],pinned:true
+      }
+    : {
+        t:"Пока никто: Орда ещё сильна",
+        r:"Ты сказал верно: год "+y+", а Золотую Орду ещё никто не разгромил. Кто хвастает иначе — путает былину с ярлыком. Сход тебя слушает.",
+        hp:0,s:0,g:12,tags:["cunning"],pinned:true
+      };
+  const wrongPool=[
+    {
+      t:"Дмитрий Донской уничтожил Золотую Орду",
+      r:afterKulikovo
+        ? "Ты сказал, будто Донской уничтожил Орду. Сход спорит: Мамая били, а Орда и Тохтамыш после того ещё гнули спины Руси."
+        : "Ты назвал Донского победителем Орды. Рано: год "+y+", Куликова поля ещё не было — стыд на сходе.",
+      hp:0,s:0,g:-6,tags:[]
+    },
+    {
+      t:"Александр Невский разгромил Орду",
+      r:"Ты назвал Невского. Тот бил шведов и немцев и ладил с Ордой — не громил её. Сход качает головами.",
+      hp:0,s:0,g:-6,tags:[]
+    },
+    {
+      t:"Иван Калита сокрушил Орду серебром",
+      r:"Ты сказал, будто Калита сокрушил Орду. Наоборот: он исправно вёз выход хану. Молва о твоей путанице пошла.",
+      hp:0,s:0,g:-6,tags:[]
+    },
+    {
+      t:"Хан Тохтамыш сам развалил Орду",
+      r:"Ты свалил всё на Тохтамыша. Тот Ордой правил и Москву жёг — не «разгромил» её за Русь. Стыд грамотея.",
+      hp:0,s:0,g:-6,tags:[]
+    },
+    {
+      t:"Ольгерд Литовский уничтожил Орду",
+      r:"Ты назвал Ольгерда. Литва билась с ордынцами на своих рубежах, но Золотую Орду не уничтожила. Сход не верит.",
+      hp:0,s:0,g:-6,tags:[]
+    },
+    {
+      t:"Батый пал — и Орды не стало",
+      r:"Ты сказал, будто с Батыем кончилась Орда. Батый её как раз и ставил. Год "+y+" — а ты летопись вывернул наизнанку.",
+      hp:0,s:0,g:-8,tags:[]
+    }
+  ];
+  const wrong=shuffleArray(wrongPool).slice(0,5);
+  const hero={
+    t:"🦸 Объяснить сходу разницу между Мамаем и Ордой",
+    r:afterKulikovo
+      ? "Ты разъяснил сходу: Мамая на Дону били, Орда после того жива, дань ещё придёт. Слушали молча — честь учителю."
+      : "Ты разъяснил сходу: Орда цела, ярлык и выход ещё над нами. Пустые хвастовства унял — честь грамотея.",
+    hp:0,s:0,g:24,tags:["cunning","brave"],extreme:"hero"
+  };
+  const villain={
+    t:"😈 Кричать, что Орды нет, и прятать свою дань",
+    r:"Ты кричал, будто Орды нет, и прятал дань. Скоро пришли за недоимкой — били и тебя, и ложь твою.",
+    hp:-8,s:-10,g:-28,tags:["zhuk","nehoroshiy"],extreme:"villain"
+  };
+  return wrong.concat([correct,hero,villain]);
+}
 function pickOpts(opts,n){
   const list=Array.isArray(opts)?opts.filter(Boolean):[];
   const want=n||4;
@@ -803,8 +920,9 @@ function pickOpts(opts,n){
   if(heroes[0]&&Math.random()<0.05) special.push(heroes[0]);
   if(villains[0]&&Math.random()<0.05) special.push(villains[0]);
   const need=Math.max(0,want-special.length);
-  const pool=shuffleArray(pinned.concat(shuffleArray(normal)));
-  return shuffleArray(special.concat(pool.slice(0,need))).slice(0,want);
+  const fill=shuffleArray(normal);
+  const base=pinned.concat(fill).slice(0,need);
+  return shuffleArray(special.concat(base)).slice(0,want);
 }
 function choiceBtnClass(opt){
   if(!opt) return "choice-btn";
@@ -830,7 +948,7 @@ function showQuestion(){
   const q=availableQuestions[currentQuestionIndex];
   document.getElementById("questionText").innerText=q.text;
   showQuestionImage(q);
-  const shuffled=pickOpts(q.opts,4);
+  const shuffled=pickOpts(getQuestionOpts(q),4);
   window._currentOpts=shuffled;
   document.getElementById("choicesBox").innerHTML=shuffled.map((opt,i)=>'<button class="'+choiceBtnClass(opt)+'" onclick="makeChoice('+i+')">'+opt.t+'</button>').join("");
   document.getElementById("resultBox").style.display="none";
@@ -992,7 +1110,7 @@ function getLastFateStory(){
   else body="В лето "+e.year+" случилось: "+situ+".";
 
   if(familyAllGone()) return body+" Кровные узы порвались, и двор опустел.";
-  if(player.glory<0) return body+" После этого сход отвернулся — и дороги назад не стало.";
+  if(player.glory<0) return body+" После этого в волости тебя вычеркнули из своих — дороги назад не стало.";
   if(player.hp<=0) return body+" С этой беды ты уже не поднялся.";
   if(player.silver<=0) return body+" Казна иссякла, и свобода ушла вместе с серебром.";
   return body;
