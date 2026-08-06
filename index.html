@@ -502,59 +502,59 @@ function considerPlaques(opt,q){
   function cand(def){ if(def) candidates.push(def); }
 
   if(isExtreme&&opt.extreme==="hero")
-    cand({id:"village_savior",title:"Спаситель деревни",why:"Село помнит: встал за волость",hp:1,g:2,power:14});
+    cand({id:"village_savior",title:"Спаситель деревни",why:"За тебя стоят: подносят еду и честь",hp:1,g:2,power:14});
   if(isExtreme&&opt.extreme==="villain")
-    cand({id:"cursed_name",title:"Проклятый",why:"Шепчут имя — зло не сходит",s:1,g:-2,power:13});
+    cand({id:"cursed_name",title:"Проклятое имя",why:"Боятся и платят — лишь бы ты ушёл",s:1,g:-2,power:13});
 
   if(/татар|орд|баскак|ясак|полон/.test(rt) && (has("zhuk")||has("nehoroshiy")||has("coward")) && (opt.g|0)<0)
-    cand({id:"tatar_lackey",title:"Татарский прихвостень",why:"Продал своих — серебро звенит",s:2,g:-2,power:12});
+    cand({id:"tatar_lackey",title:"Прислужник Орды",why:"Свои чураются, ордынцы кидают подачку",s:2,g:-2,power:12});
   if(/татар|орд|набег|осад|полон/.test(rt) && (has("brave")||has("merciful")||isExtreme) && (opt.g|0)>=6)
-    cand({id:"village_savior",title:"Спаситель деревни",why:"Отбил беду — зовут щитом",hp:1,g:2,power:14});
+    cand({id:"village_savior",title:"Спаситель деревни",why:"За тебя стоят: подносят еду и честь",hp:1,g:2,power:14});
 
   if(/княз|дружин|ярлык|тиун|двор/.test(rt) && (opt.g|0)>=5 && !has("nehoroshiy"))
-    cand({id:"prince_shield",title:"Под защитой князя",why:"Князь заметил — сила за спиной",s:1,g:2,power:13});
+    cand({id:"prince_shield",title:"Милость князя",why:"Княжий глаз бережёт: лёгкие льготы и почёт",s:1,g:2,power:13});
 
   if(/леч|знахар|лихорад|болн|мор|чум|трав|маз|исцел|зелье|отвар|бан/.test(rt) && ((opt.hp|0)>=6 || has("merciful") || has("pious")))
-    cand({id:"healer",title:"Лекарь",why:"Лечил людей — зовут к больным",hp:2,g:1,power:12});
+    cand({id:"healer",title:"Знахарь волости",why:"Знаешь травы: сам крепче, люди благодарят",hp:2,g:1,power:12});
 
   if(has("greedy") && (opt.s|0)>=5)
-    cand({id:"zhadoba",title:"Жадоба",why:"Хапал сверх меры — душа стынет",s:2,g:-2,power:11});
+    cand({id:"zhadoba",title:"Жадоба",why:"Хапаешь лишнее — кошель толще, честь тоньше",s:2,g:-2,power:11});
 
   if(has("coward") && (opt.g|0)<=-5)
-    cand({id:"village_fool",title:"Деревенский дурачок",why:"Струсил — село смеётся",hp:-1,g:-2,power:9});
+    cand({id:"village_fool",title:"Трус на виду",why:"Над тобой смеются: силы нет, уважения тоже",hp:-1,g:-2,power:9});
 
   if(has("pious") && (/церк|храм|поп|молит|пост|икон|монаст|бог/.test(rt) || (opt.g|0)>=4))
-    cand({id:"faith_keeper",title:"Хранитель веры",why:"За храм стоял — попы поминают",hp:1,g:2,power:11});
+    cand({id:"faith_keeper",title:"Божий человек",why:"Церковь за тебя: помин и кусок хлеба",hp:1,g:2,power:11});
 
   if(has("nasilnik") && ((opt.g|0)<=-6 || (opt.s|0)>=6))
-    cand({id:"bloody_fist",title:"Кровавый кулак",why:"Брал силой — боятся рот открыть",s:1,g:-2,power:11});
+    cand({id:"bloody_fist",title:"Гроза дворов",why:"Берут из страха — платят, но ненавидят",s:1,g:-2,power:11});
 
   if((has("zhuk")||has("skolzkiy")) && (opt.s|0)>=4)
-    cand({id:"road_swindler",title:"Дорожный плут",why:"Живёт обманом — в торге ловят",s:2,g:-1,power:10});
+    cand({id:"road_swindler",title:"Плут на торгу",why:"Обман кормит, в глаза смотрят косо",s:2,g:-1,power:10});
 
   if(/пожар|огонь|плам|сжёг|сжечь/.test(rt) && (has("brave")||has("merciful")) && (opt.g|0)>=4)
-    cand({id:"fire_saver",title:"Спаситель из огня",why:"Таскал из огня — слава и шрамы",hp:-1,g:2,power:12});
+    cand({id:"fire_saver",title:"Спасший из огня",why:"Шрамы ноют, а люди кормят и славят",hp:-1,g:2,power:12});
 
   if(/кабал|закуп|холоп|долг|тиун|дань|недоим/.test(rt) && (opt.s|0)<=-5)
-    cand({id:"bond_slave",title:"Кабальный",why:"Кабала на шее — серебро течёт",s:-2,g:-1,power:10});
+    cand({id:"bond_slave",title:"В кабале",why:"Долг тянет: серебро уходит, честь падает",s:-2,g:-1,power:10});
 
   if(has("brave") && (opt.g|0)>=5 && (opt.hp|0)<=-4)
-    cand({id:"scarred_glory",title:"Шрам удальца",why:"Кровь пролил — слава держится",hp:-1,g:1,power:10});
+    cand({id:"scarred_glory",title:"Шрам удальца",why:"Раны ноют, зато имя гремит",hp:-1,g:1,power:10});
 
   if(has("merciful") && (opt.g|0)>=3)
-    cand({id:"warm_hearth",title:"Тёплый очаг",why:"Пощадил своих — дом даёт силы",hp:1,g:1,power:9});
+    cand({id:"warm_hearth",title:"Добрый хозяин",why:"Дом в ладу: сытнее спится и живётся",hp:1,g:1,power:9});
 
   if(has("generous") && (opt.s|0)<=-4)
-    cand({id:"open_hand",title:"Щедрая рука",why:"Отдал своё — молва добрая",g:1,s:-1,power:8});
+    cand({id:"open_hand",title:"Щедрая рука",why:"Раздаёшь своё — беднее, но любимее",g:1,s:-1,power:8});
 
   if(has("hardworker") && impact>=10)
-    cand({id:"strong_back",title:"Крепкая спина",why:"Тяжкий труд — тело привыкло",hp:1,power:8});
+    cand({id:"strong_back",title:"Крепкая спина",why:"Привык к труду: тело держится лучше",hp:1,power:8});
 
   if(has("cunning") && (opt.s|0)>=3 && (opt.g|0)>=0)
-    cand({id:"fox_mind",title:"Лисий ум",why:"Хитростью выгадал — ум цепок",s:1,power:8});
+    cand({id:"fox_mind",title:"Лисий ум",why:"Хитрость кормит: лишняя монета в год",s:1,power:8});
 
   if(has("nehoroshiy") && (opt.g|0)<=-6)
-    cand({id:"bad_name",title:"Дурная слава",why:"Подлость помнят — честь тает",g:-1,power:9});
+    cand({id:"bad_name",title:"Дурная слава",why:"Молва гложет честь каждый сезон",g:-1,power:9});
 
   if(!candidates.length) return gained;
 
