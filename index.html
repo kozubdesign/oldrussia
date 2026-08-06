@@ -163,7 +163,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 <aside class="plaques-rail" id="plaquesRail" aria-label="Перки"></aside>
 </div>
 
-<script src="questions.js?v=20260806d"></script>
+<script src="questions.js?v=20260806g"></script>
 <script>
 const names=["Богдан","Добрыня","Всеволод","Ярополк","Святослав","Владимир","Мстислав","Ростислав","Изяслав","Глеб","Борис","Юрий","Андрей","Микула","Ратибор","Жирослав","Путята","Творимир","Станимир","Бронислав","Вячеслав","Олег","Игорь","Роман","Василий","Пётр","Иван","Максим","Кирилл","Алексей","Дмитрий","Павел","Фома","Лука","Клим","Лазарь","Савва","Тихон","Фрол","Евстафий","Архип","Гордей","Евсей","Захар","Игнат","Кондрат","Макар","Назар","Прохор","Савелий"];
 const nicknames=["Косой","Рябой","Молчун","Бешеный","Храбрый","Меньшой","Большой","Хитрый","Рыжий","Чернявый","Белый","Костлявый","Шило","Тяжелый","Шустрый","Угрюмый","Веселый","Зубатый","Губатый","Костень","Береза","Дуб","Медведь","Волк","Лисица","Кот","Бык","Петух","Зяблик","Крепыш","Глухой","Немой","Слепой","Хромой","Ломаный","Дикий","Удод","Сорока","Филин","Княжич","Скоморох","Пыжик","Ерш","Опаленный","Гроза","Буян","Смелый","Тихий","Борзый","Удалой"];
@@ -452,7 +452,32 @@ function updatePlaquesDisplay(flashIds){
 function addPlaque(def){
   if(!def||!def.id||!def.title) return null;
   if(!player.plaques) player.plaques=[];
+
+  // Второй удар по тому же органу → полная потеря
+  if(def.id==="one_eye" && player.plaques.some(function(p){ return p.id==="one_eye"; }))
+    def={id:"blind",title:"Слепой",hp:-1,power:16};
+  if(def.id==="one_hand" && player.plaques.some(function(p){ return p.id==="one_hand"; }))
+    def={id:"no_hands",title:"Безрукий",hp:-1,power:16};
+  if(def.id==="lame_leg" && player.plaques.some(function(p){ return p.id==="lame_leg"; }))
+    def={id:"no_legs",title:"Безногий",hp:-1,power:16};
+
+  // Усиление увечья: снять «половинную» плашку
+  const upgrades={
+    blind:["one_eye"],
+    no_hands:["one_hand"],
+    no_legs:["lame_leg"]
+  };
+  if(upgrades[def.id]){
+    for(let i=player.plaques.length-1;i>=0;i--){
+      if(upgrades[def.id].indexOf(player.plaques[i].id)>=0) player.plaques.splice(i,1);
+    }
+  }
+  // Уже полная потеря — не ставим половинную
+  if(def.id==="one_eye" && player.plaques.some(function(p){ return p.id==="blind"; })) return null;
+  if(def.id==="one_hand" && player.plaques.some(function(p){ return p.id==="no_hands"; })) return null;
+  if(def.id==="lame_leg" && player.plaques.some(function(p){ return p.id==="no_legs"; })) return null;
   if(player.plaques.some(function(p){ return p.id===def.id; })) return null;
+
   const p={
     id:def.id,
     title:def.title,
@@ -471,8 +496,9 @@ function addPlaque(def){
     player.plaques.splice(weakIdx,1);
   }
   player.plaques.push(p);
-  // Сразу применить за текущий ход
-  player.hp+=p.hp;player.silver+=p.s;player.glory+=p.g;
+  // Сразу применить за текущий ход (плашки — мягкий урон чести, не валят в минус)
+  player.hp+=p.hp;player.silver+=p.s;
+  applyGloryDelta(p.g, false);
   clampStats();
   return p;
 }
@@ -481,7 +507,7 @@ function tickPlaques(){
   player.plaques.forEach(function(p){
     player.hp+=p.hp|0;
     player.silver+=p.s|0;
-    player.glory+=p.g|0;
+    applyGloryDelta(p.g|0, false);
   });
   clampStats();
   updateStats();
@@ -539,6 +565,13 @@ function considerPlaques(opt,q){
   if(has("nasilnik") && ((opt.g|0)<=-8 || (opt.s|0)>=6) && /изби|уби|заруб|пыр|кров|сил(ой|ою)|кулак|плеть|повеш|сжёг жив|сжечь жив/.test(rt))
     cand({id:"bloody_fist",title:"Гроза дворов",why:"Берут из страха — платят, но ненавидят",s:1,g:-2,power:11});
 
+  // Дикий — особо лютые выходки: зверь, не человек
+  const savage=
+    /добил лежач|бить лежач|камн.*кулак|размозж|зарезал|повесил|четвертовал|сжёг жив|сжечь жив|вырвал глаз|ломал руки|труп у ног|очередь в могилу|мор за твоим|без зубов для улыбки|вытряс признание|подбил прыгнуть|отравил вино|отравил/.test(rt)
+    || (opt.extreme==="villain" && has("nasilnik") && (opt.g|0)<=-24);
+  if(savage && (has("nasilnik")||has("nehoroshiy")||opt.extreme==="villain") && (opt.g|0)<=-10)
+    cand({id:"wild_beast",title:"Дикий",s:2,g:-2,power:15});
+
   if((has("zhuk")||has("skolzkiy")) && (opt.s|0)>=4)
     cand({id:"road_swindler",title:"Плут на торгу",why:"Обман кормит, в глаза смотрят косо",s:2,g:-1,power:10});
 
@@ -566,26 +599,31 @@ function considerPlaques(opt,q){
   if(has("nehoroshiy") && (opt.g|0)<=-8)
     cand({id:"bad_name",title:"Дурная слава",why:"Молва гложет честь каждый сезон",g:-1,power:9});
 
-  // Радикальный промах → увечье: постоянная плохая плашка
+  // Радикальный промах → увечье: постоянная плашка −1❤️/ход
   const hpHit=opt.hp|0;
   const nearMiss=/едва не|чуть не/.test(rt);
-  const isBlind=/слепот|слепил|едва видит|почти не открывал/.test(rt);
-  const isLame=/хромот|кривизна остал|ногу лошадь|кость — в осколк|кость в осколк/.test(rt)
-    || (/без ноги/.test(rt) && !nearMiss);
-  const isHandMaim=/лишился кисти|без руки|без кисти/.test(rt) && !nearMiss;
+  const bothEyes=/оба глаз|оба глаза|совсем ослеп|ослеп на оба|полная слепот|слепой навсегда/.test(rt);
+  const oneEye=/одноглаз|лишился глаза|потерял глаз|глаз почти не открывал|глаз едва видит|едва видит|слепил|риск слепот|бельмо гуще|глаз красный, бельмо/.test(rt)
+    || (/слепот|ослеп/.test(rt) && !bothEyes);
+  const bothHands=/обе руки|без обеих рук|обе кисти|безрукий/.test(rt);
+  const oneHand=/лишился кисти|без руки|без кисти|рука навсегда|кисть отсох|ампутир/.test(rt) && !bothHands && !nearMiss;
+  const bothLegs=/обе ноги|без обеих ног|безногий/.test(rt);
+  const oneLeg=/хромот|кривизна остал|ногу лошадь|кость — в осколк|кость в осколк|нога навсегда|хром на всю/.test(rt)
+    || (/без ноги/.test(rt) && !nearMiss && !bothLegs);
   const isCripple=/изувеч|увечн|размозж/.test(rt)
     || (/калек/.test(rt) && !/сын|дочь|отец|тесть|зять/.test(rt));
   const disability=
-    (hpHit<=-4 && isLame) ||
-    (hpHit<=-8 && isBlind) ||
-    (hpHit<=-10 && isHandMaim) ||
+    bothEyes || oneEye || bothHands || oneHand || bothLegs || oneLeg ||
     (hpHit<=-10 && isCripple);
   if(disability){
     candidates.length=0;
-    if(isBlind) cand({id:"blind_eye",title:"Кривой",why:"Глаз повреждён: слабее в труде и в почёте",hp:-1,g:-1,power:12});
-    else if(isHandMaim) cand({id:"maimed_hand",title:"Кривая рука",why:"Кисть не та: работа тяжелее, уважения меньше",hp:-2,g:-1,power:13});
-    else if(isLame) cand({id:"lame_leg",title:"Хромой",why:"Нога не держит: силы меньше, насмешки чаще",hp:-2,g:-1,power:13});
-    else cand({id:"cripple",title:"Увечный",why:"Тело покалечено: каждый сезон давит сильнее",hp:-2,g:-2,power:15});
+    if(bothEyes) cand({id:"blind",title:"Слепой",hp:-1,power:16});
+    else if(oneEye) cand({id:"one_eye",title:"Одноглазый",hp:-1,power:12});
+    else if(bothHands) cand({id:"no_hands",title:"Безрукий",hp:-1,power:16});
+    else if(oneHand) cand({id:"one_hand",title:"Однорукий",hp:-1,power:12});
+    else if(bothLegs) cand({id:"no_legs",title:"Безногий",hp:-1,power:16});
+    else if(oneLeg) cand({id:"lame_leg",title:"Хромой",hp:-1,power:12});
+    else cand({id:"cripple",title:"Увечный",hp:-1,power:14});
   }
 
   if(!candidates.length) return gained;
@@ -629,15 +667,16 @@ function dirtyGetawayChance(){
   const sneak=Math.min(1,((player.perkCounts.zhuk||0)+(player.perkCounts.cunning||0)+(player.perkCounts.skolzkiy||0))/8);
   return 0.15+0.15*(0.5*wealth+0.5*sneak);
 }
-function applyDirtyGetaway(opt,tags){
+function applyDirtyGetaway(opt,tags,appliedG){
   // Подлый поступок иногда даёт прибыль без потери чести
   if(!opt||!tags||!tags.length) return null;
   if(!tags.some(t=>badTags.has(t))) return null;
   if(Math.random()>=dirtyGetawayChance()) return null;
   let dgFix=0;
-  if(opt.g<0){
-    player.glory-=opt.g; // откат потери чести
-    dgFix=-opt.g;
+  const lost=appliedG!=null?appliedG|0:opt.g|0;
+  if(lost<0){
+    player.glory-=lost; // откат фактической потери чести
+    dgFix=-lost;
   }
   let bonus=0;
   if(opt.s>0) bonus=Math.max(2,Math.floor(opt.s*0.3));
@@ -660,17 +699,17 @@ function applyBadLuck(tags){
   if(publicBad){
     const roll=Math.random();
     if(roll<0.5){
-      player.glory-=5;
-      return {dh:0,ds:0,dg:-5,note:"Молва разнесла поступок шире, чем ты думал: честь упала сильнее."};
+      const dg=applyGloryDelta(-5, true);
+      return {dh:0,ds:0,dg:dg,note:"Молва разнесла поступок шире, чем ты думал: честь упала сильнее."};
     }else if(roll<0.8){
-      player.glory-=8;
+      const dg=applyGloryDelta(-8, true);
       player.hp-=3;
-      return {dh:-3,ds:0,dg:-8,note:"На сходе припомнили это дело вслух — стыд ударил сильнее обычного."};
+      return {dh:-3,ds:0,dg:dg,note:"На сходе припомнили это дело вслух — стыд ударил сильнее обычного."};
     }else{
-      player.glory-=3;
+      const dg=applyGloryDelta(-3, true);
       const took=Math.min(4,player.silver);
       player.silver=Math.max(0,player.silver-4);
-      return {dh:0,ds:-took,dg:-3,note:"Чтобы замять историю, пришлось откупаться серебром."};
+      return {dh:0,ds:-took,dg:dg,note:"Чтобы замять историю, пришлось откупаться серебром."};
     }
   }
   // greedy/coward: хуже по кошельку/силам, без публичного стыда
@@ -1016,6 +1055,31 @@ function clampStats(){
   if(isNaN(player.glory))player.glory=0;
   player.hp=Math.max(0,player.hp);
   player.silver=Math.max(0,player.silver);
+  // честь ниже 0 — только после тяжёлого проступка; мелочь режется в applyGloryDelta
+}
+/** Тяжёлая потеря чести: обман, убийство, увечье, позор — может увести ниже 0 и кончить игру */
+function isHardGloryLoss(opt, amount){
+  const dg=amount|0;
+  if(dg>=0) return false;
+  if(opt&&opt.hardGlory) return true;
+  if(opt&&opt.softGlory) return false;
+  const tags=(opt&&opt.tags)||[];
+  if(tags.some(function(t){ return t==="nehoroshiy"||t==="zhuk"||t==="nasilnik"; })) return true;
+  if(opt&&opt.extreme==="villain") return true;
+  if(dg<=-12) return true;
+  const rt=(((opt&&opt.r)||"")+" "+((opt&&opt.t)||"")).toLowerCase();
+  if(/убил|убить|заруб|повеш|избил|покалеч|ослеп|без руки|без ноги|одноглаз|обман|фальш|подсун|ограб|опозор|проклял|преда|лжесвид|насили|изнасило|сжёг жив|сжечь жив/.test(rt)) return true;
+  return false;
+}
+/** Мелкая потеря чести не уходит ниже 0; тяжёлая — может */
+function applyGloryDelta(dg, hard){
+  dg=dg|0;
+  if(!dg) return 0;
+  if(dg>0){ player.glory+=dg; return dg; }
+  if(hard){ player.glory+=dg; return dg; }
+  const before=player.glory|0;
+  player.glory=Math.max(0, before+dg);
+  return player.glory-before;
 }
 function showQuestion(){
   if(gameOver) return;
@@ -1062,18 +1126,21 @@ function makeChoice(idx){
   window._currentOpts[idx]=opt;
   const q=availableQuestions[currentQuestionIndex];
   const oH=player.hp,oS=player.silver,oG=player.glory;
-  player.hp+=opt.hp;player.silver+=opt.s;player.glory+=opt.g;
+  player.hp+=opt.hp;player.silver+=opt.s;
+  const hardG=isHardGloryLoss(opt, opt.g);
+  const appliedOptG=applyGloryDelta(opt.g, hardG);
   clampStats();
 
   // Подлость: шанс 15–30% «сошло с рук» (прибыль, честь не падает)
   let bad=null;
   const tags=opt.tags||[];
-  bad=applyDirtyGetaway(opt,tags);
+  bad=applyDirtyGetaway(opt,tags,appliedOptG);
   if(!bad){
     bad=applyBadLuck(tags);
     if(player.iron && !bad && tags.some(t=>badTags.has(t)) && Math.random()<0.35){
-      player.glory-=4;
-      bad={dh:0,ds:0,dg:-4,note:"В режиме хардкор ошибка бьёт сильнее: потеряли и честь, и покой."};
+      const ironHard=tags.some(t=>t==="nehoroshiy"||t==="zhuk"||t==="nasilnik");
+      const dg=applyGloryDelta(-4, ironHard);
+      bad={dh:0,ds:0,dg:dg,note:"В режиме хардкор ошибка бьёт сильнее: потеряли и честь, и покой."};
     }
   }
   clampStats();
@@ -1131,7 +1198,8 @@ function makeChoice(idx){
   }
   const dH=opt.hp+(bad?bad.dh:0)+pH;
   const dS=opt.s+(bad?bad.ds:0)+pS;
-  const dG=opt.g+(bad?bad.dg:0)+pG;
+  // фактическая дельта чести (мелочь могла упереться в 0)
+  const dG=(player.glory-oG);
   const deltas=[fmtDelta(dH,'❤️ здоровье'),fmtDelta(dS,'🪙 деньги'),fmtDelta(dG,'🏅 почесть')].join(' · ');
   let resHtml="<strong>Что произошло:</strong> "+opt.r;
   if(bad) resHtml+=" "+bad.note;
