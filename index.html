@@ -612,9 +612,9 @@ function applyDirtyGetaway(opt,tags){
   else bonus=3+Math.floor(Math.random()*5); // 3..7
   player.silver+=bonus;
   const notes=[
-    "Сошло с рук: поживился, а молва будто оглохла.",
-    "Следы замели серебром и тишиной — честь цела, кошель тяжёл.",
-    "Подлость окупилась без шума: никто не связал дело с тобой."
+    "На этот раз пронесло: добыча у тебя, а соседи пока молчат.",
+    "Следы замели серебром и тишиной. Честь пока цела, кошель тяжелее.",
+    "Подлость прошла без шума: никто не связал это дело с тобой."
   ];
   return {dh:0,ds:bonus,dg:dgFix,note:notes[Math.floor(Math.random()*notes.length)],getaway:true};
 }
@@ -627,16 +627,16 @@ function applyBadLuck(tags){
   const roll=Math.random();
   if(roll<0.5){
     player.glory-=5;
-    return {dh:0,ds:0,dg:-5,note:"Молва разнеслась хуже, чем ты ждал."};
+    return {dh:0,ds:0,dg:-5,note:"Молва оказалась злее самого поступка: о тебе говорят хуже, чем ты ждал."};
   }else if(roll<0.8){
     player.glory-=8;
     player.hp-=3;
-    return {dh:-3,ds:0,dg:-8,note:"Дело вышло наружу. Соседи отвернулись."};
+    return {dh:-3,ds:0,dg:-8,note:"Дело вышло наружу. Соседи отвернулись и смотрят в спину."};
   }else{
     player.glory-=3;
     const took=Math.min(4,player.silver);
     player.silver=Math.max(0,player.silver-4);
-    return {dh:0,ds:-took,dg:-3,note:"Пришлось откупаться, чтобы замять историю."};
+    return {dh:0,ds:-took,dg:-3,note:"Чтобы замять историю, пришлось откупаться серебром."};
   }
 }
 function updateProgress(){
@@ -866,7 +866,7 @@ function makeChoice(idx){
     bad=applyBadLuck(tags);
     if(player.iron && !bad && tags.some(t=>badTags.has(t)) && Math.random()<0.35){
       player.glory-=4;
-      bad={dh:0,ds:0,dg:-4,note:"В режиме хардкор ошибка дорого стоит."};
+      bad={dh:0,ds:0,dg:-4,note:"В режиме хардкор ошибка бьёт сильнее: потеряли и честь, и покой."};
     }
   }
   clampStats();
