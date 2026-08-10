@@ -163,7 +163,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 <aside class="plaques-rail" id="plaquesRail" aria-label="Перки"></aside>
 </div>
 
-<script src="questions.js?v=20260806g"></script>
+<script src="questions.js?v=20260810f"></script>
 <script>
 const names=["Богдан","Добрыня","Всеволод","Ярополк","Святослав","Владимир","Мстислав","Ростислав","Изяслав","Глеб","Борис","Юрий","Андрей","Микула","Ратибор","Жирослав","Путята","Творимир","Станимир","Бронислав","Вячеслав","Олег","Игорь","Роман","Василий","Пётр","Иван","Максим","Кирилл","Алексей","Дмитрий","Павел","Фома","Лука","Клим","Лазарь","Савва","Тихон","Фрол","Евстафий","Архип","Гордей","Евсей","Захар","Игнат","Кондрат","Макар","Назар","Прохор","Савелий"];
 const nicknames=["Косой","Рябой","Молчун","Бешеный","Храбрый","Меньшой","Большой","Хитрый","Рыжий","Чернявый","Белый","Костлявый","Шило","Тяжелый","Шустрый","Угрюмый","Веселый","Зубатый","Губатый","Костень","Береза","Дуб","Медведь","Волк","Лисица","Кот","Бык","Петух","Зяблик","Крепыш","Глухой","Немой","Слепой","Хромой","Ломаный","Дикий","Удод","Сорока","Филин","Княжич","Скоморох","Пыжик","Ерш","Опаленный","Гроза","Буян","Смелый","Тихий","Борзый","Удалой"];
@@ -667,10 +667,30 @@ function dirtyGetawayChance(){
   const sneak=Math.min(1,((player.perkCounts.zhuk||0)+(player.perkCounts.cunning||0)+(player.perkCounts.skolzkiy||0))/8);
   return 0.15+0.15*(0.5*wealth+0.5*sneak);
 }
+function isOpenlyExposed(opt){
+  // Публичный позор/насилие: «пронесло втихаря» к такому тексту не клеится
+  if(!opt) return false;
+  const rt=(((opt.r)||"")+" "+((opt.t)||"")).toLowerCase();
+  if(/зовут|молва|на сходе|при людях|видели|тебя видели|слава в|имя тво|изверг|опозор|хула|клян|проклял|вяжут|палач|все знают|волость прокля|деревн.*ужас|содрог/.test(rt)) return true;
+  if(opt.extreme==="villain"||/^😈/.test(opt.t||"")){
+    const stealth=/ночью|тайком|втихаря|без свидетел|следы заме|украд|из-за угла|в лесу один/.test(rt);
+    if(!stealth) return true;
+  }
+  return false;
+}
+function dirtyGetawayNote(){
+  const notes=[
+    "На этот раз удалось уйти сухим: серебро у тебя, а молва ещё не знает, чья была рука.",
+    "Ты замел следы серебром и тишиной — честь пока цела, кошель тяжелее.",
+    "Пока улика не вышла наружу, тебя не припомнили, и добыча осталась при тебе."
+  ];
+  return notes[Math.floor(Math.random()*notes.length)];
+}
 function applyDirtyGetaway(opt,tags,appliedG){
-  // Подлый поступок иногда даёт прибыль без потери чести
+  // Подлый поступок иногда даёт прибыль без потери чести — только если дело не на виду
   if(!opt||!tags||!tags.length) return null;
   if(!tags.some(t=>badTags.has(t))) return null;
+  if(isOpenlyExposed(opt)) return null;
   if(Math.random()>=dirtyGetawayChance()) return null;
   let dgFix=0;
   const lost=appliedG!=null?appliedG|0:opt.g|0;
@@ -682,12 +702,7 @@ function applyDirtyGetaway(opt,tags,appliedG){
   if(opt.s>0) bonus=Math.max(2,Math.floor(opt.s*0.3));
   else bonus=3+Math.floor(Math.random()*5); // 3..7
   player.silver+=bonus;
-  const notes=[
-    "На этот раз пронесло: добыча у тебя, а молва ещё спит.",
-    "Следы замели серебром и тишиной. Честь пока цела, кошель тяжелее.",
-    "Подлость прошла без шума: никто не связал это дело с тобой."
-  ];
-  return {dh:0,ds:bonus,dg:dgFix,note:notes[Math.floor(Math.random()*notes.length)],getaway:true};
+  return {dh:0,ds:bonus,dg:dgFix,note:dirtyGetawayNote(),getaway:true};
 }
 function applyBadLuck(tags){
   // публичный позор — только за явную подлость/насилие, не за трусость/жадность втихаря
@@ -700,16 +715,16 @@ function applyBadLuck(tags){
     const roll=Math.random();
     if(roll<0.5){
       const dg=applyGloryDelta(-5, true);
-      return {dh:0,ds:0,dg:dg,note:"Молва разнесла поступок шире, чем ты думал: честь упала сильнее."};
+      return {dh:0,ds:0,dg:dg,note:"Молва разнесла поступок шире, чем ты думал, и честь упала сильнее обычного."};
     }else if(roll<0.8){
       const dg=applyGloryDelta(-8, true);
       player.hp-=3;
-      return {dh:-3,ds:0,dg:dg,note:"На сходе припомнили это дело вслух — стыд ударил сильнее обычного."};
+      return {dh:-3,ds:0,dg:dg,note:"На сходе это дело припомнили вслух: стыд ударил сильнее, чем ты ждал."};
     }else{
       const dg=applyGloryDelta(-3, true);
       const took=Math.min(4,player.silver);
       player.silver=Math.max(0,player.silver-4);
-      return {dh:0,ds:-took,dg:dg,note:"Чтобы замять историю, пришлось откупаться серебром."};
+      return {dh:0,ds:-took,dg:dg,note:"Чтобы замять историю, пришлось откупаться серебром — иначе хула шла бы ещё дальше."};
     }
   }
   // greedy/coward: хуже по кошельку/силам, без публичного стыда
@@ -778,14 +793,15 @@ function startGame(){
   }
   document.getElementById("historyBox").style.display="none";
   updatePerksDisplay();
-  // Сколько вопросов в жизни: по оставшимся годам до 1389 (не режем банк до 24)
-  const yearsLeft=Math.max(20,1390-currentYear);
-  const lifeLen=Math.min(questions.length,Math.max(28,Math.min(45,yearsLeft)));
+  // Партия: 24 обычных + 1 чёрное = 25 ходов (не длиннее лет до 1389)
+  const maxTurns=Math.max(1,1389-currentYear+1);
+  const lifeLen=Math.min(24,questions.length,Math.max(1,maxTurns-1));
   availableQuestions=shuffleArray(questions).slice(0,lifeLen);
   // одно чёрное событие в середине жизни
   const black=blackEvents[Math.floor(Math.random()*blackEvents.length)];
   const insertAt=Math.floor(availableQuestions.length*0.35)+Math.floor(Math.random()*Math.max(1,Math.floor(availableQuestions.length*0.25)));
   availableQuestions.splice(Math.min(insertAt,availableQuestions.length),0,black);
+  if(availableQuestions.length>maxTurns) availableQuestions.length=maxTurns;
   totalQuestions=availableQuestions.length;currentQuestionIndex=0;
   updateStats();updateFamilyDisplay();updateProgress();
   document.getElementById("questionText").innerHTML="";
@@ -896,7 +912,7 @@ function buildMoscowPrinceOpts(y){
     else if(p.id==="vladimir") r="Ты назвал Владимира Красное Солнышко. Былина — не ярлык: на дворе "+y+" год, а ты сказки путаешь с князем.";
     else if(p.id==="suzdal") r="Ты назвал Дмитрия Суздальского. Тот ярлык иногда рвал, но ныне на Москве другой стол — сход качает головами.";
     else r="Ты назвал «"+p.t+"». Неверно: сейчас на Москве "+correct.t+". Сход запомнил твою оплошность.";
-    return {t:p.t,r:r,hp:0,s:0,g:-6,tags:[]};
+    return {t:p.t,r:r,hp:0,s:0,g:-6,tags:[],softGlory:true};
   });
   const right={
     t:correct.t,
@@ -911,7 +927,7 @@ function buildMoscowPrinceOpts(y){
   const villain={
     t:"😈 Назвать себя князем и требовать поклон",
     r:"Ты назвал князем себя и потребовал поклон. Смех сменился злостью — едва не побили за бесовскую гордыню.",
-    hp:-6,s:0,g:-30,tags:["nehoroshiy"],extreme:"villain"
+    hp:-6,s:0,g:-30,tags:["nehoroshiy"],extreme:"villain",hardGlory:true
   };
   return wrong.concat([right,hero,villain]);
 }
@@ -930,8 +946,16 @@ function getQuestionOpts(q){
   if(q&&q.dynamic==="moscowPrince") return buildMoscowPrinceOpts(currentYear);
   if(q&&q.dynamic==="hordeDefeat") return buildHordeDefeatOpts(currentYear);
   const opts=(q&&q.opts)||[];
-  // Лечение — только обычные ответы, без 🦸/😈
-  if(isMedicalQuestion(q)) return stripExtremeOpts(opts);
+  // Лечение — только обычные ответы, без 🦸/😈; ошибка лечения не валит честь ниже 0
+  if(isMedicalQuestion(q)){
+    return stripExtremeOpts(opts).map(function(o){
+      if(!o||o.softGlory||o.hardGlory) return o;
+      const tags=o.tags||[];
+      if(tags.some(function(t){ return t==="nehoroshiy"||t==="zhuk"||t==="nasilnik"; })) return o;
+      if((o.g|0)<0) return Object.assign({},o,{softGlory:true});
+      return o;
+    });
+  }
   return opts;
 }
 function optAvailable(o){
@@ -977,32 +1001,32 @@ function buildHordeDefeatOpts(y){
       r:afterKulikovo
         ? "Ты сказал, будто Донской уничтожил Орду. Сход спорит: Мамая били, а Орда и Тохтамыш после того ещё гнули спины Руси."
         : "Ты назвал Донского победителем Орды. Рано: год "+y+", Куликова поля ещё не было — стыд на сходе.",
-      hp:0,s:0,g:-6,tags:[]
+      hp:0,s:0,g:-6,tags:[],softGlory:true
     },
     {
       t:"Александр Невский разгромил Орду",
       r:"Ты назвал Невского. Тот бил шведов и немцев и ладил с Ордой — не громил её. Сход качает головами.",
-      hp:0,s:0,g:-6,tags:[]
+      hp:0,s:0,g:-6,tags:[],softGlory:true
     },
     {
       t:"Иван Калита сокрушил Орду серебром",
       r:"Ты сказал, будто Калита сокрушил Орду. Наоборот: он исправно вёз выход хану. Молва о твоей путанице пошла.",
-      hp:0,s:0,g:-6,tags:[]
+      hp:0,s:0,g:-6,tags:[],softGlory:true
     },
     {
       t:"Хан Тохтамыш сам развалил Орду",
       r:"Ты свалил всё на Тохтамыша. Тот Ордой правил и Москву жёг — не «разгромил» её за Русь. Стыд грамотея.",
-      hp:0,s:0,g:-6,tags:[]
+      hp:0,s:0,g:-6,tags:[],softGlory:true
     },
     {
       t:"Ольгерд Литовский уничтожил Орду",
       r:"Ты назвал Ольгерда. Литва билась с ордынцами на своих рубежах, но Золотую Орду не уничтожила. Сход не верит.",
-      hp:0,s:0,g:-6,tags:[]
+      hp:0,s:0,g:-6,tags:[],softGlory:true
     },
     {
       t:"Батый пал — и Орды не стало",
       r:"Ты сказал, будто с Батыем кончилась Орда. Батый её как раз и ставил. Год "+y+" — а ты летопись вывернул наизнанку.",
-      hp:0,s:0,g:-8,tags:[]
+      hp:0,s:0,g:-8,tags:[],softGlory:true
     }
   ];
   const wrong=shuffleArray(wrongPool).slice(0,5);
@@ -1016,7 +1040,7 @@ function buildHordeDefeatOpts(y){
   const villain={
     t:"😈 Кричать, что Орды нет, и прятать свою дань",
     r:"Ты кричал, будто Орды нет, и прятал дань. Скоро пришли за недоимкой — били и тебя, и ложь твою.",
-    hp:-8,s:-10,g:-28,tags:["zhuk","nehoroshiy"],extreme:"villain"
+    hp:-8,s:-10,g:-28,tags:["zhuk","nehoroshiy"],extreme:"villain",hardGlory:true
   };
   return wrong.concat([correct,hero,villain]);
 }
@@ -1068,7 +1092,8 @@ function isHardGloryLoss(opt, amount){
   if(opt&&opt.extreme==="villain") return true;
   if(dg<=-12) return true;
   const rt=(((opt&&opt.r)||"")+" "+((opt&&opt.t)||"")).toLowerCase();
-  if(/убил|убить|заруб|повеш|избил|покалеч|ослеп|без руки|без ноги|одноглаз|обман|фальш|подсун|ограб|опозор|проклял|преда|лжесвид|насили|изнасило|сжёг жив|сжечь жив/.test(rt)) return true;
+  if(/убил|убить|заруб|повеш|избил|покалеч|ослеп|без руки|без ноги|одноглаз|ограб|опозор|проклял|лжесвид|насили|изнасило|сжёг жив|сжечь жив|вырвал глаз/.test(rt)) return true;
+  if(/обманул|обман вскры|подсун|фальшив|фальш.*монет|солгал|предал|предательств/.test(rt)) return true;
   return false;
 }
 /** Мелкая потеря чести не уходит ниже 0; тяжёлая — может */
@@ -1265,6 +1290,7 @@ function getLastFateStory(){
 }
 function getDestiny(){
   if(familyAllGone())return "Семья потеряна: кто умер, кто в бегах. Пустой двор и холодный очаг — ты остался один, и это хуже любой кабалы.";
+  if(player.glory<0)return "Изгой: после тяжкого позора волость вычеркнула тебя из своих — дороги назад не стало.";
   if(player.hp<=0)return "Твой жизненный путь оборвался преждевременно. Земля приняла тебя сурово.";
   if(player.silver<=0)return "Долговая яма сломила дух. Ты закончил дни в кабале.";
   const g=player.glory,s=player.silver,h=player.hp;
