@@ -50,7 +50,7 @@ body{background:#1c140a;background-image:radial-gradient(ellipse at 50% 30%,#2e2
 .name-line .header-row{display:flex;align-items:center;gap:10px;justify-content:space-between;width:100%}
 .name-line .header-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 auto}
 .name-line .header-right{display:flex;align-items:center;gap:0;flex:0 0 auto;font-size:16px;font-weight:700;white-space:nowrap;margin-left:12px}
-.name-line .avatar{width:40px;height:40px;border-radius:6px;border:none;object-fit:cover;background:transparent;flex-shrink:0}
+.name-line .avatar{width:40px;height:40px;border-radius:6px;border:3px solid #2d8a35;object-fit:cover;background:transparent;flex-shrink:0;box-sizing:border-box;transition:border-color .65s ease,box-shadow .65s ease;box-shadow:0 0 0 1px rgba(90,60,30,.15)}
 .name-line .name-stats{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .name-line .perk{display:inline-block;background:#dcc9a0;border:1px solid #a07840;border-radius:4px;padding:1px 6px;margin:0 4px;font-size:13px;font-style:italic;font-weight:400;color:#5a3a18}
 .name-line .sep{color:#a07840;font-weight:400;margin:0 2px}
@@ -169,7 +169,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 <aside class="plaques-rail" id="plaquesRail" aria-label="Перки"></aside>
 </div>
 
-<script src="questions.js?v=20260810ag"></script>
+<script src="questions.js?v=20260810ah"></script>
 <script>
 const names=["Богдан","Добрыня","Всеволод","Ярополк","Святослав","Владимир","Мстислав","Ростислав","Изяслав","Глеб","Борис","Юрий","Андрей","Микула","Ратибор","Жирослав","Путята","Творимир","Станимир","Бронислав","Вячеслав","Олег","Игорь","Роман","Василий","Пётр","Иван","Максим","Кирилл","Алексей","Дмитрий","Павел","Фома","Лука","Клим","Лазарь","Савва","Тихон","Фрол","Евстафий","Архип","Гордей","Евсей","Захар","Игнат","Кондрат","Макар","Назар","Прохор","Савелий"];
 const nicknames=["Косой","Рябой","Молчун","Бешеный","Храбрый","Меньшой","Большой","Хитрый","Рыжий","Чернявый","Белый","Костлявый","Шило","Тяжелый","Шустрый","Угрюмый","Веселый","Зубатый","Губатый","Костень","Береза","Дуб","Медведь","Волк","Лисица","Кот","Бык","Петух","Зяблик","Крепыш","Глухой","Немой","Слепой","Хромой","Ломаный","Дикий","Удод","Сорока","Филин","Княжич","Скоморох","Пыжик","Ерш","Опаленный","Гроза","Буян","Смелый","Тихий","Борзый","Удалой"];
@@ -343,6 +343,22 @@ function getRank(g){
   if(g<155) return "Воевода";
   return "Князь";
 }
+function getRankEmoji(g){
+  if(g<0) return "💀";
+  if(g<15) return "🌾";
+  if(g<30) return "🥬";
+  if(g<45) return "🐂";
+  if(g<60) return "🏡";
+  if(g<75) return "🗡️";
+  if(g<90) return "⚔️";
+  if(g<110) return "🏛️";
+  if(g<130) return "🎖️";
+  if(g<155) return "🛡️";
+  return "👑";
+}
+function getRankDisplay(g){
+  return getRankEmoji(g)+" "+getRank(g);
+}
 
 function familyMemberGone(st){
   return /^(мертв|мертва|в бегах|прогнан|прогнана|в холопах|у боярина)$/.test(st||"");
@@ -456,7 +472,7 @@ function updatePerksDisplay(){
 }
 function updateRankDisplay(){
   const el=document.getElementById("rankLabel");
-  if(el) el.textContent=getRank(player.glory);
+  if(el) el.textContent=getRankDisplay(player.glory);
 }
 function plaqueModHtml(p){
   const bits=[];
@@ -890,6 +906,30 @@ function statColor(v){
   const b=20;
   return "rgb("+r+","+g+","+b+")";
 }
+function lerpRgb(c1,c2,t){
+  function parse(hex){
+    const h=String(hex).replace("#","");
+    return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];
+  }
+  const a=parse(c1), b=parse(c2);
+  const u=Math.max(0,Math.min(1,t));
+  return "rgb("+
+    Math.round(a[0]+(b[0]-a[0])*u)+","+
+    Math.round(a[1]+(b[1]-a[1])*u)+","+
+    Math.round(a[2]+(b[2]-a[2])*u)+")";
+}
+function avatarBorderColor(hp){
+  const h=Math.max(0,hp|0);
+  const green="#2d8a35", yellow="#c9a820", red="#b82020";
+  if(h>20) return green;
+  if(h>10) return lerpRgb(yellow,green,(h-10)/10);
+  return lerpRgb(red,yellow,h/10);
+}
+function updateAvatarBorder(hp){
+  const av=document.getElementById("avatarImg");
+  if(!av) return;
+  av.style.borderColor=avatarBorderColor(hp==null?player.hp:hp);
+}
 function paintStat(id,val){
   const el=document.getElementById(id);
   el.innerText=val;
@@ -902,6 +942,7 @@ function updateStats(){
   paintStat("silver",player.silver);
   paintStat("glory",player.glory);
   updateRankDisplay();
+  updateAvatarBorder();
 }
 function updateStatsWithAnimation(oH,oS,oG){
   document.getElementById("year").innerText=currentYear;
@@ -916,6 +957,7 @@ function updateStatsWithAnimation(oH,oS,oG){
   sEl.style.color=statColor(player.silver);
   gEl.style.color=statColor(player.glory);
   updateRankDisplay();
+  updateAvatarBorder();
 }
 function shuffleArray(arr){
   const a=arr.slice();
