@@ -3,121 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Выживание на Руси</title>
+<title>Житие на Руси</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kurale&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 *{box-sizing:border-box}
-body{background:#1c140a;background-image:radial-gradient(ellipse at 50% 30%,#2e2112 0%,#1c140a 75%);color:#3a2814;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:flex-start;height:100vh;height:100dvh;margin:0;padding:12px 10px;overflow:hidden}
-.play-layout{position:relative;width:720px;max-width:min(720px,calc(100vw - 24px));height:min(740px,calc(100vh - 24px));height:min(740px,calc(100dvh - 24px))}
-.game-container{background:#f3e8c8;background-image:linear-gradient(rgba(160,120,60,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(160,120,60,.06) 1px,transparent 1px);background-size:22px 22px;border:9px solid #5c3d1e;border-radius:6px;width:100%;height:100%;overflow:hidden;padding:13px 26px 22px;box-shadow:0 0 0 2px #2a1a0c,0 14px 36px rgba(0,0,0,.75),inset 0 0 50px rgba(120,80,30,.08);position:relative;display:flex;flex-direction:column;z-index:1}
-.plaques-rail{position:absolute;left:calc(100% + 10px);top:0;bottom:0;width:200px;display:flex;flex-direction:column;gap:6px;overflow-x:hidden;overflow-y:auto;padding:2px 2px 8px;scrollbar-width:thin;z-index:2;pointer-events:auto}
+body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 100%,rgba(255,130,45,.2) 0%,transparent 58%),radial-gradient(ellipse 35% 28% at 12% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse 35% 28% at 88% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse at 50% 15%,#1a1208 0%,#0a0604 72%);color:#e8d4b0;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:center;height:100vh;height:100dvh;margin:0;padding:12px 10px;overflow:hidden}
+.play-layout{position:relative;width:871px;max-width:min(871px,calc(100vw - 24px));height:min(895px,calc(100vh - 24px));height:min(895px,calc(100dvh - 24px));filter:drop-shadow(0 22px 48px rgba(0,0,0,.75))}
+.game-container{background:linear-gradient(180deg,rgba(255,180,90,.05) 0%,transparent 28%),repeating-linear-gradient(92deg,rgba(0,0,0,.04) 0,rgba(0,0,0,.04) 2px,transparent 2px,transparent 9px),linear-gradient(168deg,#3a2818 0%,#2a1c10 42%,#1a1008 100%);border:12px solid #120a06;outline:2px solid #7a6038;border-radius:9px;width:100%;height:100%;overflow:hidden;padding:15px 32px 30px;box-shadow:inset 0 0 90px rgba(255,150,60,.07),inset 0 0 140px rgba(0,0,0,.55),0 0 50px rgba(255,120,40,.12);position:relative;display:flex;flex-direction:column;z-index:1}
+.plaques-rail{position:absolute;left:calc(100% + 12px);top:0;bottom:0;width:242px;display:flex;flex-direction:column;gap:8px;overflow-x:hidden;overflow-y:auto;padding:2px 2px 10px;scrollbar-width:thin;z-index:2;pointer-events:auto}
 .plaques-rail::-webkit-scrollbar{width:4px}
-.plaques-rail::-webkit-scrollbar-thumb{background:#5c3d1e;border-radius:2px}
-.plaque{background:#ebe0b8;border:1px solid #a07840;border-radius:5px;padding:8px 9px;font-size:13px;line-height:1.25;color:#3a2814;box-shadow:0 2px 6px rgba(0,0,0,.35)}
-.plaque.good{border-color:#3a6a3a;background:#e4efd8}
-.plaque.bad{border-color:#8b3a2a;background:#f0ddd4}
-.plaque-title{font-weight:700;margin:0 0 4px;font-size:14px;line-height:1.2;overflow-wrap:anywhere}
-.plaque-mods{font-size:13px;color:#5a3a18;font-variant-numeric:tabular-nums;white-space:nowrap}
-.plaque-mods .up{color:#2a6a2a;font-weight:700}
-.plaque-mods .down{color:#8b1a1a;font-weight:700}
+.plaques-rail::-webkit-scrollbar-thumb{background:#6a5030;border-radius:2px}
+.plaque{background:linear-gradient(180deg,#342418 0%,#24180e 100%);border:1px solid #6a5030;border-radius:7px;padding:10px 11px 10px 13px;font-size:15px;line-height:1.25;color:#e8d4b0;box-shadow:inset 0 1px 0 rgba(255,200,120,.08),0 3px 10px rgba(0,0,0,.45);position:relative}
+.plaque::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:radial-gradient(circle at 30% 30%,#c84838,#7a2018);box-shadow:0 0 6px rgba(200,60,40,.35)}
+.plaque.good{border-color:#4a7040;background:linear-gradient(180deg,#2a3420 0%,#1c2414 100%)}
+.plaque.good::before{background:radial-gradient(circle at 30% 30%,#88c060,#3a6828)}
+.plaque.bad{border-color:#7a4030;background:linear-gradient(180deg,#3a2018 0%,#281410 100%)}
+.plaque.bad::before{background:radial-gradient(circle at 30% 30%,#e05848,#8a2018)}
+.plaque-title{font-weight:700;margin:0 0 4px;font-size:17px;line-height:1.2;overflow-wrap:anywhere;color:#f0e0c8;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.plaque-mods{font-size:15px;color:#c4a878;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plaque-mods .up{color:#98d878;font-weight:700}
+.plaque-mods .down{color:#e87868;font-weight:700}
 .plaque.plaque-flash{animation:plaqueFlash 1.15s ease;z-index:6;position:relative}
 @keyframes plaqueFlash{
   0%{opacity:0;transform:translateX(28px) scale(.82)}
-  40%{opacity:1;transform:translateX(0) scale(1.1);box-shadow:0 0 0 3px #c9a227,0 10px 22px rgba(0,0,0,.5)}
+  40%{opacity:1;transform:translateX(0) scale(1.1);box-shadow:0 0 0 3px #e8a830,0 10px 22px rgba(0,0,0,.5)}
   70%{transform:scale(1.03);box-shadow:0 0 0 2px #a07840,0 4px 12px rgba(0,0,0,.35)}
-  100%{opacity:1;transform:none;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+  100%{opacity:1;transform:none;box-shadow:inset 0 1px 0 rgba(255,200,120,.08),0 3px 10px rgba(0,0,0,.45)}
 }
-@media (max-width:980px){
-  .plaques-rail{width:170px}
+@media (max-width:1188px){
+  .plaques-rail{width:206px}
 }
-@media (max-width:700px){
-  body{overflow:auto;height:auto;min-height:100dvh}
+@media (max-width:850px){
+  body{overflow:auto;height:auto;min-height:100dvh;align-items:flex-start}
   .play-layout{width:100%;max-width:100%;height:auto;max-height:none}
-  .game-container{height:min(740px,calc(100dvh - 24px))}
-  .plaques-rail{position:static;width:100%;max-height:120px;flex-direction:row;flex-wrap:wrap;margin-top:8px}
-  .plaque{flex:1 1 120px}
+  .game-container{height:min(895px,calc(100dvh - 24px))}
+  .plaques-rail{position:static;width:100%;max-height:145px;flex-direction:row;flex-wrap:wrap;margin-top:10px}
+  .plaque{flex:1 1 145px}
 }
-.game-container::before{content:"";position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:1px solid rgba(90,60,30,.28);pointer-events:none;border-radius:3px;z-index:0}
+.game-container::before{content:"";position:absolute;top:9px;left:9px;right:9px;bottom:9px;border:none;pointer-events:none;border-radius:4px;z-index:0;box-shadow:inset 0 0 30px rgba(0,0,0,.35)}
+.game-container::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:7px;background:linear-gradient(135deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(225deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(315deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(45deg,rgba(184,148,90,.35) 0,transparent 17px);z-index:0}
 .game-main{flex:1 1 auto;min-height:0;overflow:hidden;position:relative;z-index:1;display:flex;flex-direction:column}
-.game-footer{flex:0 0 auto;height:186px;display:flex;flex-direction:column;justify-content:flex-end;gap:5px;position:relative;z-index:1;padding-top:3px;padding-bottom:0;box-sizing:border-box}
-.game-container.ending .game-footer{height:auto;min-height:0;padding-top:8px}
-.progress-counter{position:absolute;top:8px;right:12px;font-size:12px;color:#7a5a30;background:#e8d9b0;border:1px solid #b89860;border-radius:4px;padding:2px 7px;z-index:2}
-.year-header{position:absolute;top:8px;left:12px;right:70px;font-size:11px;font-weight:400;color:#3a2814;margin:0;z-index:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.year-header span{color:#3a2814}
+.game-footer{flex:0 0 auto;height:252px;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;position:relative;z-index:1;padding-top:3px;padding-bottom:6px;box-sizing:border-box}
+.game-container.playing .game-footer{justify-content:flex-end}
+.game-container.playing .game-footer .next-btn{margin-top:0}
+.game-container.playing.showing-result .game-footer{height:auto;min-height:0;justify-content:flex-end;padding-top:8px}
+.game-container.playing.showing-result .game-footer .next-btn{margin-top:0}
+.game-container.playing.showing-result .question-box{display:none!important}
+.game-container.playing.showing-result .prompt-area{justify-content:center;gap:0}
+.game-container.playing.showing-result .result-box{margin:0;max-height:100%}
+.game-container.ending .game-footer{height:auto;min-height:0;padding-top:10px}
+.progress-counter{position:absolute;top:10px;right:14px;font-size:14px;color:#e8c878;background:rgba(20,12,6,.75);border:1px solid #7a6038;border-radius:4px;padding:2px 9px;z-index:2;box-shadow:0 0 10px rgba(255,140,50,.08)}
+.year-header{position:absolute;top:10px;left:14px;right:85px;font-size:13px;font-weight:400;color:#c4a878;margin:0;z-index:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.year-header span{color:#e8d4b0}
 .year-event{display:none}
 
-.name-line{color:#3a2814;margin:22px 0 5px;line-height:1.3;flex-shrink:0}
-.name-line .header-row{display:flex;align-items:center;gap:10px;justify-content:space-between;width:100%}
-.name-line .header-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 auto}
-.name-line .header-right{display:flex;align-items:center;gap:0;flex:0 0 auto;font-size:16px;font-weight:700;white-space:nowrap;margin-left:12px}
-.name-line .avatar{width:40px;height:40px;border-radius:50%;border:3px solid #2d8a35;object-fit:cover;background:transparent;flex-shrink:0;box-sizing:border-box;transition:border-color .65s ease,box-shadow .65s ease;box-shadow:0 0 0 1px rgba(90,60,30,.15)}
-.name-line .name-stats{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.name-line .perk{display:inline-block;background:#dcc9a0;border:1px solid #a07840;border-radius:4px;padding:1px 6px;margin:0 4px;font-size:13px;font-style:italic;font-weight:400;color:#5a3a18}
-.name-line .sep{color:#a07840;font-weight:400;margin:0 2px}
-.rank-label{font-weight:400;font-size:15px;color:#5a3a18;margin-left:4px}
-.job-label{font-weight:400;font-size:15px;color:#5a3a18;margin-left:4px}
-.stat-num{font-variant-numeric:tabular-nums;min-width:22px;display:inline-block;text-align:center}
-.bio-text{padding:0;border:none;border-radius:0;background:transparent;font-size:18px;margin:0;line-height:1.4;text-align:center;color:#2c1c0a;flex:0 1 auto;min-height:0;overflow:hidden}
+.name-line{color:#f0e0c8;margin:26px 0 7px;line-height:1.3;flex-shrink:0;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+.name-line .header-row{display:flex;align-items:center;gap:12px;justify-content:space-between;width:100%}
+.name-line .header-left{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto}
+.name-line .header-right{display:flex;align-items:center;gap:0;flex:0 0 auto;font-size:20px;font-weight:700;white-space:nowrap;margin-left:14px}
+.name-line .avatar{width:48px;height:48px;border-radius:50%;border:3px solid #d4a035;object-fit:cover;background:#1a1008;flex-shrink:0;box-sizing:border-box;transition:border-color .65s ease,box-shadow .65s ease;box-shadow:0 0 12px rgba(255,160,60,.35),0 0 0 1px rgba(200,150,80,.25)}
+.name-line .name-stats{font-size:20px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;color:#f0e0c8}
+.name-line .perk{display:inline-block;background:rgba(20,12,6,.65);border:1px solid #7a6038;border-radius:4px;padding:1px 8px;margin:0 4px;font-size:15px;font-style:italic;font-weight:400;color:#e8c878}
+.name-line .sep{color:#8a7048;font-weight:400;margin:0 2px}
+.rank-label{font-weight:400;font-size:19px;color:#c4a878;margin-left:4px}
+.job-label{font-weight:400;font-size:19px;color:#c4a878;margin-left:4px}
+.stat-num{font-variant-numeric:tabular-nums;min-width:26px;display:inline-block;text-align:center}
+.bio-text{padding:0;border:none;border-radius:0;background:transparent;font-size:22px;margin:0;line-height:1.4;text-align:center;color:#f0e0c8;flex:0 1 auto;min-height:0;overflow:hidden;text-shadow:0 1px 3px rgba(0,0,0,.5)}
 .stats{display:none}
-.stat-item span{color:#7a1a1a;display:inline-block;min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
-.q-visual{position:relative;flex:0 0 auto;width:100%;height:min(332px,36.1vh);margin:0 auto 0;border-radius:5px;overflow:hidden;display:none}
-.q-visual.splash{flex:0 0 auto;height:min(332px,36.1vh);min-height:0;max-height:min(332px,36.1vh)}
-.q-visual.end{flex:1 1 0;height:auto;min-height:100px;max-height:min(390px,42vh)}
-.game-container.ending .q-visual.end{flex:1 1 0;height:auto;min-height:90px;max-height:min(390px,42vh)}
-.q-image{display:block;width:100%;height:100%;object-fit:cover;border:none;background:transparent}
-.delta-good{color:#2a6a2a;font-weight:700}
-.delta-bad{color:#8b1a1a;font-weight:700}
-.delta-zero{color:#6a5a40}
-.mode-bar{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:center;margin:0;font-size:17px;color:#3a2814;flex-shrink:0}
-.mode-bar label{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px}
-.mode-bar input{width:18px;height:18px;accent-color:#2f6b32;flex-shrink:0}
-.pitch-text{margin:0;font-size:15px;line-height:1.4;text-align:center;color:#5a3a18;font-style:italic;flex-shrink:0}
+.stat-item span{color:#e87868;display:inline-block;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
+.q-visual{position:relative;flex:0 0 auto;width:100%;height:min(402px,43.7vh);margin:0 auto 0;border-radius:7px;overflow:hidden;display:none;border:2px solid #5a4028;box-shadow:inset 0 0 50px rgba(0,0,0,.5),0 0 16px rgba(255,140,50,.06)}
+.q-visual.splash{flex:0 0 auto;height:min(402px,43.7vh);min-height:0;max-height:min(402px,43.7vh)}
+.q-visual.end{flex:1 1 0;height:auto;min-height:121px;max-height:min(472px,50.8vh)}
+.game-container.ending .q-visual.end{flex:1 1 0;height:auto;min-height:109px;max-height:min(472px,50.8vh)}
+.q-image{display:block;width:100%;height:100%;object-fit:cover;border:none;background:#120a06}
+.delta-good{color:#98d878;font-weight:700}
+.delta-bad{color:#e87868;font-weight:700}
+.delta-zero{color:#a89070}
+.mode-bar{display:flex;flex-wrap:wrap;gap:14px 34px;justify-content:center;margin:0;font-size:21px;color:#e8d4b0;flex-shrink:0}
+.mode-bar label{cursor:pointer;user-select:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.mode-bar input{width:22px;height:22px;accent-color:#d4a035;flex-shrink:0}
+.mode-hint{font-size:16px;color:#a89070;font-weight:400}
+.pitch-text{margin:0;font-size:19px;line-height:1.4;text-align:center;color:#c4a878;font-style:italic;flex-shrink:0;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.boot-load{display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:8px 12px;flex:1 1 auto;min-height:0;width:100%}
+.boot-load.show{display:flex}
+.boot-title{margin:0;font-family:"Kurale","PT Serif",serif;font-size:64px;font-weight:400;line-height:1.15;color:#f0e0c8;letter-spacing:.03em;text-align:center;text-shadow:0 2px 6px rgba(0,0,0,.65),0 0 24px rgba(255,160,60,.18)}
+.boot-meter{display:flex;flex-direction:column;align-items:center;gap:10px;width:min(420px,86%)}
+.boot-bar{width:100%;height:12px;border-radius:6px;border:1px solid #6a5030;background:rgba(20,12,6,.75);overflow:hidden;box-shadow:inset 0 0 12px rgba(0,0,0,.45)}
+.boot-bar-fill{height:100%;width:0%;border-radius:5px;background:linear-gradient(90deg,#8a5020,#d4a035 55%,#e8c878);box-shadow:0 0 10px rgba(255,160,60,.35);will-change:width}
+.boot-pct{margin:0;font-size:24px;font-weight:700;color:#e8c878;font-variant-numeric:tabular-nums;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.55)}
+.boot-line{margin:4px 0 0;min-height:1.4em;width:min(520px,92%);font-size:24px;line-height:1.35;color:#c4a878;font-style:italic;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.45);opacity:0;transition:opacity .45s ease}
+.boot-line.show{opacity:1}
+.game-container.booting .name-line,
+.game-container.booting .year-header,
+.game-container.booting .progress-counter,
+.game-container.booting .q-visual,
+.game-container.booting .bio-text,
+.game-container.booting .pitch-text,
+.game-container.booting .mode-bar,
+.game-container.booting .game-footer{display:none!important}
+.game-container.booting .prompt-area{flex:1 1 auto;justify-content:center;padding:0;gap:0}
 
-.prompt-area{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:stretch;gap:8px;padding:8px 0;overflow:hidden}
-.game-container.playing .prompt-area{justify-content:center;padding:0;overflow:hidden}
+.prompt-area{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:stretch;gap:10px;padding:10px 0;overflow:hidden}
+.game-container.playing .prompt-area{justify-content:center;align-items:center;padding:0;gap:0;overflow:hidden}
 .game-container.ending .prompt-area{flex:0 1 auto;justify-content:center;padding:4px 0 0;overflow:hidden;min-height:0}
-.game-container:not(.playing):not(.ending) .game-footer{height:auto;min-height:0;padding-top:10px}
-.game-container:not(.playing):not(.ending) .prompt-area{flex:1 1 auto;justify-content:center;gap:14px;padding:12px 0;min-height:0}
-.game-container:not(.playing):not(.ending) .bio-text{font-size:18px;line-height:1.4;flex:0 1 auto;overflow:hidden}
-.game-container:not(.playing):not(.ending) .pitch-text{font-size:17px;line-height:1.4}
-.game-container:not(.playing):not(.ending) .mode-bar{margin-top:4px;font-size:18px;gap:12px 28px}
+.game-container:not(.playing):not(.ending) .game-footer{height:auto;min-height:0;padding-top:12px}
+.game-container:not(.playing):not(.ending) .prompt-area{flex:1 1 auto;justify-content:center;gap:17px;padding:14px 0;min-height:0}
+.game-container:not(.playing):not(.ending) .bio-text{font-size:22px;line-height:1.4;flex:0 1 auto;overflow:hidden}
+.game-container:not(.playing):not(.ending) .pitch-text{font-size:21px;line-height:1.4}
+.game-container:not(.playing):not(.ending) .mode-bar{margin-top:4px;font-size:22px;gap:14px 34px}
 .game-container.ending .question-box{flex:0 1 auto;overflow:hidden}
 .game-container.ending .end-block{max-height:100%;overflow:hidden;display:flex;flex-direction:column;min-height:0}
-.game-container.ending .end-block .chronicle-wrap{flex:1 1 auto;min-height:80px;max-height:min(240px,32vh)}
-.game-container.ending.chronicle-open .q-visual.end{max-height:min(180px,22vh);min-height:60px}
-.question-box{font-size:19px;line-height:1.4;margin:0;min-height:0;color:#2c1c0a;text-align:center;flex-shrink:0}
+.game-container.ending .end-block .chronicle-wrap{flex:1 1 auto;min-height:97px;max-height:min(290px,38vh)}
+.game-container.ending.chronicle-open .q-visual.end{max-height:min(218px,26vh);min-height:73px}
+.question-box{font-size:21px;line-height:1.4;margin:0;min-height:0;max-height:100%;width:100%;color:#f0e0c8;text-align:center;flex:0 1 auto;overflow:hidden;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 .question-box:empty{display:none}
-.choices{display:flex;flex-direction:column;align-items:stretch;gap:5px;flex-shrink:0;width:100%}
+.choices{display:flex;flex-direction:column;align-items:stretch;gap:7px;flex-shrink:0;width:100%}
 .choices:empty{display:none}
-button.choice-btn{background:#2f6b32;color:#ffffff;border:none;padding:11px 14px;border-radius:6px;font-family:"PT Serif","Times New Roman",serif;font-size:16px;cursor:pointer;text-align:center;width:100%;transition:background .2s,transform .12s;box-shadow:0 2px 6px rgba(0,0,0,.22);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-button.choice-btn:hover{background:#245528;transform:translateY(1px)}
-button.choice-btn.hero-btn,button.choice-btn.villain-btn{background:#2f6b32}
-button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:#245528}
-.result-box{background:#ebe0b8;padding:10px 14px;border-radius:5px;margin:0;display:none;border-left:5px solid #3a6a3a;font-size:16px;line-height:1.45;flex:1 1 auto;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;white-space:normal;overflow-wrap:anywhere;word-wrap:break-word}
+button.choice-btn{background:linear-gradient(180deg,#3d7a42 0%,#2a5a30 100%);color:#ffffff;border:1px solid #5a9a58;padding:11px 17px;border-radius:8px;font-family:"PT Serif","Times New Roman",serif;font-size:20px;font-weight:400;line-height:1.25;cursor:pointer;text-align:center;width:100%;transition:background .2s,border-color .2s,box-shadow .2s,transform .12s;box-shadow:inset 0 1px 0 rgba(200,255,180,.18),0 2px 8px rgba(0,0,0,.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+button.choice-btn:hover{background:linear-gradient(180deg,#4a8f50 0%,#346a3a 100%);border-color:#78c070;transform:translateY(1px);box-shadow:inset 0 1px 0 rgba(220,255,200,.22),0 0 14px rgba(80,160,70,.25),0 2px 8px rgba(0,0,0,.4)}
+button.choice-btn.hero-btn,button.choice-btn.villain-btn{background:linear-gradient(180deg,#3d7a42 0%,#2a5a30 100%)}
+button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:linear-gradient(180deg,#4a8f50 0%,#346a3a 100%)}
+.result-box{display:none;flex-direction:column;align-items:stretch;gap:10px;margin:0;padding:0;width:100%;min-height:0;max-height:100%;flex:0 1 auto;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;background:transparent;border:none;box-shadow:none}
 .result-box::-webkit-scrollbar{width:0;height:0}
-.history-box{position:absolute;left:0;right:0;bottom:0;margin:0;padding:10px 14px 12px;font-style:italic;display:none;border:none;border-radius:0;font-size:15px;line-height:1.35;color:#f3e8c8;background:linear-gradient(transparent,rgba(28,20,10,.55) 18%,rgba(28,20,10,.82));max-height:48%;overflow:hidden;z-index:2;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.45)}
-.history-box strong{color:#f3e8c8;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.45)}
-.deck-ids{position:absolute;inset:0;z-index:3;display:none;flex-direction:column;gap:6px;padding:10px 12px;background:rgba(18,12,6,.62);overflow:auto;scrollbar-width:thin}
+.result-card{background:rgba(20,12,6,.82);padding:12px 17px;border-radius:7px;border-left:5px solid #4a8f50;font-size:20px;line-height:1.45;color:#e8d4b0;text-align:center;box-shadow:inset 0 0 24px rgba(0,0,0,.35),0 0 12px rgba(255,140,50,.05);white-space:normal;overflow-wrap:anywhere;word-wrap:break-word}
+.result-card.result-stats{padding:11px 17px}
+.result-deltas{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px 14px;margin:0;font-variant-numeric:tabular-nums}
+.history-box{position:absolute;left:0;right:0;bottom:0;margin:0;padding:12px 17px 14px;font-style:italic;display:none;border:none;border-radius:0;font-size:16px;line-height:1.35;color:#f3e8c8;background:linear-gradient(transparent,rgba(8,4,2,.5) 15%,rgba(8,4,2,.88));max-height:48%;overflow:hidden;z-index:2;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.45)}
+.history-box strong{color:#f3e8c8;font-size:16px;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.45)}
+.deck-ids{position:absolute;inset:0;z-index:3;display:none;flex-direction:column;gap:8px;padding:12px 14px;background:rgba(8,4,2,.72);overflow:auto;scrollbar-width:thin}
 .deck-ids.show{display:flex}
-.deck-ids-label{flex:0 0 auto;font-size:13px;line-height:1.25;color:#f3e8c8;text-shadow:0 1px 2px rgba(0,0,0,.85)}
-.deck-ids-nums{display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start}
-.deck-ids-nums .n{font-size:12px;font-variant-numeric:tabular-nums;color:#f3e8c8;background:rgba(0,0,0,.4);border:1px solid rgba(220,180,100,.4);border-radius:4px;padding:2px 6px;line-height:1.2}
+.deck-ids-label{flex:0 0 auto;font-size:15px;line-height:1.25;color:#f3e8c8;text-shadow:0 1px 2px rgba(0,0,0,.85)}
+.deck-ids-nums{display:flex;flex-wrap:wrap;gap:7px;align-content:flex-start}
+.deck-ids-nums .n{font-size:14px;font-variant-numeric:tabular-nums;color:#f3e8c8;background:rgba(0,0,0,.45);border:1px solid rgba(220,180,100,.4);border-radius:4px;padding:2px 8px;line-height:1.2}
 .deck-ids-nums .n.black{border-color:rgba(180,40,40,.7);color:#ffd0d0}
-.next-btn{background:#2f6b32!important;color:#ffffff!important;border:none!important;margin-top:0;display:none;width:100%!important;align-self:stretch;text-align:center!important;font-size:17px!important;flex-shrink:0}
-.next-btn:hover{background:#245528!important}
-.end-title{margin:0 0 4px;color:#3d2a12;font-size:20px;font-weight:700;text-align:center}
-.end-block{text-align:center;overflow:hidden}
-.chronicle-wrap{margin:6px 0 0;text-align:left;max-height:min(220px,28vh);overflow-y:auto;border:1px solid #a07840;border-radius:5px;background:#ebe0b8;padding:6px 8px;scrollbar-width:thin}
-.chronicle-wrap::-webkit-scrollbar{width:6px}
-.chronicle-wrap::-webkit-scrollbar-thumb{background:#a07840;border-radius:3px}
-.chronicle-title{text-align:center;font-size:15px;font-weight:700;margin:0 0 6px;color:#3a2814}
-.chronicle-row{font-size:13px;line-height:1.35;padding:3px 4px;border-radius:3px;color:#3a2814;font-variant-numeric:tabular-nums}
-.chronicle-row.me{font-weight:700;background:rgba(47,107,50,.18)}
-.chronicle-empty{text-align:center;font-size:14px;color:#5a3a18;padding:8px;font-style:italic}
+.next-btn{background:linear-gradient(180deg,#4a8f50 0%,#346a3a 100%)!important;color:#ffffff!important;border:1px solid #78c070!important;margin-top:0;display:none;width:100%!important;align-self:stretch;text-align:center!important;font-size:21px!important;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(220,255,200,.22),0 0 14px rgba(80,160,70,.2),0 2px 8px rgba(0,0,0,.4)!important;text-shadow:0 1px 2px rgba(0,0,0,.45)!important}
+.next-btn:hover{background:linear-gradient(180deg,#56a058 0%,#3d7a42 100%)!important;border-color:#98d888!important}
+.end-title{margin:0 0 4px;color:#f0e0c8;font-size:24px;font-weight:700;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+.end-block{text-align:center;overflow:hidden;color:#e8d4b0;font-size:20px;line-height:1.4}
+.end-block p{margin:7px 0;font-size:20px;line-height:1.4}
+.end-block .end-iron{font-size:16px;color:#e87868;margin:4px 0}
+.end-block .end-score{font-size:18px;color:#c4a878}
+.chronicle-wrap{margin:8px 0 0;text-align:left;max-height:min(266px,34vh);overflow-y:auto;border:1px solid #6a5030;border-radius:7px;background:rgba(20,12,6,.78);padding:8px 10px;scrollbar-width:thin;box-shadow:inset 0 0 20px rgba(0,0,0,.35)}
+.chronicle-wrap::-webkit-scrollbar{width:7px}
+.chronicle-wrap::-webkit-scrollbar-thumb{background:#6a5030;border-radius:3px}
+.chronicle-title{text-align:center;font-size:19px;font-weight:700;margin:0 0 8px;color:#e8c878}
+.chronicle-row{font-size:15px;line-height:1.35;padding:3px 4px;border-radius:3px;color:#e8d4b0;font-variant-numeric:tabular-nums}
+.chronicle-row.me{font-weight:700;background:rgba(212,160,53,.15)}
+.chronicle-empty{text-align:center;font-size:17px;color:#a89070;padding:10px;font-style:italic}
 .choices.ending-actions{gap:6px}
 .choices.ending-actions .choice-btn{width:100%}
-.choices.ending-actions .choice-btn.secondary{background:#6b5428}
-.choices.ending-actions .choice-btn.secondary:hover{background:#554220}
+.choices.ending-actions .choice-btn.secondary{background:linear-gradient(180deg,#4a5a68 0%,#343e48 100%);border-color:#6a7a88}
+.choices.ending-actions .choice-btn.secondary:hover{background:linear-gradient(180deg,#5a6a78 0%,#3e4a54 100%);border-color:#8a9aa8}
 .choices.ending-actions .choice-btn:disabled{opacity:.55;cursor:default;transform:none}
 </style>
 </head>
@@ -152,24 +188,32 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
       <div class="history-box" id="historyBox"></div>
     </div>
     <div class="prompt-area">
+      <div class="boot-load" id="bootLoad" aria-live="polite">
+        <p class="boot-title">Житие на Руси</p>
+        <div class="boot-meter">
+          <div class="boot-bar" aria-hidden="true"><div class="boot-bar-fill" id="bootFill"></div></div>
+          <p class="boot-pct" id="bootPct">0%</p>
+        </div>
+        <p class="boot-line" id="bootLine"></p>
+      </div>
       <div class="bio-text" id="bioBox">-</div>
-      <p class="pitch-text" id="pitchText">Сможешь ли ты прожить четверть века в русской деревне XIII века? Каждый твой выбор — целый год жизни: от сева и суда общины до мора и княжьего гнева.</p>
+      <p class="pitch-text" id="pitchText">Сможешь ли ты прожить четверть века в русской деревне XIV века? Каждый твой выбор — целый год жизни: от сева и суда общины до мора и княжьего гнева.</p>
       <div class="mode-bar" id="modeBar">
-        <label><input type="checkbox" id="ironMode"> Режим хардкор</label>
+        <label><input type="checkbox" id="ironMode"> Лютый век <span class="mode-hint">— слабее старт, подлость бьёт чаще</span></label>
       </div>
       <div class="question-box" id="questionText">Загрузка летописей...</div>
+      <div class="result-box" id="resultBox"></div>
     </div>
   </div>
   <div class="game-footer">
     <div class="choices" id="choicesBox"></div>
-    <div class="result-box" id="resultBox"></div>
     <button class="choice-btn next-btn" id="nextBtn">Далее →</button>
   </div>
 </div>
 <aside class="plaques-rail" id="plaquesRail" aria-label="Перки"></aside>
 </div>
 
-<script src="questions.js?v=20260810ah"></script>
+<script src="questions.js?v=20260810av"></script>
 <script>
 const names=["Богдан","Добрыня","Всеволод","Ярополк","Святослав","Владимир","Мстислав","Ростислав","Изяслав","Глеб","Борис","Юрий","Андрей","Микула","Ратибор","Жирослав","Путята","Творимир","Станимир","Бронислав","Вячеслав","Олег","Игорь","Роман","Василий","Пётр","Иван","Максим","Кирилл","Алексей","Дмитрий","Павел","Фома","Лука","Клим","Лазарь","Савва","Тихон","Фрол","Евстафий","Архип","Гордей","Евсей","Захар","Игнат","Кондрат","Макар","Назар","Прохор","Савелий"];
 const nicknames=["Косой","Рябой","Молчун","Бешеный","Храбрый","Меньшой","Большой","Хитрый","Рыжий","Чернявый","Белый","Костлявый","Шило","Тяжелый","Шустрый","Угрюмый","Веселый","Зубатый","Губатый","Костень","Береза","Дуб","Медведь","Волк","Лисица","Кот","Бык","Петух","Зяблик","Крепыш","Глухой","Немой","Слепой","Хромой","Ломаный","Дикий","Удод","Сорока","Филин","Княжич","Скоморох","Пыжик","Ерш","Опаленный","Гроза","Буян","Смелый","Тихий","Борзый","Удалой"];
@@ -250,7 +294,7 @@ let gameOver=false,choiceLocked=false,endGameTimer=null,historyWritten=false,las
 const HISTORY_KEY="oldrussia_chronicle_v1";
 const HISTORY_MAX=200;
 const yearEvents={"1320": ["Новгородский поход на Торжок", "Усиление позиций Ивана Калиты", "Литовский набег на псковичей", "Каменное строительство в Ростове", "Борьба Дмитрия в Орде"], "1321": ["Закладка храма Спаса на Бору", "Конфликт Твери с Новгородом", "Княжеские поездки в Сарай", "Ревизия баскаков на Руси", "Набеги кочевников на юг"], "1322": ["Ярлык передан Дмитрию Тверскому", "Строительство новгородского Орешка", "Поддержка ордынских договорённостей Калитой", "Отражение литовских набегов", "Приток переселенцев в Москву"], "1323": ["Отеховский мирный договор", "Завершение строительства крепости Орешек", "Убийство Юрия Московского", "Арест Дмитрия Тверского ханом", "Переход руководства к Калите"], "1324": ["Поездка Калиты к хану", "Напряжение в Тверском княжестве", "Внутриполитическая борьба в Новгороде", "Литовская экспансия на запад", "Рост производства оружия"], "1325": ["Воцарение Ивана Калиты", "Москва — резиденция митрополита", "Казнь Дмитрия Тверского", "Замедление литовских набегов", "Оживление Волжской торговли"], "1326": ["Закладка московского Успенского собора", "Александру Тверскому дали ярлык", "Сотрудничество Калиты с Ордой", "Новые храмы Кремля", "Отражение литовского набега Псковом"], "1327": ["Антиордынское восстание в Твери", "Карательный поход Калиты", "Разорение Твери, бегство Александра", "Ярлык передан Ивану Калите", "Временный раздел великокняжеских земель"], "1328": ["Калита стал великим князем", "Требования выдачи Александра Псковом", "Угроза отлучения Пскова от церкви", "Наступление «великой тишины»", "Концентрация дани в Москве"], "1329": ["Бегство Александра Тверского в Литву", "Поездка Калиты в Сарай", "Освящение Успенского собора", "Новгород признал старшинство Москвы", "Усмирение удельных князей"], "1330": ["Возведение укреплений Московского Кремля", "Возвращение Александра в Тверь", "Въезд Калиты во Владимир", "Рост ремесленных слобод", "Династические браки московского дома"], "1331": ["Споры вокруг митрополии", "Суд князей в Сарае", "Присоединение волостей к Москве", "Осада пригородов Гедимином", "Ведение летописных сводов"], "1332": ["Отказ Новгорода платить дань", "Занятие Торжка и Белоозера", "Расширение влияния на севере", "Возобновление стройки в Твери", "Укрепление стен псковского Крома"], "1333": ["Мир Москвы с Новгородом", "Закладка Архангельского собора", "Бегство новгородской оппозиции", "Подтверждение привилегий Калиты", "Локальный голод на Руси"], "1334": ["Поездка Калиты в Орду", "Попытки восстановления Твери", "Отражение нападений Ливонии", "Централизация церковных доходов", "Развитие дорожной сети"], "1335": ["Рост напряжения вокруг Твери", "Постройка церкви Иоанна Лествичника", "Укрепление Костромы с Переяславлем", "Перемирие с Литовским княжеством", "Контроль сбора дани Калитой"], "1336": ["Паломничество Калиты в Сарай", "Споры с новгородским вече", "Основание новых монастырей", "Рост числа московских ремесленников", "Литовский набег на Смоленск"], "1337": ["Основание Троице-Сергиева монастыря", "Поездка Александра в Сарай", "Доносы Калиты на тверского князя", "Лавирование смоленских князей", "Закрепление статуса Москвы"], "1338": ["Неудачная литовская осада Смоленска", "Постройка Сергием деревянной Троицкой церкви", "Покупка части Ростовского княжества", "Торговые соглашения с Ордой", "Подготовка удара по Твери"], "1339": ["Казнь Александра Тверского", "Раздробление Тверского княжества", "Завершение строительства Архангельского собора", "Смерть Ивана I Калиты", "Воцарение Семёна Гордого"], "1340": ["Начало правления Семёна Гордого", "Получение ярлыка Семёном", "Поход русской рати на Смоленск", "Набег Ольгерда на Торжок", "Смерть хана Узбека, смуты"], "1341": ["Джанибек воцарился в Орде", "Переговоры Семёна с Новгородом", "Отражение татарских набегов", "Отстаивание княжеских прав Семёном", "Украшение Московского Кремля"], "1342": ["Поход Семёна на Торжок", "Подтверждение церковных привилегий", "Московское влияние на Белоозере", "Литовские походы на Псков", "Рост каменных построек"], "1343": ["Ливонская осада Пскова", "Помощь Семёна псковичам", "Княжеский съезд в Москве", "Укрепление денежного обращения", "Строительство новых храмов"], "1344": ["Мир Пскова с Ливонией", "Поездка Семёна в Сарай", "Совершенствование сбора пошлин", "Создание тверских летописей", "Укрепление авторитета Семёна"], "1345": ["Начало правления Ольгерда в Литве", "Поездка Семёна к хану", "Стычки на литовской границе", "Рост торговых пошлин Москвы", "Укрепление обороны южных рубежей"], "1346": ["Смена власти в Орде (хан Джанибек)", "Подтверждение великокняжеских прав Симеона", "Поход литовцев на Псков", "Укрепление позиций Москвы на Севере", "Развитие церковного строительства"], "1347": ["Отражение набегов кочевников", "Дипломатическая миссия Москвы в Орду", "Разграничение земель с Новгородом", "Укрепление союза с уделами", "Расширение московских ремесленных слобод"], "1348": ["Болотовский договор Пскова с Новгородом", "Потеря Новгородом части самостоятельности", "Нападение шведов на земли карел", "Усиление контроля Москвы над севером", "Строительство новых каменных церквей"], "1349": ["Династический союз Москвы и Твери", "Поездка Семёна Гордого в Сарай", "Отражение набегов литовских отрядов", "Рост влияния митрополичьей кафедры", "Развитие внутренней торговли"], "1350": ["Эпидемия чумы («Чёрная смерть») в Европе", "Проникновение эпидемии на Русь", "Строительство новых храмов-молебнов", "Дипломатические контакты с Ордой", "Стабилизация границ после моровой язвы"], "1351": ["Литовский поход Ольгерда на Ржев", "Ответный поход Семёна Гордого", "Возобновление укрепления Ржева", "Переговоры о мире с Литвой", "Укрепление московских гарнизонов"], "1352": ["Эпидемия чумы в Пскове и Новгороде", "Начало каменного строительства в Пскове", "Смерть псковского князя Ивана Александровича", "Осада Пскова литовскими войсками", "Дипломатическая поддержка Пскова Москвой"], "1353": ["Смерть князя Семёна Гордого от чумы", "Смерть сыновей Семёна от мора", "Смерть митрополита Феогноста", "Борьба за ярлык между Москвой и Суздалем", "Переход престола к Ивану II Красному"], "1354": ["Поездка Ивана II в Сарай за ярлыком", "Получение Иваном великого княжения", "Возведение Алексия в митрополиты", "Обострение борьбы за влияние в Новгороде", "Набеги литовцев на приграничные волости"], "1355": ["Усиление позиций Ивана II Красного", "Поездки митрополита Алексия в Орду", "Укрепление мира с Тверским княжеством", "Земельные приобретения московского дома", "Строительство новых монастырей"], "1356": ["Литовский захват Брянска Ольгердом", "Переход чернигово-северских земель под Литву", "Поездка Ивана II в Орду", "Внутренние усобицы в Рязанском княжестве", "Укрепление южных границ Московского княжества"], "1357": ["Поездка митрополита Алексия в Орду", "Чудесное исцеление Тайдулы митрополитом", "Убийство хана Джанибека, смуты в Орде", "Укрепление авторитета митрополичьей власти", "Дипломатические манёвры Москвы"], "1358": ["Набег литовских войск на южные земли", "Строительство Спасского монастыря в Москве", "Укрепление позиций митрополита Алексия", "Смерть хана Бердибека в Орде", "Ослабление центральной власти в Орде"], "1359": ["Смерть московского князя Ивана II Красного", "Начало правления Дмитрия Ивановича (Донского)", "Малолетство Дмитрия, усиление роли Алексия", "Переход ярлыка к суздальскому князю", "Начало «великой замятни» в Золотой Орде"], "1360": ["Переход великого владимирского ярлыка к Дмитрию Суздальскому", "Обострение борьбы за великокняжеский престол", "Московские бояре добиваются поддержки Орды", "Набеги нижегородцев и суздальцев", "Укрепление Москвы при поддержке митрополита"], "1361": ["Захват Владимиром московскими силами ярлыка", "Раздел ордынскими претендентами власти в Сарае", "Нападение татарских отрядов на Нижегородчину", "Дипломатические победы митрополита Алексия", "Рост влияния юного Дмитрия Московского"], "1362": ["Битва на Синих Водах (победа Ольгерда)", "Вхождение Юго-Западной Руси в состав Литвы", "Возвращение ярлыка Дмитрию Московскому", "Изгнание Дмитрия Суздальского из Владимира", "Объединение владимирского и московского престолов"], "1363": ["Поход москвичей на Суздаль и Нижний Новгород", "Окончательное закрепление великого княжения за Москвой", "Примирение Дмитрия Московского с Дмитрием Суздальским", "Литовские нападения на смоленские земли", "Строительство новых укреплений в городах"], "1364": ["Эпидемия чумы в ряде русских земель", "Поездка Дмитрия Московского в Орду", "Укрепление союза Москвы с Ростовом", "Набеги ушкуйников на волжские города", "Отражение литовских набегов на запад"], "1365": ["«Всехсвятский пожар» в Москве", "Начало обсуждения строительства каменного Кремля", "Сражение у Шишевского леса с рязанцами", "Пожар в Нижнем Новгороде", "Укрепление южных рубежей Рязанского княжества"], "1366": ["Нападение новгородских ушкуйников на Кострому", "Поход москвичей против новгородских ушкуйников", "Строительство новых оборонительных укреплений", "Обострение отношений с Тверским княжеством", "Дипломатические манёвры литовского князя Ольгерда"], "1367": ["Закладка белокаменного Московского Кремля", "Поход москвичей на Тверь", "Заключение мира с тверским князем", "Нападение литовцев на южные рубежи", "Отражение набегов объединённых сил"], "1368": ["Первый поход Ольгерда на Москву", "Осада белокаменного Кремля литовскими войсками", "Отступление Ольгерда без взятия Кремля", "Опустошение московских волостей литовцами", "Заключение временного перемирия с Литвой"], "1369": ["Союз Москвы с Тверью против Литвы", "Поход москвичей на владения Ольгерда", "Подготовка к новым столкновениям с Литвой", "Укрепление связей с северными землями", "Рост авторитета митрополита Алексия"], "1370": ["Второй поход Ольгерда на Москву", "Осада Волоколамска тверскими и литовскими войсками", "Переговоры Москвы с литовскими послами", "Поездка тверского князя Михаила в Орду за ярлыком", "Получение тверским князем ярлыка на великое княжение"], "1371": ["Отказ Дмитрия признать ярлык Твери", "Поездка Дмитрия Московского в Орду к хану", "Получение Дмитрием ярлыка обратно", "Конфликт с Олегом Рязанским", "Битва при Скорнищеве (победа москвичей над рязанцами)"], "1372": ["Поход Ольгерда на Москву в третий раз", "Стояние на реке Тьме под Любутском", "Заключение «вечного мира» с Литвой", "Признание Тверью старшинства Москвы", "Укрепление позиций Дмитрия Ивановича"], "1373": ["Набег ордынского мурзы Арапши на Рязань", "Поход московского войска к Оке", "Укрепление пограничной стражи на юге", "Стычки с литовскими отрядами на западе", "Строительство новых монастырей вокруг Москвы"], "1374": ["Съезд русских князей в Переяславле-Залесском", "Отказ Москвы платить дань Орде", "Избиение татарских купцов в Нижнем Новгороде", "Разрыв отношений с ханом Мамаем", "Поход тверского князя за ярлыком в Орду"], "1375": ["Общерусский поход на Тверское княжество", "Осада Твери соединёнными силами князей", "Подписание Тверского договора о подчинении Москве", "Окончательное признание старшинства Москвы над Тверью", "Укрепление антиордынской коалиции Северо-Востока"], "1376": ["Поход москвичей и суздальцев на Волжскую Булгарию", "Назначение московских таможенников в Булгаре", "Смерть митрополита Алексия Московского", "Укрепление позиций Дмитрия на Волге", "Стычки с отрядами Мамая на границах"], "1377": ["Битва на реке Пьяне (поражение от Арапши)", "Разорение Нижегородского и Рязанского княжеств татарами", "Внезапное нападение ордынцев на русские силы", "Усиление бдительности московских войск", "Сбор сил после поражения"], "1378": ["Битва на реке Воже (первая крупная победа над Ордой)", "Разгром ордынского войска Бегича москвичами", "Смерть литовского князя Ольгерда", "Начало междоусобиц в Литовском княжестве", "Подготовка Мамая к масштабному походу на Русь"], "1379": ["Поход москвичей на Брянск и Стародуб", "Переход князя Дмитрия Брянского на службу к Москве", "Нападение литовцев на московские границы", "Сбор сил общерусского ополчения", "Дипломатическая изоляция Мамая"], "1380": ["Куликовская битва (разгром Мамая)", "Объединение русских сил под Москвой", "Благословение Сергием Радонежским Дмитрия Донского", "Падение власти Мамая, воцарение Тохтамыша", "Начало восстановления после грандиозной битвы"], "1381": ["Восстановление ордынского единства при Тохтамыше", "Возвращение князя Дмитрия Тверского из Орды", "Подтверждение Тверью вассалитета от Москвы", "Поездка Дмитрия Донского в Орду с дарами", "Восстановление разрушенных войной городов"], "1382": ["Поход хана Тохтамыша на Москву", "Осада и взятие Москвы обманом", "Разорение города и окрестных земель ордынцами", "Восстановление выплаты дани Орде", "Временное ослабление позиций Москвы"], "1383": ["Получение тверским князем ярлыка на великое княжение", "Поездка князя Владимира Андреевича в Орду", "Восстановление разрушенного Кремля и Москвы", "Дипломатическая борьба за великокняжеские права", "Заключение союзов между русскими княжествами"], "1384": ["Строительство новых оборонительных линий на юге", "Переговоры Москвы с Литовским княжеством", "Укрепление волоцких и можайских рубежей", "Сбор средств на уплату ордынского выхода", "Развитие торговли с Новгородской землёй"], "1385": ["Кревская уния (союз Литвы и Польши)", "Нападение Олега Рязанского на Коломну", "Поход москвичей на Рязанское княжество", "Миротворческая миссия Сергия Радонежского в Рязани", "Заключение вечного мира с Рязанью"], "1386": ["Поход Дмитрия Донского на Новгород", "Осада Новгорода московским ополчением", "Выплата новгородцами огромной контрибуции («чёрный бор»)", "Укрепление позиций Москвы на Севере", "Заключение мира с Новгородской республикой"], "1387": ["Возвращение княжеских сыновей из ордынского заложничества", "Укрепление литовско-польского союза (Ягайло)", "Возобновление строительства каменных храмов", "Рост авторитета московского митрополита", "Стабилизация финансовой системы княжества"], "1388": ["Съезд русских князей в Москве", "Урегулирование споров о вотчинах и границах", "Подготовка к отражению угрозы со стороны Тамерлана", "Укрепление оборонительных сооружений Владимира", "Развитие летописного дела в Москве"], "1389": ["Смерть великого князя Дмитрия Донского", "Начало правления Василия I Дмитриевича", "Завещание Дмитрия о передаче великого княжения без Орды", "Поездка Василия I в Золотую Орду", "Утверждение позиций нового московского князя"]};
-let player={name:"",nickname:"",job:"",age:0,storyCore:"",hp:50,silver:20,glory:10,perkCounts:{},currentPerk:null,perkHistory:[],family:{wife:"цела",son:"цел",daughter:"цела",father:"цел"},chronicle:[],plaques:[],lastEvent:null,iron:false};
+let player={name:"",nickname:"",job:"",age:0,storyCore:"",hp:50,silver:20,glory:10,perkCounts:{},currentPerk:null,perkHistory:[],family:{wife:"цела",son:"цел",daughter:"цела",father:"цел"},chronicle:[],plaques:[],songsKnown:0,lastEvent:null,iron:false};
 
 function animateValue(el,start,end,duration){
   if(start===end){el.textContent=end;return}
@@ -385,7 +429,33 @@ const PLAQUE_EMOJI={
   one_hand:"✋",
   no_legs:"🦽",
   lame_leg:"🩼",
-  cripple:"🩹"
+  cripple:"🩹",
+  widow:"🖤",
+  son_dead:"⚰️",
+  daughter_dead:"🕊️",
+  father_dead:"🕯️",
+  wife_banished:"🚪",
+  wife_violated:"💔",
+  wife_sick:"🤒",
+  wife_fleeing:"🌫️",
+  son_druzhina:"⚔️",
+  son_slave:"⛓️",
+  son_apprentice:"📜",
+  son_cripple:"🩹",
+  son_monk:"⛪",
+  son_banished:"🚪",
+  son_sick:"🤒",
+  son_fleeing:"🌫️",
+  daughter_married:"💍",
+  daughter_monk:"⛪",
+  daughter_boyar:"🏰",
+  daughter_banished:"🚪",
+  daughter_sick:"🤒",
+  daughter_fleeing:"🌫️",
+  father_monk:"⛪",
+  father_sick:"🤒",
+  father_fleeing:"🌫️",
+  bylina_singer:"🎶"
 };
 function getPlaqueDisplayTitle(p){
   if(!p) return "";
@@ -395,6 +465,76 @@ function getPlaqueDisplayTitle(p){
 
 function familyMemberGone(st){
   return /^(мертв|мертва|в бегах|прогнан|прогнана|в холопах|у боярина)$/.test(st||"");
+}
+function isFamilyDead(st){
+  return /^(мертв|мертва)$/.test(st||"");
+}
+
+/** Плашки по статусу родни: id плашек на одного члена семьи */
+const FAMILY_STATUS_PLAQUE_IDS={
+  wife:["widow","wife_banished","wife_violated","wife_sick","wife_fleeing"],
+  son:["son_dead","son_druzhina","son_slave","son_apprentice","son_cripple","son_monk","son_banished","son_sick","son_fleeing"],
+  daughter:["daughter_dead","daughter_married","daughter_monk","daughter_boyar","daughter_banished","daughter_sick","daughter_fleeing"],
+  father:["father_dead","father_monk","father_sick","father_fleeing"]
+};
+/** Статус → плашка (цел/цела — без плашки) */
+const FAMILY_STATUS_PLAQUES={
+  wife:{
+    "мертва":{id:"widow",title:"Вдовец",hp:-1,g:-1,power:12},
+    "прогнана":{id:"wife_banished",title:"Жена прогнана",g:-1,power:9},
+    "поругана":{id:"wife_violated",title:"Жена поругана",hp:-1,g:-1,power:11},
+    "больна":{id:"wife_sick",title:"Жена хворает",hp:-1,power:8},
+    "в бегах":{id:"wife_fleeing",title:"Жена в бегах",g:-1,power:9}
+  },
+  son:{
+    "мертв":{id:"son_dead",title:"Сын в земле",hp:-1,g:-1,power:13},
+    "в дружине":{id:"son_druzhina",title:"Сын в дружине",g:1,power:10},
+    "в холопах":{id:"son_slave",title:"Сын в холопах",hp:-1,g:-1,power:12},
+    "в учении":{id:"son_apprentice",title:"Сын в учении",g:1,power:9},
+    "калека":{id:"son_cripple",title:"Сын калека",hp:-1,g:-1,power:11},
+    "в монастыре":{id:"son_monk",title:"Сын в монастыре",g:1,power:8},
+    "прогнан":{id:"son_banished",title:"Сын прогнан",g:-1,power:9},
+    "болен":{id:"son_sick",title:"Сын хворает",hp:-1,power:8},
+    "в бегах":{id:"son_fleeing",title:"Сын в бегах",g:-1,power:9}
+  },
+  daughter:{
+    "мертва":{id:"daughter_dead",title:"Дочь в земле",hp:-1,g:-1,power:12},
+    "замужем":{id:"daughter_married",title:"Дочь замужем",g:1,power:10},
+    "в монастыре":{id:"daughter_monk",title:"Дочь в монастыре",g:1,power:8},
+    "у боярина":{id:"daughter_boyar",title:"Дочь у боярина",s:1,g:-1,power:10},
+    "прогнана":{id:"daughter_banished",title:"Дочь прогнана",g:-1,power:9},
+    "больна":{id:"daughter_sick",title:"Дочь хворает",hp:-1,power:8},
+    "в бегах":{id:"daughter_fleeing",title:"Дочь в бегах",g:-1,power:9}
+  },
+  father:{
+    "мертв":{id:"father_dead",title:"Без отца",hp:-1,power:11},
+    "в монастыре":{id:"father_monk",title:"Отец в монастыре",g:1,power:8},
+    "болен":{id:"father_sick",title:"Отец хворает",hp:-1,power:8},
+    "в бегах":{id:"father_fleeing",title:"Отец в бегах",g:-1,power:9}
+  }
+};
+function removePlaquesByIds(ids){
+  if(!player.plaques||!ids||!ids.length) return;
+  for(let i=player.plaques.length-1;i>=0;i--){
+    if(ids.indexOf(player.plaques[i].id)>=0) player.plaques.splice(i,1);
+  }
+}
+/** Плашки семьи: смерть, замужество, дружина, холопы и др. при смене статуса */
+function considerFamilyPlaques(beforeFam){
+  const gained=[];
+  if(!beforeFam||!player.family) return gained;
+  const now=player.family;
+  function tryAdd(def){
+    const p=addPlaque(def);
+    if(p) gained.push(p);
+  }
+  ["wife","son","daughter","father"].forEach(function(role){
+    if(now[role]===beforeFam[role]) return;
+    removePlaquesByIds(FAMILY_STATUS_PLAQUE_IDS[role]||[]);
+    const def=FAMILY_STATUS_PLAQUES[role]&&FAMILY_STATUS_PLAQUES[role][now[role]];
+    if(def) tryAdd(def);
+  });
+  return gained;
 }
 function familyLost(){
   return familyAllGone();
@@ -512,7 +652,7 @@ function plaqueModHtml(p){
   if(p.hp) bits.push('<span class="'+(p.hp>0?"up":"down")+'">'+(p.hp>0?"+":"")+p.hp+" ❤️</span>");
   if(p.s) bits.push('<span class="'+(p.s>0?"up":"down")+'">'+(p.s>0?"+":"")+p.s+" 🪙</span>");
   if(p.g) bits.push('<span class="'+(p.g>0?"up":"down")+'">'+(p.g>0?"+":"")+p.g+" 🏅</span>");
-  bits.push('<span style="color:#7a5a30">/ход</span>');
+  bits.push('<span style="color:#a89070">/ход</span>');
   return bits.join(" ");
 }
 function plaquePower(p){
@@ -597,6 +737,18 @@ function tickPlaques(){
   clampStats();
   updateStats();
 }
+function isSongQuiz(q){
+  if(!q||q.isBlack) return false;
+  const t=q.text||"";
+  return /Как начать\?|Как затянуть\?|Какой зачин|Как запеть\?|Затяни/.test(t)
+    || /Спой про |спой «про |Спой, как |просит колыбельную|просит долгую|стучат ковшами/.test(t);
+}
+function isSongCorrect(opt){
+  if(!opt) return false;
+  if(opt.pinned) return true;
+  const r=opt.r||"";
+  return /Затянул верно|Спел верно/.test(r);
+}
 function considerPlaques(opt,q){
   // Сильные перки справа (макс. 5); «Жук» и т.п. — только у имени
   const gained=[];
@@ -606,6 +758,13 @@ function considerPlaques(opt,q){
   // Викторины «угадай предмет» — без плашек: ошибка не делает тебя грозой дворов
   const qtext=(q&&q.text)||"";
   if(/^Сосед просит дать ему /.test(qtext)) return gained;
+
+  // Былины/песни: верный запев копится; с 2–3 песен — плашка знатока
+  if(isSongQuiz(q) && isSongCorrect(opt)){
+    player.songsKnown=(player.songsKnown|0)+1;
+    if(player.songsKnown>=2)
+      tryAdd({id:"bylina_singer",title:"Знаток былин",why:"Знаешь старые запевы: двор слушает и кормит",g:1,power:10});
+  }
 
   const tags=opt.tags||[];
   const has=function(t){ return tags.indexOf(t)>=0; };
@@ -651,7 +810,7 @@ function considerPlaques(opt,q){
   if(has("coward") && (opt.g|0)<=-5)
     cand({id:"village_fool",title:"Трус на виду",why:"Над тобой смеются: силы нет, уважения тоже",hp:-1,g:-2,power:9});
 
-  if(has("pious") && (/церк|храм|поп|молит|пост|икон|монаст|бог/.test(rt) || (opt.g|0)>=4))
+  if(has("pious") && (/церк|храм|священник|молит|пост|икон|монаст|бог/.test(rt) || (opt.g|0)>=4))
     cand({id:"faith_keeper",title:"Божий человек",why:"Церковь за тебя: помин и кусок хлеба",hp:1,g:2,power:11});
 
   // Гроза дворов — только за явное насилие, не за «не тот предмет»
@@ -773,9 +932,9 @@ function isOpenlyExposed(opt){
 }
 function dirtyGetawayNote(){
   const notes=[
-    "На этот раз удалось уйти сухим: серебро у тебя, а молва ещё не знает, чья была рука.",
-    "Ты замел следы серебром и тишиной — честь пока цела, кошель тяжелее.",
-    "Пока улика не вышла наружу, тебя не припомнили, и добыча осталась при тебе."
+    "Удалось уйти сухим: серебро твоё, молва ещё не знает чью руку.",
+    "Замел следы серебром и тишиной — честь цела, кошель тяжелее.",
+    "Пока улика не вышла, тебя не припомнили — добыча при тебе."
   ];
   return notes[Math.floor(Math.random()*notes.length)];
 }
@@ -808,30 +967,193 @@ function applyBadLuck(tags){
     const roll=Math.random();
     if(roll<0.5){
       const dg=applyGloryDelta(-5, true);
-      return {dh:0,ds:0,dg:dg,note:"Молва разнесла поступок шире, чем ты думал, и честь упала сильнее обычного."};
+      return {dh:0,ds:0,dg:dg,note:"Молва разнесла поступок — честь упала сильнее."};
     }else if(roll<0.8){
       const dg=applyGloryDelta(-8, true);
       const dh=applyHpDelta(-3, false);
-      return {dh:dh,ds:0,dg:dg,note:"На сходе это дело припомнили вслух: стыд ударил сильнее, чем ты ждал."};
+      return {dh:dh,ds:0,dg:dg,note:"На сходе припомнили вслух: стыд ударил сильнее, чем ты ждал."};
     }else{
       const dg=applyGloryDelta(-3, true);
       const dsApplied=applySilverDelta(-4, false);
-      return {dh:0,ds:dsApplied,dg:dg,note:"Чтобы замять историю, пришлось откупаться серебром — иначе хула шла бы ещё дальше."};
+      return {dh:0,ds:dsApplied,dg:dg,note:"Пришлось откупаться серебром, иначе хула шла бы дальше."};
     }
   }
   // greedy/coward: хуже по кошельку/силам, без публичного стыда и без смерти от мелочи
   const roll=Math.random();
   if(roll<0.55){
     const dh=applyHpDelta(-2, true);
-    return {dh:dh,ds:0,dg:0,note:"Вышло хуже, чем казалось: силы сели сильнее обычного."};
+    return {dh:dh,ds:0,dg:0,note:"Вышло хуже: силы сели сильнее обычного."};
   }
   const ds=applySilverDelta(-3, true);
-  return {dh:0,ds:ds,dg:0,note:ds? "Промах обошёлся дороже: серебро утекло впустую." : "Промах обошёлся дороже, но в кошельке и так пусто."};
+  return {dh:0,ds:ds,dg:0,note:ds? "Промах дороже: серебро утекло впустую." : "Промах дороже, но в кошельке и так пусто."};
 }
 function updateProgress(){
   document.getElementById("progressCounter").textContent=Math.min(currentQuestionIndex+1,totalQuestions)+"/"+totalQuestions;
 }
+const BOOT_LINES=[
+  "Снимаем печати…",
+  "Читаем берестяные грамоты…",
+  "Сверяем годы княженья…",
+  "Складываем твой двор…",
+  "Открываем летопись жития…",
+  "Точим топоры на дрова…",
+  "Кормим кур перед рассветом…",
+  "Считаем куницы в силках…",
+  "Месим глину для печи…",
+  "Чиним оглобли у телеги…",
+  "Запасаем лучину на зиму…",
+  "Примеряем лапти к дороге…",
+  "Смолим днище ладьи…",
+  "Слушаем, что шепчет домовой…",
+  "Проверяем межу с соседом…",
+  "Толчём зерно в ступе…",
+  "Варим квас на погребе…",
+  "Чистим ржавчину с топора…",
+  "Перебираем горох на решете…",
+  "Гоним скот с дальнего луга…",
+  "Смотрим, не горит ли овин…",
+  "Снимаем воск с ульев…",
+  "Пишем челобитную князю…",
+  "Кланяемся на все четыре стороны…",
+  "Ищем цвет папоротника…",
+  "Считаем серебро в мошне…",
+  "Чиним кровлю перед дождём…",
+  "Зовём кузнеца чинить лемех…",
+  "Готовим стол к именинам…",
+  "Проверяем замки на клети…",
+  "Метим скотину ухом…",
+  "Сушим сети на шестах…",
+  "Толкёмся на торгу за солью…",
+  "Слушаем колокол к заутрене…",
+  "Читаем Псалтирь при свече…",
+  "Гоним медведя от пасеки…",
+  "Копаем колодец глубже…",
+  "Ставим кресты на межах…",
+  "Чиним сани к зимнему пути…",
+  "Солим капусту в кадках…",
+  "Смотрим на звёзды — к урожаю…",
+  "Прядём лён до петухов…",
+  "Колем дрова для бани…",
+  "Ищем пропавшую овцу…",
+  "Смазываем колёса дёгтем…",
+  "Считаем дни до Покрова…",
+  "Просим у знахаря коренья…",
+  "Чиним плетень у огорода…",
+  "Готовим подать баскаку…",
+  "Слушаем гудок скомороха…",
+  "Перевозим хлеб через волок…",
+  "Смотрим дым — к погоде…",
+  "Кладём икону в красный угол…",
+  "Учим сына держать соху…",
+  "Открываем ворота новому лету…"
+];
+const BOOT_MARKS=[18,37,58,79,100];
+function pickBootSteps(){
+  const pool=BOOT_LINES.slice();
+  for(let i=pool.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    const t=pool[i];pool[i]=pool[j];pool[j]=t;
+  }
+  return BOOT_MARKS.map(function(p,i){ return {t:pool[i],p:p}; });
+}
+let bootTimer=null;
+let bootLineTimer=null;
+let bootRaf=null;
+function clearBootTimer(){
+  if(bootTimer){clearTimeout(bootTimer);bootTimer=null;}
+  if(bootLineTimer){clearTimeout(bootLineTimer);bootLineTimer=null;}
+  if(bootRaf){cancelAnimationFrame(bootRaf);bootRaf=null;}
+}
+function setBootUI(loading){
+  const screen=document.getElementById("gameScreen");
+  const boot=document.getElementById("bootLoad");
+  const bio=document.getElementById("bioBox");
+  const pitch=document.getElementById("pitchText");
+  const mb=document.getElementById("modeBar");
+  const next=document.getElementById("nextBtn");
+  const nameLine=document.getElementById("nameLine");
+  const progress=document.getElementById("progressCounter");
+  const yh=document.querySelector(".year-header");
+  const splash=document.getElementById("qVisual");
+  if(screen) screen.classList.toggle("booting",!!loading);
+  if(boot) boot.classList.toggle("show",!!loading);
+  if(bio) bio.style.display=loading?"none":"block";
+  if(pitch) pitch.style.display=loading?"none":"block";
+  if(mb) mb.style.display=loading?"none":"flex";
+  if(next) next.style.display=loading?"none":"block";
+  if(nameLine) nameLine.style.display=loading?"none":"block";
+  if(progress) progress.style.display=loading?"none":"block";
+  if(yh) yh.style.display=loading?"none":"";
+  if(splash) splash.style.display=loading?"none":"block";
+}
+function runBootSequence(done){
+  clearBootTimer();
+  const fill=document.getElementById("bootFill");
+  const pctEl=document.getElementById("bootPct");
+  const line=document.getElementById("bootLine");
+  const steps=pickBootSteps();
+  const duration=5600;
+  setBootUI(true);
+  if(line){
+    line.classList.remove("show");
+    line.textContent="";
+  }
+  if(pctEl) pctEl.textContent="0%";
+  if(fill){
+    fill.style.transition="none";
+    fill.style.width="0%";
+  }
+  let lastIdx=-1;
+  function showLine(text,immediate){
+    if(!line) return;
+    if(bootLineTimer){clearTimeout(bootLineTimer);bootLineTimer=null;}
+    if(immediate||!line.textContent){
+      line.textContent=text;
+      requestAnimationFrame(function(){ line.classList.add("show"); });
+      return;
+    }
+    line.classList.remove("show");
+    bootLineTimer=setTimeout(function(){
+      line.textContent=text;
+      requestAnimationFrame(function(){ line.classList.add("show"); });
+    },420);
+  }
+  const start=performance.now();
+  function frame(now){
+    const t=Math.min(1,(now-start)/duration);
+    const eased=1-Math.pow(1-t,1.25);
+    const p=Math.min(100,eased*100);
+    if(fill) fill.style.width=p.toFixed(2)+"%";
+    if(pctEl) pctEl.textContent=Math.round(p)+"%";
+    let idx=0;
+    for(let i=0;i<steps.length;i++){
+      const from=i===0?0:steps[i-1].p;
+      if(p>=from) idx=i;
+    }
+    if(idx!==lastIdx){
+      const first=lastIdx<0;
+      lastIdx=idx;
+      showLine(steps[idx].t,first);
+    }
+    if(t<1){
+      bootRaf=requestAnimationFrame(frame);
+      return;
+    }
+    bootRaf=null;
+    if(fill) fill.style.width="100%";
+    if(pctEl) pctEl.textContent="100%";
+    bootTimer=setTimeout(function(){
+      if(line) line.classList.remove("show");
+      bootTimer=setTimeout(function(){
+        setBootUI(false);
+        if(done) done();
+      },450);
+    },500);
+  }
+  bootRaf=requestAnimationFrame(frame);
+}
 function startGame(){
+  clearBootTimer();
   player.name=names[Math.floor(Math.random()*names.length)];
   player.nickname=nicknames[Math.floor(Math.random()*nicknames.length)];
   player.job=jobs[Math.floor(Math.random()*jobs.length)];
@@ -851,6 +1173,7 @@ function startGame(){
   player.family={wife:"цела",son:"цел",daughter:"цела",father:"цел"};
   player.chronicle=[];
   player.plaques=[];
+  player.songsKnown=0;
   player.lastEvent=null;
   gameOver=false;choiceLocked=false;
   if(endGameTimer){clearTimeout(endGameTimer);endGameTimer=null;}
@@ -865,13 +1188,6 @@ function startGame(){
   updatePerksDisplay();
   updatePlaquesDisplay();
   document.getElementById("bioBox").innerText=generateBioText();
-  document.getElementById("bioBox").style.display="block";
-  const mbStart=document.getElementById("modeBar");
-  if(mbStart) mbStart.style.display="flex";
-  const pitch=document.getElementById("pitchText");
-  if(pitch) pitch.style.display="block";
-  document.getElementById("nameLine").style.display="block";
-  document.getElementById("progressCounter").style.display="block";
   const splash=document.getElementById("qVisual");
   const splashImg=document.getElementById("qImage");
   if(splash&&splashImg){
@@ -879,7 +1195,6 @@ function startGame(){
     splashImg.alt="крестьянин застолье";
     splash.classList.remove("end");
     splash.classList.add("splash");
-    splash.style.display="block";
   }
   document.getElementById("historyBox").style.display="none";
   updatePerksDisplay();
@@ -894,19 +1209,25 @@ function startGame(){
   if(availableQuestions.length>maxTurns) availableQuestions.length=maxTurns;
   totalQuestions=availableQuestions.length;currentQuestionIndex=0;
   updateStats();updateFamilyDisplay();updateProgress();
-  showDeckIds();
+  hideDeckIds();
   document.getElementById("questionText").innerHTML="";
   document.getElementById("choicesBox").innerHTML="";
   document.getElementById("resultBox").style.display="none";
   document.getElementById("historyBox").style.display="none";
-  document.getElementById("nextBtn").style.display="block";
-  document.getElementById("nextBtn").innerText="Начать жизнь →";
+  document.getElementById("nextBtn").innerText="Начать";
   document.getElementById("nextBtn").onclick=beginLife;
   document.getElementById("gameScreen").classList.remove("playing");
   document.getElementById("gameScreen").classList.remove("ending");
+  document.getElementById("gameScreen").classList.remove("chronicle-open");
+  runBootSequence();
 }
 function beginLife(){
   // читаем режимы в момент старта жизни (не при загрузке страницы)
+  clearBootTimer();
+  const screen=document.getElementById("gameScreen");
+  if(screen) screen.classList.remove("booting");
+  const boot=document.getElementById("bootLoad");
+  if(boot) boot.classList.remove("show");
   hideDeckIds();
   player.iron=!!(document.getElementById("ironMode")&&document.getElementById("ironMode").checked);
   if(player.iron){
@@ -921,20 +1242,20 @@ function beginLife(){
   const mb=document.getElementById("modeBar"); if(mb) mb.style.display="none";
   const pitch=document.getElementById("pitchText"); if(pitch) pitch.style.display="none";
   document.getElementById("gameScreen").classList.add("playing");
+  document.getElementById("gameScreen").classList.remove("showing-result");
   document.getElementById("nextBtn").innerText="Далее →";
   document.getElementById("nextBtn").onclick=nextQuestion;
   document.getElementById("nextBtn").style.display="none";
   showQuestion();
 }
 function statColor(v){
-  // >25 зелёный, ближе к 0 — краснее
-  if(v>25) return "#1a7a2a";
-  if(v<=0) return "#8b1010";
-  // 1..25: от оранжево-красного к жёлто-зелёному
+  // >25 золото, ближе к 0 — краснее (палитра свечи)
+  if(v>25) return "#e8c868";
+  if(v<=0) return "#e85848";
   const t=v/25;
-  const r=Math.round(180-t*120);
-  const g=Math.round(40+t*120);
-  const b=20;
+  const r=Math.round(220-t*30);
+  const g=Math.round(90+t*110);
+  const b=Math.round(35+t*25);
   return "rgb("+r+","+g+","+b+")";
 }
 function lerpRgb(c1,c2,t){
@@ -951,7 +1272,7 @@ function lerpRgb(c1,c2,t){
 }
 function avatarBorderColor(hp){
   const h=Math.max(0,hp|0);
-  const green="#2d8a35", yellow="#c9a820", red="#b82020";
+  const green="#88c848", yellow="#e8a830", red="#d04030";
   if(h>20) return green;
   if(h>10) return lerpRgb(yellow,green,(h-10)/10);
   return lerpRgb(red,yellow,h/10);
@@ -959,7 +1280,9 @@ function avatarBorderColor(hp){
 function updateAvatarBorder(hp){
   const av=document.getElementById("avatarImg");
   if(!av) return;
-  av.style.borderColor=avatarBorderColor(hp==null?player.hp:hp);
+  const c=avatarBorderColor(hp==null?player.hp:hp);
+  av.style.borderColor=c;
+  av.style.boxShadow="0 0 12px "+c+"66, 0 0 0 1px rgba(200,150,80,.25)";
 }
 function paintStat(id,val){
   const el=document.getElementById(id);
@@ -1005,7 +1328,7 @@ function isKnowledgeQuiz(q){
   return (q.opts||[]).some(function(o){ return o&&o.pinned; });
 }
 function pickLifeQuestions(pool, lifeLen){
-  const maxQuiz=2;
+  const maxQuiz=3;
   const shuffled=shuffleArray(pool);
   const quizzes=[];
   const story=[];
@@ -1291,6 +1614,8 @@ function showQuestion(){
   document.getElementById("bioAge").innerText=player.age;
   const q=availableQuestions[currentQuestionIndex];
   document.getElementById("questionText").innerText=q.text;
+  document.getElementById("questionText").style.display="";
+  document.getElementById("gameScreen").classList.remove("showing-result");
   showQuestionImage(q);
   const shuffled=pickOpts(getQuestionOpts(q),4);
   window._currentOpts=shuffled;
@@ -1344,17 +1669,25 @@ function makeChoice(idx){
     if(player.iron && !bad && tags.some(t=>badTags.has(t)) && Math.random()<0.35){
       const ironHard=tags.some(t=>t==="nehoroshiy"||t==="zhuk"||t==="nasilnik");
       const dg=applyGloryDelta(-4, ironHard);
-      bad={dh:0,ds:0,dg:dg,note:"В режиме хардкор ошибка бьёт сильнее: потеряли и честь, и покой."};
+      bad={dh:0,ds:0,dg:dg,note:"Лютый век бьёт сильнее: потеряли и честь, и покой."};
     }
   }
   clampStats();
+  const famBefore={
+    wife:player.family.wife,
+    son:player.family.son,
+    daughter:player.family.daughter,
+    father:player.family.father
+  };
   if(opt.family) applyFamilyChange(opt.family);
   // эвристика по тексту результата / варианта / вопроса
   const qt=(q.text||"").toLowerCase();
   const ot=(opt.t||"").toLowerCase();
   const rt=((opt.r||"")+" "+ot+" "+qt).toLowerCase();
-  if(/сын умер|единственный сын умер/.test(qt)) applyFamilyChange({son:"мертв"});
-  if(/отец не вышел|отца не стало|отец погиб/.test(rt)) applyFamilyChange({father:"мертв"});
+  if(/сын умер|единственный сын умер|сына похоронил|сын погиб|сына не стало/.test(qt+" "+rt)) applyFamilyChange({son:"мертв"});
+  if(/отец не вышел|отца не стало|отец погиб|отец умер|отца похоронил/.test(rt)) applyFamilyChange({father:"мертв"});
+  if(/жена умер|жены не стало|жена погиб|жену похоронил|жена мертва/.test(rt)) applyFamilyChange({wife:"мертва"});
+  if(/дочь умер|дочери не стало|дочь погиб|дочь похоронил|дочь мертва/.test(rt)) applyFamilyChange({daughter:"мертва"});
   if(/старый отец просит|отпустить в монастырь|ушёл в монастырь/.test(rt) && /отец/.test(qt)) applyFamilyChange({father:"в монастыре"});
   if(/семью увели|семья потеряна|семья в бегах|семья потеряна в дыму/.test(rt)) applyFamilyChange({wife:"в бегах",son:"в бегах",daughter:"в бегах"});
   if(/жену прогнал|прогнал жену|жену с ребёнком/.test(rt)) applyFamilyChange({wife:"прогнана"});
@@ -1377,7 +1710,8 @@ function makeChoice(idx){
   if(/сын.*ранен|сын.*болен|многие пали/.test(rt) && /бой|отряд|дружин/.test(rt)) applyFamilyChange({son:"болен"});
   if(/дочь.*замуж|вышла замуж/.test(rt)) applyFamilyChange({daughter:"замужем"});
   processTags(opt.tags||[]);
-  const newPlaques=considerPlaques(opt,q);
+  const famPlaques=considerFamilyPlaques(famBefore);
+  const newPlaques=(considerPlaques(opt,q)||[]).concat(famPlaques);
   updatePlaquesDisplay((newPlaques||[]).map(function(p){ return p.id; }));
   addChronicle(opt,q);
   player.lastEvent={
@@ -1400,17 +1734,15 @@ function makeChoice(idx){
   const dH=player.hp-oH;
   const dS=player.silver-oS;
   const dG=player.glory-oG;
-  const deltas=[fmtDelta(dH,'❤️ здоровье'),fmtDelta(dS,'🪙 деньги'),fmtDelta(dG,'🏅 почесть')].join(' · ');
-  let resHtml="<strong>Что произошло:</strong> "+opt.r;
-  if(bad) resHtml+=" "+bad.note;
-  if(newPlaques&&newPlaques.length){
-    resHtml+="<br>"+newPlaques.map(function(p){
-      return '<span style="color:#5a3a18">Плашка:</span> <b>'+escapeHtml(getPlaqueDisplayTitle(p))+'</b> '+plaqueModHtml(p);
-    }).join("<br>");
-  }
-  resHtml+="<br>"+deltas;
+  const deltas=[fmtDelta(dH,'❤️ здоровье'),fmtDelta(dS,'🪙 деньги'),fmtDelta(dG,'🏅 почесть')].join('<span class="delta-zero"> · </span>');
+  let story=((opt.r||"")+(bad&&bad.note?(" "+bad.note):"")).replace(/\s*[—–-]\s*$/,"").trim();
+  const resHtml=
+    '<div class="result-card result-story"><strong>Что произошло:</strong> '+story+'</div>'+
+    '<div class="result-card result-stats"><div class="result-deltas">'+deltas+'</div></div>';
   document.getElementById("resultBox").innerHTML=resHtml;
-  document.getElementById("resultBox").style.display="block";
+  document.getElementById("resultBox").style.display="flex";
+  document.getElementById("questionText").style.display="none";
+  document.getElementById("gameScreen").classList.add("showing-result");
   document.getElementById("historyBox").innerHTML="<strong>Историческая справка:</strong> "+q.history;
   document.getElementById("historyBox").style.display="block";
   document.getElementById("choicesBox").innerHTML="";
@@ -1430,6 +1762,18 @@ function nextQuestion(){
   tickPlaques();
   showQuestion();
 }
+function clipFateText(s, max){
+  s=String(s||"").replace(/\s+/g," ").trim();
+  if(!s) return "";
+  const first=s.match(/^.+?[.!?…](?=\s|$)/);
+  if(first){
+    const one=first[0].trim();
+    if(one.length<=max) return one;
+    s=one;
+  }
+  if(s.length<=max) return s;
+  return s.slice(0,max).replace(/\s+\S*$/,"").replace(/[,—–-]+$/,"")+"…";
+}
 function getLastFateStory(){
   const e=player.lastEvent;
   if(!e) return "";
@@ -1437,31 +1781,32 @@ function getLastFateStory(){
   if(!ruined) return "";
 
   let situ=String(e.q||"").replace(/[?？]+$/,"").trim();
-  if(situ) situ=situ.charAt(0).toLowerCase()+situ.slice(1);
+  situ=clipFateText(situ, 58).replace(/[.!?…]+$/,"");
+  if(situ) situ=situ.charAt(0).toUpperCase()+situ.slice(1);
 
-  let res=String(e.result||"").trim();
+  let res=clipFateText(String(e.result||"").trim(), 100);
   if(res && !/[.!?…]$/.test(res)) res+=".";
   if(e.badNote){
-    let n=String(e.badNote).trim();
+    let n=clipFateText(String(e.badNote).trim(), 58);
     if(n && !/[.!?…]$/.test(n)) n+=".";
     if(n) res=(res?res+" ":"")+n;
   }
   if(!situ && !res) return "";
 
   let body="";
-  if(situ && res) body="В лето "+e.year+" судьба подвела тебя к такому: "+situ+". "+res;
-  else if(res) body="В лето "+e.year+" пришёл последний удар. "+res;
-  else body="В лето "+e.year+" случилось: "+situ+".";
+  if(situ && res) body="В лето "+e.year+": "+situ+". "+res;
+  else if(res) body="В лето "+e.year+". "+res;
+  else body="В лето "+e.year+": "+situ+".";
 
-  if(familyAllGone()) return body+" Кровные узы порвались, и двор опустел.";
-  if(player.glory<0) return body+" На сходе тебя не стали слушать — имя стало пустым. Ты собрал семью и ушёл из волости, где уже не было почёта.";
-  if(player.hp<=0) return body+" С этой беды ты уже не поднялся.";
-  if(player.silver<=0) return body+" Казна иссякла, и свобода ушла вместе с серебром.";
+  if(familyAllGone()) return body+" Двор опустел.";
+  if(player.glory<0) return body+" Имя стало пустым — ушёл с семьёй из волости.";
+  if(player.hp<=0) return body+" С этой беды ты не поднялся.";
+  if(player.silver<=0) return body+" Казна иссякла вместе со свободой.";
   return body;
 }
 function getDestiny(){
   if(familyAllGone())return "Семья потеряна: кто умер, кто в бегах. Пустой двор и холодный очаг — ты остался один, и это хуже любой кабалы.";
-  if(player.glory<0)return "Дурная слава сожгла имя: в деревне тебя не уважали, торгу и сходу закрыли. С семьёй ты ушёл искать место, где можно начать с чистого двора.";
+  if(player.glory<0)return "Дурная слава сожгла имя. Сход и торг закрыли — с семьёй ушёл искать новый двор.";
   if(player.hp<=0)return "Твой жизненный путь оборвался преждевременно. Земля приняла тебя сурово.";
   if(player.silver<=0)return "Долговая яма сломила дух. Ты закончил дни в кабале.";
   const g=player.glory,s=player.silver,h=player.hp;
@@ -1585,7 +1930,7 @@ function writeToHistory(){
     end.appendChild(slot);
   }
   const inList=list.some(function(e){ return e.id===entry.id; });
-  slot.innerHTML=renderChronicleList(list,entry.id)+(inList?"":'<p style="font-size:13px;margin:6px 0 0;color:#6b1a1a;">Счёт слишком мал — в топ-'+HISTORY_MAX+' не вошёл, но запись была учтена при отборе.</p>');
+  slot.innerHTML=renderChronicleList(list,entry.id)+(inList?"":'<p style="font-size:13px;margin:6px 0 0;color:#e87868;">Счёт слишком мал — в топ-'+HISTORY_MAX+' не вошёл, но запись была учтена при отборе.</p>');
   const me=document.getElementById("chronicleMe");
   const wrap=document.getElementById("chronicleWrap");
   if(me&&wrap){
@@ -1608,15 +1953,18 @@ function endGame(){
   gameOver=true;choiceLocked=true;historyWritten=false;lastHistoryId=null;
   if(endGameTimer){clearTimeout(endGameTimer);endGameTimer=null;}
   document.getElementById("gameScreen").classList.remove("playing");
+  document.getElementById("gameScreen").classList.remove("showing-result");
   const destiny=getDestiny();
   const fateStory=getLastFateStory();
   const perkBit=player.perkHistory.length?(' За глаза называли: <i>'+player.perkHistory.join(', ')+'</i>.'):'';
-  const nickLine='<p style="margin:8px 0;font-size:15px;"><b>'+player.name+'</b> по прозвищу <b>'+player.nickname+'</b>, прожил '+player.age+' '+yearsWord(player.age)+'.'+perkBit+'</p>';
+  const nickLine='<p><b>'+player.name+'</b> по прозвищу <b>'+player.nickname+'</b>, прожил '+player.age+' '+yearsWord(player.age)+'.'+perkBit+'</p>';
   document.getElementById("bioBox").style.display="none";
   document.getElementById("nameLine").style.display="none";
   document.getElementById("progressCounter").style.display="none";
   const mb=document.getElementById("modeBar"); if(mb) mb.style.display="none";
   const pitch=document.getElementById("pitchText"); if(pitch) pitch.style.display="none";
+  const boot=document.getElementById("bootLoad"); if(boot) boot.classList.remove("show");
+  document.getElementById("gameScreen").classList.remove("booting");
   const yh=document.querySelector(".year-header"); if(yh) yh.style.display="none";
   const ye=document.getElementById("yearEvent"); if(ye) ye.style.display="none";
   document.getElementById("historyBox").style.display="none";
@@ -1633,11 +1981,12 @@ function endGame(){
     img.src=encodeURI("img/"+baseName+".jpg");
     img.alt=baseName;
   }
-  const famLine='<p style="font-size:14px;margin:6px 0;">'+getFamilyStory()+'</p>';
-  const ironNote=player.iron?'<p style="font-size:13px;color:#6b1a1a;margin:4px 0;">Режим: хардкор</p>':'';
-  const fateLine=fateStory?'<p style="font-size:15px;line-height:1.45;margin:8px 0;">'+fateStory+'</p>':'';
+  const famLine='<p>'+getFamilyStory()+'</p>';
+  const ironNote=player.iron?'<p class="end-iron">Лютый век — слабее старт, подлость бьёт чаще</p>':'';
+  const fateLine=fateStory?'<p>'+fateStory+'</p>':'';
   const score=player.hp+player.silver+player.glory;
-  document.getElementById("questionText").innerHTML='<div class="end-block">'+nickLine+ironNote+'<p style="font-size:15px;line-height:1.45;margin:6px 0;">'+destiny+'</p>'+fateLine+famLine+'<hr style="border:1px solid #5c3d1e;margin:8px auto;width:80%;"><p style="font-size:15px;margin:6px 0;">Итоговые показатели:<br>❤️ <b>'+player.hp+'</b> &nbsp;|&nbsp; 🪙 <b>'+player.silver+'</b> &nbsp;|&nbsp; 🏅 <b>'+player.glory+'</b> · '+getRank(player.glory)+'<br><span style="font-size:14px;color:#5a3a18;">Сумма для летописи: <b>'+score+'</b></span></p><div id="chronicleSlot"></div></div>';
+  document.getElementById("questionText").innerHTML='<div class="end-block">'+nickLine+ironNote+'<p>'+destiny+'</p>'+fateLine+famLine+'<hr style="border:1px solid #6a5030;margin:8px auto;width:80%;"><p>Итоговые показатели:<br>❤️ <b>'+player.hp+'</b> &nbsp;|&nbsp; 🪙 <b>'+player.silver+'</b> &nbsp;|&nbsp; 🏅 <b>'+player.glory+'</b> · '+getRank(player.glory)+'<br><span class="end-score">Сумма для летописи: <b>'+score+'</b></span></p><div id="chronicleSlot"></div></div>';
+  document.getElementById("questionText").style.display="";
   showEndActions(false);
   document.getElementById("resultBox").style.display="none";
   document.getElementById("nextBtn").style.display="none";
