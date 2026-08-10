@@ -97,6 +97,12 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 .result-box::-webkit-scrollbar{width:0;height:0}
 .history-box{position:absolute;left:0;right:0;bottom:0;margin:0;padding:10px 14px 12px;font-style:italic;display:none;border:none;border-radius:0;font-size:15px;line-height:1.35;color:#f3e8c8;background:linear-gradient(transparent,rgba(28,20,10,.55) 18%,rgba(28,20,10,.82));max-height:48%;overflow:hidden;z-index:2;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.45)}
 .history-box strong{color:#f3e8c8;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.45)}
+.deck-ids{position:absolute;inset:0;z-index:3;display:none;flex-direction:column;gap:6px;padding:10px 12px;background:rgba(18,12,6,.62);overflow:auto;scrollbar-width:thin}
+.deck-ids.show{display:flex}
+.deck-ids-label{flex:0 0 auto;font-size:13px;line-height:1.25;color:#f3e8c8;text-shadow:0 1px 2px rgba(0,0,0,.85)}
+.deck-ids-nums{display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start}
+.deck-ids-nums .n{font-size:12px;font-variant-numeric:tabular-nums;color:#f3e8c8;background:rgba(0,0,0,.4);border:1px solid rgba(220,180,100,.4);border-radius:4px;padding:2px 6px;line-height:1.2}
+.deck-ids-nums .n.black{border-color:rgba(180,40,40,.7);color:#ffd0d0}
 .next-btn{background:#2f6b32!important;color:#ffffff!important;border:none!important;margin-top:0;display:none;width:100%!important;align-self:stretch;text-align:center!important;font-size:17px!important;flex-shrink:0}
 .next-btn:hover{background:#245528!important}
 .end-title{margin:0 0 4px;color:#3d2a12;font-size:20px;font-weight:700;text-align:center}
@@ -142,6 +148,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
     </div>
     <div class="q-visual" id="qVisual">
       <img class="q-image" id="qImage" src="" alt="">
+      <div class="deck-ids" id="deckIdsOverlay" aria-hidden="true"></div>
       <div class="history-box" id="historyBox"></div>
     </div>
     <div class="prompt-area">
@@ -268,6 +275,7 @@ function pickImageName(q){
   return String(name||FALLBACK_IMGS[0]).replace(/\.(jpg|jpeg|png|webp)$/i,"").trim();
 }
 function showQuestionImage(q){
+  hideDeckIds();
   const baseName=pickImageName(q);
   const img=document.getElementById("qImage");
   const wrap=document.getElementById("qVisual");
@@ -283,6 +291,34 @@ function showQuestionImage(q){
   wrap.style.display="block";
   img.src=encodeURI(src);
   img.alt=baseName;
+}
+function questionBankNo(q){
+  if(!q) return {label:"?", black:false};
+  if(q.isBlack){
+    const bi=blackEvents.indexOf(q);
+    return {label:bi>=0?("Ч"+(bi+1)):"Ч", black:true};
+  }
+  const i=questions.indexOf(q);
+  return {label:i>=0?String(i+1):"?", black:false};
+}
+function showDeckIds(){
+  const el=document.getElementById("deckIdsOverlay");
+  if(!el) return;
+  const nums=(availableQuestions||[]).map(questionBankNo);
+  el.innerHTML=
+    '<div class="deck-ids-label">Вопросы этой жизни (№ в банке, по ходам): '+nums.length+'</div>'+
+    '<div class="deck-ids-nums">'+nums.map(function(n){
+      return '<span class="n'+(n.black?" black":"")+'">'+escapeHtml(n.label)+'</span>';
+    }).join("")+"</div>";
+  el.classList.add("show");
+  el.setAttribute("aria-hidden","false");
+}
+function hideDeckIds(){
+  const el=document.getElementById("deckIdsOverlay");
+  if(!el) return;
+  el.classList.remove("show");
+  el.setAttribute("aria-hidden","true");
+  el.innerHTML="";
 }
 
 
@@ -805,6 +841,7 @@ function startGame(){
   if(availableQuestions.length>maxTurns) availableQuestions.length=maxTurns;
   totalQuestions=availableQuestions.length;currentQuestionIndex=0;
   updateStats();updateFamilyDisplay();updateProgress();
+  showDeckIds();
   document.getElementById("questionText").innerHTML="";
   document.getElementById("choicesBox").innerHTML="";
   document.getElementById("resultBox").style.display="none";
@@ -817,6 +854,7 @@ function startGame(){
 }
 function beginLife(){
   // читаем режимы в момент старта жизни (не при загрузке страницы)
+  hideDeckIds();
   player.iron=!!(document.getElementById("ironMode")&&document.getElementById("ironMode").checked);
   player.skipHistory=!!(document.getElementById("skipHistory")&&document.getElementById("skipHistory").checked);
   if(player.iron){
