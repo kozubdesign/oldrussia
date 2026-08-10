@@ -163,7 +163,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 <aside class="plaques-rail" id="plaquesRail" aria-label="Перки"></aside>
 </div>
 
-<script src="questions.js?v=20260810f"></script>
+<script src="questions.js?v=20260810l"></script>
 <script>
 const names=["Богдан","Добрыня","Всеволод","Ярополк","Святослав","Владимир","Мстислав","Ростислав","Изяслав","Глеб","Борис","Юрий","Андрей","Микула","Ратибор","Жирослав","Путята","Творимир","Станимир","Бронислав","Вячеслав","Олег","Игорь","Роман","Василий","Пётр","Иван","Максим","Кирилл","Алексей","Дмитрий","Павел","Фома","Лука","Клим","Лазарь","Савва","Тихон","Фрол","Евстафий","Архип","Гордей","Евсей","Захар","Игнат","Кондрат","Макар","Назар","Прохор","Савелий"];
 const nicknames=["Косой","Рябой","Молчун","Бешеный","Храбрый","Меньшой","Большой","Хитрый","Рыжий","Чернявый","Белый","Костлявый","Шило","Тяжелый","Шустрый","Угрюмый","Веселый","Зубатый","Губатый","Костень","Береза","Дуб","Медведь","Волк","Лисица","Кот","Бык","Петух","Зяблик","Крепыш","Глухой","Немой","Слепой","Хромой","Ломаный","Дикий","Удод","Сорока","Филин","Княжич","Скоморох","Пыжик","Ерш","Опаленный","Гроза","Буян","Смелый","Тихий","Борзый","Удалой"];
@@ -496,8 +496,9 @@ function addPlaque(def){
     player.plaques.splice(weakIdx,1);
   }
   player.plaques.push(p);
-  // Сразу применить за текущий ход (плашки — мягкий урон чести, не валят в минус)
-  player.hp+=p.hp;player.silver+=p.s;
+  // Сразу применить за текущий ход (плашки — мягкий урон: не валят в могилу и не в минус чести)
+  applyHpDelta(p.hp, true);
+  applySilverDelta(p.s, true);
   applyGloryDelta(p.g, false);
   clampStats();
   return p;
@@ -505,8 +506,8 @@ function addPlaque(def){
 function tickPlaques(){
   if(!player.plaques||!player.plaques.length) return;
   player.plaques.forEach(function(p){
-    player.hp+=p.hp|0;
-    player.silver+=p.s|0;
+    applyHpDelta(p.hp|0, true);
+    applySilverDelta(p.s|0, true);
     applyGloryDelta(p.g|0, false);
   });
   clampStats();
@@ -718,24 +719,24 @@ function applyBadLuck(tags){
       return {dh:0,ds:0,dg:dg,note:"Молва разнесла поступок шире, чем ты думал, и честь упала сильнее обычного."};
     }else if(roll<0.8){
       const dg=applyGloryDelta(-8, true);
-      player.hp-=3;
-      return {dh:-3,ds:0,dg:dg,note:"На сходе это дело припомнили вслух: стыд ударил сильнее, чем ты ждал."};
+      const dh=applyHpDelta(-3, false);
+      return {dh:dh,ds:0,dg:dg,note:"На сходе это дело припомнили вслух: стыд ударил сильнее, чем ты ждал."};
     }else{
       const dg=applyGloryDelta(-3, true);
       const took=Math.min(4,player.silver);
-      player.silver=Math.max(0,player.silver-4);
+      applySilverDelta(-4, false);
       return {dh:0,ds:-took,dg:dg,note:"Чтобы замять историю, пришлось откупаться серебром — иначе хула шла бы ещё дальше."};
     }
   }
-  // greedy/coward: хуже по кошельку/силам, без публичного стыда
+  // greedy/coward: хуже по кошельку/силам, без публичного стыда и без смерти от мелочи
   const roll=Math.random();
   if(roll<0.55){
-    player.hp-=2;
-    return {dh:-2,ds:0,dg:0,note:"Вышло хуже, чем казалось: силы сели сильнее обычного."};
+    const dh=applyHpDelta(-2, true);
+    return {dh:dh,ds:0,dg:0,note:"Вышло хуже, чем казалось: силы сели сильнее обычного."};
   }
   const took=Math.min(3,player.silver);
-  player.silver=Math.max(0,player.silver-3);
-  return {dh:0,ds:-took,dg:0,note:"Промах обошёлся дороже: серебро утекло впустую."};
+  const ds=applySilverDelta(-3, true);
+  return {dh:0,ds:ds,dg:0,note:"Промах обошёлся дороже: серебро утекло впустую."};
 }
 function updateProgress(){
   document.getElementById("progressCounter").textContent=Math.min(currentQuestionIndex+1,totalQuestions)+"/"+totalQuestions;
@@ -796,7 +797,7 @@ function startGame(){
   // Партия: 24 обычных + 1 чёрное = 25 ходов (не длиннее лет до 1389)
   const maxTurns=Math.max(1,1389-currentYear+1);
   const lifeLen=Math.min(24,questions.length,Math.max(1,maxTurns-1));
-  availableQuestions=shuffleArray(questions).slice(0,lifeLen);
+  availableQuestions=pickLifeQuestions(questions, lifeLen);
   // одно чёрное событие в середине жизни
   const black=blackEvents[Math.floor(Math.random()*blackEvents.length)];
   const insertAt=Math.floor(availableQuestions.length*0.35)+Math.floor(Math.random()*Math.max(1,Math.floor(availableQuestions.length*0.25)));
@@ -880,6 +881,32 @@ function shuffleArray(arr){
     const t=a[i];a[i]=a[j];a[j]=t;
   }
   return a;
+}
+/** Викторины с закреплённым верным ответом — не больше пары за жизнь */
+function isKnowledgeQuiz(q){
+  if(!q||q.isBlack) return false;
+  if(q.quiz) return true;
+  return (q.opts||[]).some(function(o){ return o&&o.pinned; });
+}
+function pickLifeQuestions(pool, lifeLen){
+  const maxQuiz=2;
+  const shuffled=shuffleArray(pool);
+  const quizzes=[];
+  const story=[];
+  shuffled.forEach(function(q){
+    if(isKnowledgeQuiz(q)) quizzes.push(q);
+    else story.push(q);
+  });
+  const takeQuiz=quizzes.slice(0, Math.min(maxQuiz, lifeLen, quizzes.length));
+  const need=Math.max(0, lifeLen-takeQuiz.length);
+  const takeStory=story.slice(0, Math.min(need, story.length));
+  // если сюжетных мало — добираем викторинами
+  let deck=takeQuiz.concat(takeStory);
+  if(deck.length<lifeLen){
+    const rest=quizzes.slice(takeQuiz.length);
+    deck=deck.concat(rest.slice(0, lifeLen-deck.length));
+  }
+  return shuffleArray(deck).slice(0, lifeLen);
 }
 function moscowPrinceForYear(y){
   // Московский стол (игра ведётся «от Москвы»)
@@ -1081,6 +1108,41 @@ function clampStats(){
   player.silver=Math.max(0,player.silver);
   // честь ниже 0 — только после тяжёлого проступка; мелочь режется в applyGloryDelta
 }
+/** Мелочь (обида, отказ, глупость): не валит в могилу и не в изгои */
+function isSoftHarm(opt,q){
+  if(!opt) return true;
+  if(opt.hardGlory||opt.extreme==="villain") return false;
+  if(opt.softGlory) return true;
+  if(isMedicalQuestion(q)) return true;
+  const tags=opt.tags||[];
+  if(tags.some(function(t){ return t==="nehoroshiy"||t==="zhuk"||t==="nasilnik"; })) return false;
+  const dh=opt.hp|0;
+  if(dh<=-12) return false; // тяжёлая рана/мор — может убить
+  const impact=Math.abs(dh)+Math.abs(opt.s|0)+Math.abs(opt.g|0);
+  if(impact<=14) return true;
+  return false;
+}
+function applyHpDelta(dh, soft){
+  dh=dh|0;
+  if(!dh) return 0;
+  if(dh>0){ player.hp+=dh; return dh; }
+  if(!soft){ player.hp+=dh; return dh; }
+  const before=player.hp|0;
+  player.hp=Math.max(1, before+dh);
+  // мелочь «добила» бы — остаёшься жив, но почесть на нуле
+  if(before+dh<=0) player.glory=0;
+  return player.hp-before;
+}
+function applySilverDelta(ds, soft){
+  ds=ds|0;
+  if(!ds) return 0;
+  if(ds>0){ player.silver+=ds; return ds; }
+  if(!soft){ player.silver+=ds; return ds; }
+  const before=player.silver|0;
+  player.silver=Math.max(1, before+ds);
+  if(before+ds<=0) player.glory=Math.min(player.glory|0, 0);
+  return player.silver-before;
+}
 /** Тяжёлая потеря чести: обман, убийство, увечье, позор — может увести ниже 0 и кончить игру */
 function isHardGloryLoss(opt, amount){
   const dg=amount|0;
@@ -1151,15 +1213,19 @@ function makeChoice(idx){
   window._currentOpts[idx]=opt;
   const q=availableQuestions[currentQuestionIndex];
   const oH=player.hp,oS=player.silver,oG=player.glory;
-  player.hp+=opt.hp;player.silver+=opt.s;
+  const soft=isSoftHarm(opt,q);
+  applyHpDelta(opt.hp, soft);
+  applySilverDelta(opt.s, soft);
   const hardG=isHardGloryLoss(opt, opt.g);
   const appliedOptG=applyGloryDelta(opt.g, hardG);
   clampStats();
 
-  // Подлость: шанс 15–30% «сошло с рук» (прибыль, честь не падает)
+  // Подлость: шанс 15–30% «сошло с рук» — не к лечению и не к публичным делам
   let bad=null;
   const tags=opt.tags||[];
-  bad=applyDirtyGetaway(opt,tags,appliedOptG);
+  if(!isMedicalQuestion(q)){
+    bad=applyDirtyGetaway(opt,tags,appliedOptG);
+  }
   if(!bad){
     bad=applyBadLuck(tags);
     if(player.iron && !bad && tags.some(t=>badTags.has(t)) && Math.random()<0.35){
