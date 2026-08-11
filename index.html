@@ -119,7 +119,7 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .pitch-text{margin:0;font-size:19px;line-height:1.4;text-align:center;color:#c4a878;font-style:italic;flex-shrink:0;text-shadow:0 1px 2px rgba(0,0,0,.45)}
 .boot-load{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:8px 12px;flex:1 1 auto;min-height:0;width:100%}
 .boot-load.show{display:flex}
-.boot-title{margin:0;display:flex;flex-direction:column;align-items:center;gap:0;font-family:"Ruslan Display","Kurale","PT Serif",serif;font-size:69px;font-weight:400;line-height:0.92;color:#e8c878;letter-spacing:.03em;text-align:center;text-shadow:0 2px 6px rgba(0,0,0,.65),0 0 26px rgba(255,176,60,.25)}
+.boot-title{margin:-25px 0 0;display:flex;flex-direction:column;align-items:center;gap:0;font-family:"Ruslan Display","Kurale","PT Serif",serif;font-size:69px;font-weight:400;line-height:0.92;color:#e8c878;letter-spacing:.03em;text-align:center;text-shadow:0 2px 6px rgba(0,0,0,.65),0 0 26px rgba(255,176,60,.25)}
 .boot-title-line{display:block;line-height:0.9}
 .boot-title-line+.boot-title-line{margin-top:-0.04em}
 .boot-meter{display:flex;flex-direction:column;align-items:center;gap:8px;width:min(620px,88%)}
@@ -309,7 +309,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 .choices.ending-actions .choice-btn:disabled{opacity:.55;cursor:default;transform:none}
 .chronicle-reject-note{margin:0;padding:10px 12px;width:100%;font-size:26px;font-weight:700;line-height:1.2;color:#e87868;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 .stanislav-fate{font-size:22px;line-height:1.45;color:#f0e0c8;margin:12px 0 8px}
-.end-block .stanislav-reject{margin-top:16px;font-size:22px}
+.stanislav-reject{margin:20px 0 8px;padding:10px 12px;width:100%;font-size:32px;font-weight:700;line-height:1.15;color:#e87868;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 </style>
 </head>
 <body>
@@ -516,22 +516,28 @@ const HISTORY_MAX=50;
 const LAST_NAME_KEY="oldrussia_last_name";
 const CHRONICLE_REJECT_NOTE="Ты не достоин летописей.";
 const STANISLAV_FATES=[
-  "Тебя нарекли Станиславом — имя слишком громкое для грудного младенца. На третьей неделе ты стих; летопись помнит лишь короткий век и холодную постель.",
-  "Станиславом крестили в купели — но судьба не терпит гордых имён. Ещё до первого сита ты простудился; к полудню плач утих, к вечеру матери осталась только пелёнка.",
-  "Имя Станислав сказали свече — огонь не догорел. Жизнь твоя была короче одной былины: три дня плача, потом тишина в избе.",
-  "Бабка шепнула: «Станислав — княжеское имя смерду не к лицу». Молва не успела разойтись — ты уже лежал в ладанке, не дожив до крестин.",
-  "Тебя крестили Станиславом — и небо не приняло. На восьмой день пришла лихая горячка; к утру имя осталось только на деревянной доске у ворот.",
-  "Отец гордо назвал сына Станиславом. Соседи качали головами. Младенец не прожил и двух лун — судьба забрала громкое имя обратно в землю.",
-  "Станислав — имя для боярина, а не для пелёнок. Ты не успел познать ни хлеба, ни схода: угас на руках у матери, пока печь ещё не остыла после родов.",
-  "Кличали Станислава — и волость перекрестилась. Жизнь оборвалась, как нитка: ни года, ни слова, только короткий плач и могилка у плетня.",
-  "Имя Станислав записали в памятную книгу прихода — и сразу вычеркнули. Не дожил до первой зимы: мороз пришёл, а ты уже лёг под снег у церкви.",
-  "Нарекли Станиславом — будто князь родился в смердовой избе. Небеса посмеялись: через полторы недели ты ушёл, не оставив ни славы, ни следа."
+  "Жил себе тихо: ни походов, ни суда, ни подвигов. Дошёл почти до отрочества — и в лесу его задрал медведь. Коньца не успел крикнуть.",
+  "Годы шли без событий: сеял, ел, спал. Потом наелся сырой репы из чужого огорода — живот скрутило, и больше Станислав не встал.",
+  "Жизнь была пустая, как пустой двор. В баню залез жарко, уснул на полке — угорел. Нашли его уже холодным у каменки.",
+  "Долго жил без славы и без срама. Залез на высокую ель за гнездом — сорвался и сломал шею. Сход только качал головами.",
+  "Ничего примечательного за годы не случилось. На ярмарке выпил лишнего, полез купаться — утонул пьяный в тихой заводь.",
+  "Прожил скучно и мирно: ни князя, ни Орды. Потом полез в чужой улей за мёдом — пчёлы замучили насмерть. Сладкая кончина.",
+  "Без событий, без летописи. В морозный день решил «подышать» у колодца — поскользнулся, упал вниз. Вытащили уже не дышащим.",
+  "Годы тянулись ровно, как борозда. Пошёл в поле один — попал под грозу, молния ударила в косу. Станислав сгорел вместе с травой.",
+  "Жил без подвигов и без греха громкого. Потом спорил с братом из-за куска хлеба — тот толкнул его на вилы. Случайная, но верная смерть.",
+  "Ни сева, ни схода не запомнились. В полночь полез в чужой сарай за овсом — хозяин принял за вора и ударил топорищем. Утро не наступило."
 ];
 function isStanislavName(name){
   return String(name||"").trim().toLowerCase()==="станислав";
 }
 function pickStanislavFate(){
   return STANISLAV_FATES[Math.floor(Math.random()*STANISLAV_FATES.length)];
+}
+function rollStanislavAge(){
+  return 10+Math.floor(Math.random()*6); // 10..15
+}
+function stanislavRejectNote(){
+  return "Ты не достоин летописей, "+(player.name||"Станислав");
 }
 function isLegendStartName(name){
   const n=String(name||"").trim().toLowerCase();
@@ -1119,7 +1125,7 @@ function showIntroAfterName(){
 }
 function beginStanislavEnd(){
   hideNameGate();
-  player.age=0;
+  player.age=rollStanislavAge();
   player.hp=0;
   player.silver=0;
   player.glory=0;
@@ -2850,7 +2856,7 @@ function endGame(){
     img.src=encodeURI("img/"+baseName+".jpg");
     img.alt=baseName;
   }
-  const famLine=player.stanislavFate?'<p>Мать положила цветок на могилку у плетня — и имя забыли через год.</p>':'<p>'+getFamilyStory()+'</p>';
+  const famLine=player.stanislavFate?'':'<p>'+getFamilyStory()+'</p>';
   const ironNote=!player.stanislavFate&&player.iron?'<p class="end-iron">Лютый век — слабее старт, подлость бьёт чаще</p>':'';
   const score=player.hp+player.silver+player.glory;
   const isStanislav=!!player.stanislavFate;
@@ -2860,7 +2866,7 @@ function endGame(){
       +nickLine
       +'<p class="stanislav-fate">'+escapeHtml(destiny)+'</p>'
       +famLine
-      +'<p class="chronicle-reject-note stanislav-reject">'+escapeHtml(CHRONICLE_REJECT_NOTE)+'</p>'
+      +'<p class="stanislav-reject">'+escapeHtml(stanislavRejectNote())+'</p>'
       +'</div></div>';
   }else{
     endHtml='<div class="end-block"><div class="end-summary" id="endSummary">'+nickLine+ironNote+'<p>'+destiny+'</p>'+famLine+'<hr style="border:1px solid #6a5030;margin:8px auto;width:80%;"><p>Итоговые показатели:<br>❤️ <b>'+player.hp+'</b> &nbsp;|&nbsp; 🪙 <b>'+player.silver+'</b> &nbsp;|&nbsp; 🏅 <b>'+player.glory+'</b> · '+getRank(player.glory)+'<br><span class="end-score">Сумма для летописи: <b>'+score+'</b></span></p></div><div id="chronicleSlot"></div></div>';
