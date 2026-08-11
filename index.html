@@ -7,9 +7,10 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kurale&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 *{box-sizing:border-box}
-:root{--play-ref-w:871;--play-ref-h:895;--play-scale:min(1,calc((100dvh - 24px) / 895),calc((100vw - 24px) / 871))}
-body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 100%,rgba(255,130,45,.2) 0%,transparent 58%),radial-gradient(ellipse 35% 28% at 12% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse 35% 28% at 88% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse at 50% 15%,#1a1208 0%,#0a0604 72%);color:#e8d4b0;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:center;height:100vh;height:100dvh;margin:0;padding:12px 10px;overflow:hidden}
-.play-layout{position:relative;width:871px;height:895px;transform:scale(var(--play-scale));transform-origin:center center;filter:drop-shadow(0 22px 48px rgba(0,0,0,.75))}
+:root{--play-ref-w:871;--play-ref-h:895;--play-scale:1}
+body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 100%,rgba(255,130,45,.2) 0%,transparent 58%),radial-gradient(ellipse 35% 28% at 12% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse 35% 28% at 88% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse at 50% 15%,#1a1208 0%,#0a0604 72%);color:#e8d4b0;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:center;height:100vh;height:100dvh;margin:0;padding:0;overflow:hidden}
+.play-fit{display:flex;align-items:flex-start;justify-content:center;width:calc(871px * var(--play-scale));height:calc(895px * var(--play-scale));max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow:hidden;flex-shrink:0;margin:auto}
+.play-layout{position:relative;width:871px;height:895px;transform:scale(var(--play-scale));transform-origin:top left;filter:drop-shadow(0 22px 48px rgba(0,0,0,.75))}
 .game-container{background:linear-gradient(180deg,rgba(255,180,90,.05) 0%,transparent 28%),repeating-linear-gradient(92deg,rgba(0,0,0,.04) 0,rgba(0,0,0,.04) 2px,transparent 2px,transparent 9px),linear-gradient(168deg,#3a2818 0%,#2a1c10 42%,#1a1008 100%);border:12px solid #120a06;outline:2px solid #7a6038;border-radius:9px;width:100%;height:100%;overflow:hidden;padding:15px 32px 30px;box-shadow:inset 0 0 90px rgba(255,150,60,.07),inset 0 0 140px rgba(0,0,0,.55),0 0 50px rgba(255,120,40,.12);position:relative;display:flex;flex-direction:column;z-index:1}
 .plaques-rail{position:absolute;left:calc(100% + 12px);top:0;bottom:0;width:242px;display:flex;flex-direction:column;gap:8px;overflow-x:hidden;overflow-y:auto;padding:2px 2px 10px;scrollbar-width:thin;z-index:2;pointer-events:auto}
 .plaques-rail::-webkit-scrollbar{width:4px}
@@ -44,16 +45,17 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-container::before{content:"";position:absolute;top:9px;left:9px;right:9px;bottom:9px;border:none;pointer-events:none;border-radius:4px;z-index:0;box-shadow:inset 0 0 30px rgba(0,0,0,.35)}
 .game-container::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:7px;background:linear-gradient(135deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(225deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(315deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(45deg,rgba(184,148,90,.35) 0,transparent 17px);z-index:0}
 .game-main{flex:1 1 auto;min-height:0;overflow:hidden;position:relative;z-index:1;display:flex;flex-direction:column}
-.game-footer{flex:0 0 auto;height:252px;max-height:252px;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;position:relative;z-index:1;padding-top:3px;padding-bottom:6px;box-sizing:border-box;overflow:hidden}
-.game-container.playing .game-main{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column}
-.game-container.playing .name-line{margin:24px 0 4px;flex:0 0 auto}
-.game-container.playing .q-visual{flex:1 1 auto;height:auto;min-height:min(180px,22vh);max-height:min(402px,43.7dvh)}
-.game-container.playing .q-visual.splash{flex:1 1 auto;height:auto;min-height:min(180px,22vh);max-height:min(402px,43.7dvh)}
-.game-container.playing .prompt-area{flex:0 0 auto;min-height:0;padding:4px 0 0;gap:0}
-.game-container.playing .question-box{flex:0 0 auto;max-height:4.2em;overflow:hidden}
-.game-container.playing .game-footer{flex:0 0 auto;height:auto;min-height:196px;max-height:252px}
-.game-container.playing .choices{flex:0 0 auto;justify-content:flex-end}
-.game-container.playing button.choice-btn{padding:9px 14px;font-size:19px;line-height:1.2;flex-shrink:0}
+.game-footer{flex:0 0 auto;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;position:relative;z-index:1;padding-top:3px;padding-bottom:6px;box-sizing:border-box}
+.game-container.playing .game-main{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.game-container.playing .name-line{margin:20px 0 2px;flex:0 0 auto}
+.game-container.playing .q-visual{flex:1 1 0;min-height:72px;height:0;max-height:none}
+.game-container.playing .q-visual.splash{flex:1 1 0;min-height:72px;height:0;max-height:none}
+.game-container.playing .prompt-area{flex:0 0 auto;min-height:0;padding:2px 0 0;gap:0}
+.game-container.playing .question-box{flex:0 0 auto;max-height:5.6em;overflow:hidden}
+.game-container.playing .game-footer{flex:0 0 auto;height:auto;min-height:0;padding-top:4px}
+.game-container.playing .choices{flex:0 0 auto;gap:5px}
+.game-container.playing button.choice-btn{padding:8px 12px;font-size:18px;line-height:1.2;flex-shrink:0;white-space:normal}
+.game-container:not(.playing):not(.ending) .game-footer{height:auto;min-height:0;padding-top:12px}
 .game-container.playing .game-footer{justify-content:flex-end}
 .game-container.playing .game-footer .next-btn{margin-top:0}
 .game-container.playing.showing-result .game-footer{height:auto;min-height:0;justify-content:flex-end;padding-top:8px}
@@ -140,11 +142,21 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-container:not(.playing):not(.ending) .bio-text{font-size:22px;line-height:1.4;flex:0 1 auto;overflow:hidden}
 .game-container:not(.playing):not(.ending) .pitch-text{font-size:21px;line-height:1.4}
 .game-container:not(.playing):not(.ending) .mode-bar{margin-top:4px;font-size:22px;gap:14px 34px}
-.game-container.ending .question-box{flex:0 1 auto;overflow:hidden}
-.game-container.ending .end-block{max-height:100%;overflow:hidden;display:flex;flex-direction:column;min-height:0}
-.game-container.ending .end-block .chronicle-wrap{flex:1 1 auto;min-height:120px;max-height:min(340px,44vh)}
-.game-container.ending.chronicle-open .q-visual.end{max-height:min(180px,22vh);min-height:64px}
-.game-container.ending.chronicle-open .end-block{overflow:hidden}
+.game-container.ending .question-box{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.game-container.ending .end-block{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.game-container.ending .end-summary{flex:0 0 auto;overflow:hidden;text-align:center}
+.game-container.ending #chronicleSlot{flex:0 0 auto;min-height:0}
+.game-container.ending .end-block .chronicle-wrap{flex:1 1 auto;min-height:120px;max-height:min(340px,44vh);display:flex;flex-direction:column;overflow:hidden;margin:8px 0 0}
+.game-container.ending.chronicle-open .q-visual.end{display:none!important}
+.game-container.ending.chronicle-open .prompt-area{flex:1 1 auto;min-height:0;padding:0;overflow:hidden}
+.game-container.ending.chronicle-open .question-box{flex:1 1 auto;min-height:0}
+.game-container.ending.chronicle-open .end-block{flex:1 1 auto;min-height:0}
+.game-container.ending.chronicle-open .end-summary{display:none!important}
+.game-container.ending.chronicle-open #chronicleSlot{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.game-container.ending.chronicle-open .end-block .chronicle-wrap{flex:1 1 auto;min-height:0;max-height:none;margin:0}
+.game-container.ending.chronicle-open .chronicle-list{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:thin}
+.game-container.ending.chronicle-open .chronicle-list::-webkit-scrollbar{width:7px}
+.game-container.ending.chronicle-open .chronicle-list::-webkit-scrollbar-thumb{background:#6a5030;border-radius:3px}
 .question-box{font-size:21px;line-height:1.4;margin:0;min-height:0;max-height:100%;width:100%;color:#f0e0c8;text-align:center;flex:0 1 auto;overflow:hidden;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 .question-box:empty{display:none}
 .choices{display:flex;flex-direction:column;align-items:stretch;gap:7px;flex-shrink:0;width:100%}
@@ -173,10 +185,9 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 .end-block p{margin:7px 0;font-size:20px;line-height:1.4}
 .end-block .end-iron{font-size:16px;color:#e87868;margin:4px 0}
 .end-block .end-score{font-size:18px;color:#c4a878}
-.chronicle-wrap{margin:8px 0 0;text-align:left;max-height:min(320px,42vh);overflow-y:auto;border:1px solid #6a5030;border-radius:7px;background:rgba(20,12,6,.78);padding:8px 10px;scrollbar-width:thin;box-shadow:inset 0 0 20px rgba(0,0,0,.35)}
-.chronicle-wrap::-webkit-scrollbar{width:7px}
-.chronicle-wrap::-webkit-scrollbar-thumb{background:#6a5030;border-radius:3px}
-.chronicle-title{text-align:center;font-size:19px;font-weight:700;margin:0 0 8px;color:#e8c878}
+.chronicle-wrap{margin:8px 0 0;text-align:left;border:1px solid #6a5030;border-radius:7px;background:rgba(20,12,6,.78);padding:8px 10px;box-shadow:inset 0 0 20px rgba(0,0,0,.35)}
+.chronicle-title{text-align:center;font-size:19px;font-weight:700;margin:0 0 8px;color:#e8c878;flex:0 0 auto;position:sticky;top:0;z-index:1;background:rgba(20,12,6,.95);padding-bottom:6px}
+.chronicle-list{overflow:visible}
 .chronicle-row{font-size:15px;line-height:1.45;padding:5px 4px;border-radius:3px;color:#e8d4b0;font-variant-numeric:tabular-nums}
 .chronicle-row+.chronicle-row{border-top:1px solid rgba(106,80,48,.35)}
 .chronicle-place{font-weight:700;color:#c4a878;margin-right:2px}
@@ -193,7 +204,8 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 </style>
 </head>
 <body>
-<div class="play-layout">
+<div class="play-fit" id="playFit">
+<div class="play-layout" id="playLayout">
 <div class="game-container" id="gameScreen">
   <div class="life-rail" id="lifeRail" aria-hidden="true">
     <div class="year-header" id="yearHeader">Лето <span id="year">1354</span> — <span id="yearEvent">…</span></div>
@@ -257,6 +269,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
   </div>
 </div>
 <aside class="plaques-rail" id="plaquesRail" aria-label="Перки"></aside>
+</div>
 </div>
 
 <script src="questions.js?v=20260811a"></script>
@@ -2195,7 +2208,7 @@ function renderChronicleList(list,meId){
   const title=firebaseConfigured()
     ?'Летопись игроков · общая · топ-'+HISTORY_MAX+' по сумме ❤️+🪙+🏅'
     :'Летопись игроков · топ-'+HISTORY_MAX+' по сумме ❤️+🪙+🏅';
-  return '<div class="chronicle-wrap" id="chronicleWrap"><div class="chronicle-title">'+title+'</div>'+rows+'</div>';
+  return '<div class="chronicle-wrap" id="chronicleWrap"><div class="chronicle-title">'+title+'</div><div class="chronicle-list">'+rows+'</div></div>';
 }
 function writeToHistory(){
   if(historyWritten||!gameOver) return;
@@ -2284,10 +2297,15 @@ function fillChronicleSlot(meId,promptSave,listOpt,rejected){
       if(!inList) note=chronicleRejectNoteHtml();
     }
     slot.innerHTML=renderChronicleList(list||[],meId)+note;
+    if(!promptSave){
+      const screen=document.getElementById("gameScreen");
+      if(screen) screen.classList.add("chronicle-open");
+    }
     const me=document.getElementById("chronicleMe");
     if(me){
       requestAnimationFrame(function(){
-        me.scrollIntoView({block:"center",behavior:"smooth"});
+        const listEl=document.querySelector(".chronicle-list");
+        if(listEl) listEl.scrollTop=Math.max(0,me.offsetTop-listEl.clientHeight/2);
       });
     }
   }
@@ -2353,13 +2371,23 @@ function endGame(){
   const ironNote=player.iron?'<p class="end-iron">Лютый век — слабее старт, подлость бьёт чаще</p>':'';
   const fateLine=fateStory?'<p>'+fateStory+'</p>':'';
   const score=player.hp+player.silver+player.glory;
-  document.getElementById("questionText").innerHTML='<div class="end-block">'+nickLine+ironNote+'<p>'+destiny+'</p>'+fateLine+famLine+'<hr style="border:1px solid #6a5030;margin:8px auto;width:80%;"><p>Итоговые показатели:<br>❤️ <b>'+player.hp+'</b> &nbsp;|&nbsp; 🪙 <b>'+player.silver+'</b> &nbsp;|&nbsp; 🏅 <b>'+player.glory+'</b> · '+getRank(player.glory)+'<br><span class="end-score">Сумма для летописи: <b>'+score+'</b></span></p><div id="chronicleSlot"></div></div>';
+  document.getElementById("questionText").innerHTML='<div class="end-block"><div class="end-summary" id="endSummary">'+nickLine+ironNote+'<p>'+destiny+'</p>'+fateLine+famLine+'<hr style="border:1px solid #6a5030;margin:8px auto;width:80%;"><p>Итоговые показатели:<br>❤️ <b>'+player.hp+'</b> &nbsp;|&nbsp; 🪙 <b>'+player.silver+'</b> &nbsp;|&nbsp; 🏅 <b>'+player.glory+'</b> · '+getRank(player.glory)+'<br><span class="end-score">Сумма для летописи: <b>'+score+'</b></span></p></div><div id="chronicleSlot"></div></div>';
   document.getElementById("questionText").style.display="";
   fillChronicleSlot(null,true);
   showEndActions(false);
   document.getElementById("resultBox").style.display="none";
   document.getElementById("nextBtn").style.display="none";
 }
+var PLAY_REF_W=871,PLAY_REF_H=895;
+function fitPlayLayout(){
+  var pad=24;
+  var s=Math.min(1,(window.innerWidth-pad)/PLAY_REF_W,(window.innerHeight-pad)/PLAY_REF_H);
+  if(!isFinite(s)||s<=0) s=1;
+  document.documentElement.style.setProperty("--play-scale",String(s));
+}
+window.addEventListener("resize",fitPlayLayout);
+window.addEventListener("orientationchange",fitPlayLayout);
+fitPlayLayout();
 startGame();
 </script>
 </body>
