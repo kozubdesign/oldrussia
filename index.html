@@ -10,7 +10,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kurale&family=Ruslan+Display&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 *{box-sizing:border-box}
-:root{--play-ref-w:871;--play-ref-h:895;--play-fit-w:1379;--play-scale:1;--q-img-w:800px;--q-img-h:446px;--q-img-ratio:642/358;--q-img-end-h:330px;--q-img-end-ratio:800/330;--play-plaque-tick-h:24px;--play-year-h:24px;--play-header-gap:14px}
+:root{--play-ref-w:871;--play-ref-h:895;--play-fit-w:1379;--play-scale:1;--q-img-w:800px;--q-img-h:446px;--q-img-ratio:642/358;--q-img-end-h:330px;--q-img-end-ratio:800/330;--play-plaque-tick-h:24px;--play-year-h:24px;--play-header-gap:14px;--play-header-row-gap:8px;--play-name-gap:12px;--play-rank-gap:14px}
 body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 100%,rgba(255,130,45,.2) 0%,transparent 58%),radial-gradient(ellipse 35% 28% at 12% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse 35% 28% at 88% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse at 50% 15%,#1a1208 0%,#0a0604 72%);color:#e8d4b0;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:center;height:100vh;height:100dvh;margin:0;padding:0;overflow:hidden}
 .play-fit{display:flex;align-items:center;justify-content:center;width:calc(var(--play-fit-w) * 1px * var(--play-scale));height:calc(var(--play-ref-h) * 1px * var(--play-scale));max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow:visible;flex-shrink:0;margin:auto}
 .play-layout{position:relative;width:calc(var(--play-ref-w) * 1px);height:calc(var(--play-ref-h) * 1px);transform:scale(var(--play-scale));transform-origin:top left;filter:drop-shadow(0 22px 48px rgba(0,0,0,.75))}
@@ -50,10 +50,11 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-footer{flex:0 0 auto;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;position:relative;z-index:1;padding-top:3px;padding-bottom:6px;box-sizing:border-box}
 .game-container.playing{padding-top:6px;padding-bottom:24px}
 .game-container.playing .game-main{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
-.game-container.playing .play-header{flex:0 0 auto;display:flex;flex-direction:column;gap:3px;margin:0 0 var(--play-header-gap)}
+.game-container.playing .play-header{flex:0 0 auto;display:flex;flex-direction:column;gap:var(--play-header-row-gap);margin:0 0 var(--play-header-gap)}
 .game-container.playing .year-strip{margin:0}
 .game-container.playing .name-line{margin:0;padding:0;flex:0 0 auto}
 .game-container.playing .name-line .avatar{box-shadow:0 0 5px rgba(255,160,60,.22),0 0 0 1px rgba(200,150,80,.25)}
+.play-header{display:flex;flex-direction:column;gap:var(--play-header-row-gap);flex:0 0 auto}
 .game-container.playing .q-visual,.game-container.playing .q-visual.splash{flex:0 0 auto;width:min(var(--q-img-w),100%);max-width:100%;height:auto;aspect-ratio:var(--q-img-ratio);max-height:var(--q-img-h);margin:0 auto;align-self:center}
 .game-container.playing .prompt-area{flex:1 1 0;min-height:0;height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 0 6px;gap:0;overflow:hidden}
 .game-container.playing .question-box{flex:0 0 auto;max-height:100%;overflow:hidden;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:4px}
@@ -79,7 +80,7 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-container.ending .game-footer{height:auto;min-height:0;padding-top:10px}
 .year-strip{flex:0 0 auto;display:none;align-items:center;justify-content:space-between;gap:10px;height:var(--play-year-h);min-height:var(--play-year-h);margin:0 0 2px;z-index:2;pointer-events:none}
 .year-strip.show{display:flex}
-.year-header{flex:1 1 auto;min-width:0;display:flex;align-items:center;height:var(--play-year-h);padding:0 2px;font-size:13px;font-weight:400;color:#e8d4b0;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.75),0 0 8px rgba(0,0,0,.4)}
+.year-header{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:0;height:var(--play-year-h);padding:0 2px;font-size:13px;font-weight:400;color:#e8d4b0;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.75),0 0 8px rgba(0,0,0,.4);letter-spacing:.01em}
 .year-header span{color:#f0e0c8}
 .progress-counter{flex:0 0 auto;height:var(--play-year-h);display:flex;align-items:center;font-size:13px;color:#e8c878;background:rgba(14,8,4,.82);border:1px solid #7a6038;border-radius:5px;padding:0 10px;box-shadow:inset 0 0 8px rgba(0,0,0,.35);font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:nowrap}
 .year-event{display:none}
@@ -91,19 +92,19 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .plaque-tick-note .down{color:#e87868;font-weight:700}
 .plaque-tick-note .up{color:#98d878;font-weight:700}
 #questionTextBody{display:block;width:100%}
-.name-line .header-row{display:flex;align-items:center;gap:12px;justify-content:space-between;width:100%}
-.name-line .header-left{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto}
-.name-line .header-left{position:relative}
-.name-line .header-right{display:flex;align-items:center;gap:0;flex:0 0 auto;font-size:18px;font-weight:700;white-space:nowrap;margin-left:14px}
+.name-line .header-row{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:36px}
+.name-line .header-left{display:flex;align-items:center;gap:var(--play-name-gap);min-width:0;flex:1 1 auto;position:relative}
+.name-line .header-right{display:flex;align-items:center;gap:0;flex:0 0 auto;font-size:18px;font-weight:700;white-space:nowrap;margin-left:auto}
 .name-line .avatar{width:32px;height:32px;border-radius:50%;border:2px solid #d4a035;object-fit:cover;background:#1a1008;flex-shrink:0;box-sizing:border-box;transition:border-color .65s ease,box-shadow .65s ease;box-shadow:0 0 10px rgba(255,160,60,.35),0 0 0 1px rgba(200,150,80,.25)}
-.name-line .name-stats{font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;color:#f0e0c8}
+.name-line .name-stats{display:inline-flex;align-items:center;gap:var(--play-rank-gap);font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:100%;color:#f0e0c8}
+.name-line .name-age{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
 .name-line .perk{display:inline-block;background:rgba(20,12,6,.65);border:1px solid #7a6038;border-radius:4px;padding:1px 7px;margin:0 4px;font-size:14px;font-style:italic;font-weight:400;color:#e8c878}
 .name-line #perksContainer{position:absolute;top:-10px;left:-10px;z-index:4;display:flex;flex-direction:column;gap:4px;pointer-events:none}
 .name-line #perksContainer .perk{margin:0}
-.name-line .sep{color:#8a7048;font-weight:400;margin:0 2px}
-.rank-label{font-weight:400;font-size:17px;color:#c4a878;margin-left:4px}
+.name-line .sep{color:#8a7048;font-weight:400;margin:0 6px}
+.rank-label{flex:0 0 auto;font-weight:400;font-size:17px;color:#c4a878;margin:0}
 .job-label{font-weight:400;font-size:19px;color:#c4a878;margin-left:4px}
-.stat-num{font-variant-numeric:tabular-nums;min-width:26px;display:inline-block;text-align:center}
+.stat-num{font-variant-numeric:tabular-nums;min-width:32px;display:inline-block;text-align:left}
 .bio-text{padding:0;border:none;border-radius:0;background:transparent;font-size:22px;margin:0;line-height:1.4;text-align:center;color:#f0e0c8;flex:0 1 auto;min-height:0;overflow:hidden;text-shadow:0 1px 3px rgba(0,0,0,.5)}
 .stats{display:none}
 .stat-item span{color:#e87868;display:inline-block;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
@@ -122,9 +123,9 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .pitch-text{margin:0;font-size:19px;line-height:1.4;text-align:center;color:#c4a878;font-style:italic;flex-shrink:0;text-shadow:0 1px 2px rgba(0,0,0,.45)}
 .boot-load{display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:8px 12px;flex:1 1 auto;min-height:0;width:100%}
 .boot-load.show{display:flex}
-.boot-title{margin:-25px 0 0;display:flex;flex-direction:column;align-items:center;gap:0;font-family:"Ruslan Display","Kurale","PT Serif",serif;font-size:69px;font-weight:400;line-height:0.92;color:#e8c878;letter-spacing:.03em;text-align:center;text-shadow:0 2px 6px rgba(0,0,0,.65),0 0 26px rgba(255,176,60,.25)}
+.boot-title{margin:-25px 0 0;display:flex;flex-direction:column;align-items:center;gap:0;font-family:"Ruslan Display","Kurale","PT Serif",serif;font-size:79px;font-weight:400;line-height:0.92;color:#e8c878;letter-spacing:.03em;text-align:center;text-shadow:0 2px 6px rgba(0,0,0,.65),0 0 26px rgba(255,176,60,.25)}
 .boot-title-line{display:block;line-height:0.9}
-.boot-title-line+.boot-title-line{margin-top:-0.04em}
+.boot-title-line+.boot-title-line{margin-top:0.06em;font-size:50%;line-height:1}
 .boot-meter{display:flex;flex-direction:column;align-items:center;gap:8px;width:min(620px,88%)}
 .boot-bar{width:100%;height:16px;border-radius:4px;overflow:hidden}
 .boot-bar.pattern-bar-track{box-shadow:inset 0 0 10px rgba(0,0,0,.45),0 0 8px rgba(255,140,50,.08)}
@@ -187,9 +188,9 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .name-gate-gen-btn:active{transform:translateY(2px)}
 .name-gate-gen-btn:focus{outline:none}
 .name-gate-gen-btn:focus-visible{box-shadow:0 0 0 3px rgba(212,160,53,.35),inset 0 1px 0 rgba(200,255,180,.18),0 2px 8px rgba(0,0,0,.4)}
-.name-gate-input{width:min(360px,92%);padding:12px 16px;border-radius:8px;border:1px solid #7a6038;background:rgba(20,12,6,.85);color:#f0e0c8;font-family:"PT Serif","Times New Roman",serif;font-size:22px;text-align:center;outline:none;box-shadow:inset 0 0 16px rgba(0,0,0,.35)}
+.name-gate-input{width:min(360px,92%);padding:12px 16px;border-radius:8px;border:1px solid #7a6038;background:rgba(20,12,6,.85);color:#f0e0c8;font-family:"Ruslan Display","Kurale","PT Serif",serif;font-size:22px;text-align:center;outline:none;box-shadow:inset 0 0 16px rgba(0,0,0,.35)}
 .name-gate-input:focus{border-color:#d4a035;box-shadow:inset 0 0 16px rgba(0,0,0,.35),0 0 12px rgba(212,160,53,.25)}
-.name-gate-input::placeholder{color:#8a7048}
+.name-gate-input::placeholder{color:#8a7048;font-family:"Ruslan Display","Kurale","PT Serif",serif}
 .name-gate-hint{margin:0;min-height:1.3em;font-size:16px;color:#e87868}
 .name-gate-reveal{margin:0;font-size:20px;line-height:1.4;color:#c4a878;font-style:italic;text-shadow:0 1px 2px rgba(0,0,0,.45)}
 .game-container.booting .play-header,
@@ -323,7 +324,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
   <div class="game-main">
     <div class="play-header">
       <div class="year-strip" id="yearStrip" aria-hidden="true">
-        <div class="year-header" id="yearHeader">Лето <span id="year">1354</span> — <span id="yearEvent">…</span></div>
+        <div class="year-header" id="yearHeader">Лето&nbsp;<span id="year">1354</span>&nbsp;—&nbsp;<span id="yearEvent">…</span></div>
         <div class="progress-counter" id="progressCounter">0/0</div>
       </div>
       <div class="name-line" id="nameLine">
@@ -331,10 +332,10 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
           <div class="header-left">
             <img class="avatar" id="avatarImg" src="avatars/1.png" alt="" onerror="this.style.visibility='hidden'">
             <div class="name-stats">
-              <span id="bioName">-</span>, <span id="bioAge">-</span> лет
+              <span class="name-age"><span id="bioName">-</span>, <span id="bioAge">-</span> лет</span>
               <span class="rank-label" id="rankLabel">-</span>
-              <span id="perksContainer"></span>
             </div>
+            <span id="perksContainer"></span>
           </div>
           <div class="header-right" id="headerStats">
             ❤️ <span class="stat-num" id="hp">50</span>
@@ -386,7 +387,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 </div>
 </div>
 
-<script src="questions.js?v=20260811b"></script>
+<script src="questions.js?v=20260811d"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js?v=20260811b"></script>
@@ -546,6 +547,9 @@ function isLegendStartName(name){
   const n=String(name||"").trim().toLowerCase();
   return n==="борат"||n==="павел";
 }
+function isChronicleForbiddenName(name){
+  return String(name||"").trim().toLowerCase()==="борат";
+}
 function rollLegendStat(){
   return 100+Math.floor(Math.random()*51);
 }
@@ -555,7 +559,7 @@ function applyLegendStartStats(){
   player.glory=rollLegendStat();
 }
 const yearEvents={"1320": ["Новгородский поход на Торжок", "Усиление позиций Ивана Калиты", "Литовский набег на псковичей", "Каменное строительство в Ростове", "Борьба Дмитрия в Орде"], "1321": ["Закладка храма Спаса на Бору", "Конфликт Твери с Новгородом", "Княжеские поездки в Сарай", "Ревизия баскаков на Руси", "Набеги кочевников на юг"], "1322": ["Ярлык передан Дмитрию Тверскому", "Строительство новгородского Орешка", "Поддержка ордынских договорённостей Калитой", "Отражение литовских набегов", "Приток переселенцев в Москву"], "1323": ["Отеховский мирный договор", "Завершение строительства крепости Орешек", "Убийство Юрия Московского", "Арест Дмитрия Тверского ханом", "Переход руководства к Калите"], "1324": ["Поездка Калиты к хану", "Напряжение в Тверском княжестве", "Внутриполитическая борьба в Новгороде", "Литовская экспансия на запад", "Рост производства оружия"], "1325": ["Воцарение Ивана Калиты", "Москва — резиденция митрополита", "Казнь Дмитрия Тверского", "Замедление литовских набегов", "Оживление Волжской торговли"], "1326": ["Закладка московского Успенского собора", "Александру Тверскому дали ярлык", "Сотрудничество Калиты с Ордой", "Новые храмы Кремля", "Отражение литовского набега Псковом"], "1327": ["Антиордынское восстание в Твери", "Карательный поход Калиты", "Разорение Твери, бегство Александра", "Ярлык передан Ивану Калите", "Временный раздел великокняжеских земель"], "1328": ["Калита стал великим князем", "Требования выдачи Александра Псковом", "Угроза отлучения Пскова от церкви", "Наступление «великой тишины»", "Концентрация дани в Москве"], "1329": ["Бегство Александра Тверского в Литву", "Поездка Калиты в Сарай", "Освящение Успенского собора", "Новгород признал старшинство Москвы", "Усмирение удельных князей"], "1330": ["Возведение укреплений Московского Кремля", "Возвращение Александра в Тверь", "Въезд Калиты во Владимир", "Рост ремесленных слобод", "Династические браки московского дома"], "1331": ["Споры вокруг митрополии", "Суд князей в Сарае", "Присоединение волостей к Москве", "Осада пригородов Гедимином", "Ведение летописных сводов"], "1332": ["Отказ Новгорода платить дань", "Занятие Торжка и Белоозера", "Расширение влияния на севере", "Возобновление стройки в Твери", "Укрепление стен псковского Крома"], "1333": ["Мир Москвы с Новгородом", "Закладка Архангельского собора", "Бегство новгородской оппозиции", "Подтверждение привилегий Калиты", "Локальный голод на Руси"], "1334": ["Поездка Калиты в Орду", "Попытки восстановления Твери", "Отражение нападений Ливонии", "Централизация церковных доходов", "Развитие дорожной сети"], "1335": ["Рост напряжения вокруг Твери", "Постройка церкви Иоанна Лествичника", "Укрепление Костромы с Переяславлем", "Перемирие с Литовским княжеством", "Контроль сбора дани Калитой"], "1336": ["Паломничество Калиты в Сарай", "Споры с новгородским вече", "Основание новых монастырей", "Рост числа московских ремесленников", "Литовский набег на Смоленск"], "1337": ["Основание Троице-Сергиева монастыря", "Поездка Александра в Сарай", "Доносы Калиты на тверского князя", "Лавирование смоленских князей", "Закрепление статуса Москвы"], "1338": ["Неудачная литовская осада Смоленска", "Постройка Сергием деревянной Троицкой церкви", "Покупка части Ростовского княжества", "Торговые соглашения с Ордой", "Подготовка удара по Твери"], "1339": ["Казнь Александра Тверского", "Раздробление Тверского княжества", "Завершение строительства Архангельского собора", "Смерть Ивана I Калиты", "Воцарение Семёна Гордого"], "1340": ["Начало правления Семёна Гордого", "Получение ярлыка Семёном", "Поход русской рати на Смоленск", "Набег Ольгерда на Торжок", "Смерть хана Узбека, смуты"], "1341": ["Джанибек воцарился в Орде", "Переговоры Семёна с Новгородом", "Отражение татарских набегов", "Отстаивание княжеских прав Семёном", "Украшение Московского Кремля"], "1342": ["Поход Семёна на Торжок", "Подтверждение церковных привилегий", "Московское влияние на Белоозере", "Литовские походы на Псков", "Рост каменных построек"], "1343": ["Ливонская осада Пскова", "Помощь Семёна псковичам", "Княжеский съезд в Москве", "Укрепление денежного обращения", "Строительство новых храмов"], "1344": ["Мир Пскова с Ливонией", "Поездка Семёна в Сарай", "Совершенствование сбора пошлин", "Создание тверских летописей", "Укрепление авторитета Семёна"], "1345": ["Начало правления Ольгерда в Литве", "Поездка Семёна к хану", "Стычки на литовской границе", "Рост торговых пошлин Москвы", "Укрепление обороны южных рубежей"], "1346": ["Смена власти в Орде (хан Джанибек)", "Подтверждение великокняжеских прав Симеона", "Поход литовцев на Псков", "Укрепление позиций Москвы на Севере", "Развитие церковного строительства"], "1347": ["Отражение набегов кочевников", "Дипломатическая миссия Москвы в Орду", "Разграничение земель с Новгородом", "Укрепление союза с уделами", "Расширение московских ремесленных слобод"], "1348": ["Болотовский договор Пскова с Новгородом", "Потеря Новгородом части самостоятельности", "Нападение шведов на земли карел", "Усиление контроля Москвы над севером", "Строительство новых каменных церквей"], "1349": ["Династический союз Москвы и Твери", "Поездка Семёна Гордого в Сарай", "Отражение набегов литовских отрядов", "Рост влияния митрополичьей кафедры", "Развитие внутренней торговли"], "1350": ["Эпидемия чумы («Чёрная смерть») в Европе", "Проникновение эпидемии на Русь", "Строительство новых храмов-молебнов", "Дипломатические контакты с Ордой", "Стабилизация границ после моровой язвы"], "1351": ["Литовский поход Ольгерда на Ржев", "Ответный поход Семёна Гордого", "Возобновление укрепления Ржева", "Переговоры о мире с Литвой", "Укрепление московских гарнизонов"], "1352": ["Эпидемия чумы в Пскове и Новгороде", "Начало каменного строительства в Пскове", "Смерть псковского князя Ивана Александровича", "Осада Пскова литовскими войсками", "Дипломатическая поддержка Пскова Москвой"], "1353": ["Смерть князя Семёна Гордого от чумы", "Смерть сыновей Семёна от мора", "Смерть митрополита Феогноста", "Борьба за ярлык между Москвой и Суздалем", "Переход престола к Ивану II Красному"], "1354": ["Поездка Ивана II в Сарай за ярлыком", "Получение Иваном великого княжения", "Возведение Алексия в митрополиты", "Обострение борьбы за влияние в Новгороде", "Набеги литовцев на приграничные волости"], "1355": ["Усиление позиций Ивана II Красного", "Поездки митрополита Алексия в Орду", "Укрепление мира с Тверским княжеством", "Земельные приобретения московского дома", "Строительство новых монастырей"], "1356": ["Литовский захват Брянска Ольгердом", "Переход чернигово-северских земель под Литву", "Поездка Ивана II в Орду", "Внутренние усобицы в Рязанском княжестве", "Укрепление южных границ Московского княжества"], "1357": ["Поездка митрополита Алексия в Орду", "Чудесное исцеление Тайдулы митрополитом", "Убийство хана Джанибека, смуты в Орде", "Укрепление авторитета митрополичьей власти", "Дипломатические манёвры Москвы"], "1358": ["Набег литовских войск на южные земли", "Строительство Спасского монастыря в Москве", "Укрепление позиций митрополита Алексия", "Смерть хана Бердибека в Орде", "Ослабление центральной власти в Орде"], "1359": ["Смерть московского князя Ивана II Красного", "Начало правления Дмитрия Ивановича (Донского)", "Малолетство Дмитрия, усиление роли Алексия", "Переход ярлыка к суздальскому князю", "Начало «великой замятни» в Золотой Орде"], "1360": ["Переход великого владимирского ярлыка к Дмитрию Суздальскому", "Обострение борьбы за великокняжеский престол", "Московские бояре добиваются поддержки Орды", "Набеги нижегородцев и суздальцев", "Укрепление Москвы при поддержке митрополита"], "1361": ["Захват Владимиром московскими силами ярлыка", "Раздел ордынскими претендентами власти в Сарае", "Нападение татарских отрядов на Нижегородчину", "Дипломатические победы митрополита Алексия", "Рост влияния юного Дмитрия Московского"], "1362": ["Битва на Синих Водах (победа Ольгерда)", "Вхождение Юго-Западной Руси в состав Литвы", "Возвращение ярлыка Дмитрию Московскому", "Изгнание Дмитрия Суздальского из Владимира", "Объединение владимирского и московского престолов"], "1363": ["Поход москвичей на Суздаль и Нижний Новгород", "Окончательное закрепление великого княжения за Москвой", "Примирение Дмитрия Московского с Дмитрием Суздальским", "Литовские нападения на смоленские земли", "Строительство новых укреплений в городах"], "1364": ["Эпидемия чумы в ряде русских земель", "Поездка Дмитрия Московского в Орду", "Укрепление союза Москвы с Ростовом", "Набеги ушкуйников на волжские города", "Отражение литовских набегов на запад"], "1365": ["«Всехсвятский пожар» в Москве", "Начало обсуждения строительства каменного Кремля", "Сражение у Шишевского леса с рязанцами", "Пожар в Нижнем Новгороде", "Укрепление южных рубежей Рязанского княжества"], "1366": ["Нападение новгородских ушкуйников на Кострому", "Поход москвичей против новгородских ушкуйников", "Строительство новых оборонительных укреплений", "Обострение отношений с Тверским княжеством", "Дипломатические манёвры литовского князя Ольгерда"], "1367": ["Закладка белокаменного Московского Кремля", "Поход москвичей на Тверь", "Заключение мира с тверским князем", "Нападение литовцев на южные рубежи", "Отражение набегов объединённых сил"], "1368": ["Первый поход Ольгерда на Москву", "Осада белокаменного Кремля литовскими войсками", "Отступление Ольгерда без взятия Кремля", "Опустошение московских волостей литовцами", "Заключение временного перемирия с Литвой"], "1369": ["Союз Москвы с Тверью против Литвы", "Поход москвичей на владения Ольгерда", "Подготовка к новым столкновениям с Литвой", "Укрепление связей с северными землями", "Рост авторитета митрополита Алексия"], "1370": ["Второй поход Ольгерда на Москву", "Осада Волоколамска тверскими и литовскими войсками", "Переговоры Москвы с литовскими послами", "Поездка тверского князя Михаила в Орду за ярлыком", "Получение тверским князем ярлыка на великое княжение"], "1371": ["Отказ Дмитрия признать ярлык Твери", "Поездка Дмитрия Московского в Орду к хану", "Получение Дмитрием ярлыка обратно", "Конфликт с Олегом Рязанским", "Битва при Скорнищеве (победа москвичей над рязанцами)"], "1372": ["Поход Ольгерда на Москву в третий раз", "Стояние на реке Тьме под Любутском", "Заключение «вечного мира» с Литвой", "Признание Тверью старшинства Москвы", "Укрепление позиций Дмитрия Ивановича"], "1373": ["Набег ордынского мурзы Арапши на Рязань", "Поход московского войска к Оке", "Укрепление пограничной стражи на юге", "Стычки с литовскими отрядами на западе", "Строительство новых монастырей вокруг Москвы"], "1374": ["Съезд русских князей в Переяславле-Залесском", "Отказ Москвы платить дань Орде", "Избиение татарских купцов в Нижнем Новгороде", "Разрыв отношений с ханом Мамаем", "Поход тверского князя за ярлыком в Орду"], "1375": ["Общерусский поход на Тверское княжество", "Осада Твери соединёнными силами князей", "Подписание Тверского договора о подчинении Москве", "Окончательное признание старшинства Москвы над Тверью", "Укрепление антиордынской коалиции Северо-Востока"], "1376": ["Поход москвичей и суздальцев на Волжскую Булгарию", "Назначение московских таможенников в Булгаре", "Смерть митрополита Алексия Московского", "Укрепление позиций Дмитрия на Волге", "Стычки с отрядами Мамая на границах"], "1377": ["Битва на реке Пьяне (поражение от Арапши)", "Разорение Нижегородского и Рязанского княжеств татарами", "Внезапное нападение ордынцев на русские силы", "Усиление бдительности московских войск", "Сбор сил после поражения"], "1378": ["Битва на реке Воже (первая крупная победа над Ордой)", "Разгром ордынского войска Бегича москвичами", "Смерть литовского князя Ольгерда", "Начало междоусобиц в Литовском княжестве", "Подготовка Мамая к масштабному походу на Русь"], "1379": ["Поход москвичей на Брянск и Стародуб", "Переход князя Дмитрия Брянского на службу к Москве", "Нападение литовцев на московские границы", "Сбор сил общерусского ополчения", "Дипломатическая изоляция Мамая"], "1380": ["Куликовская битва (разгром Мамая)", "Объединение русских сил под Москвой", "Благословение Сергием Радонежским Дмитрия Донского", "Падение власти Мамая, воцарение Тохтамыша", "Начало восстановления после грандиозной битвы"], "1381": ["Восстановление ордынского единства при Тохтамыше", "Возвращение князя Дмитрия Тверского из Орды", "Подтверждение Тверью вассалитета от Москвы", "Поездка Дмитрия Донского в Орду с дарами", "Восстановление разрушенных войной городов"], "1382": ["Поход хана Тохтамыша на Москву", "Осада и взятие Москвы обманом", "Разорение города и окрестных земель ордынцами", "Восстановление выплаты дани Орде", "Временное ослабление позиций Москвы"], "1383": ["Получение тверским князем ярлыка на великое княжение", "Поездка князя Владимира Андреевича в Орду", "Восстановление разрушенного Кремля и Москвы", "Дипломатическая борьба за великокняжеские права", "Заключение союзов между русскими княжествами"], "1384": ["Строительство новых оборонительных линий на юге", "Переговоры Москвы с Литовским княжеством", "Укрепление волоцких и можайских рубежей", "Сбор средств на уплату ордынского выхода", "Развитие торговли с Новгородской землёй"], "1385": ["Кревская уния (союз Литвы и Польши)", "Нападение Олега Рязанского на Коломну", "Поход москвичей на Рязанское княжество", "Миротворческая миссия Сергия Радонежского в Рязани", "Заключение вечного мира с Рязанью"], "1386": ["Поход Дмитрия Донского на Новгород", "Осада Новгорода московским ополчением", "Выплата новгородцами огромной контрибуции («чёрный бор»)", "Укрепление позиций Москвы на Севере", "Заключение мира с Новгородской республикой"], "1387": ["Возвращение княжеских сыновей из ордынского заложничества", "Укрепление литовско-польского союза (Ягайло)", "Возобновление строительства каменных храмов", "Рост авторитета московского митрополита", "Стабилизация финансовой системы княжества"], "1388": ["Съезд русских князей в Москве", "Урегулирование споров о вотчинах и границах", "Подготовка к отражению угрозы со стороны Тамерлана", "Укрепление оборонительных сооружений Владимира", "Развитие летописного дела в Москве"], "1389": ["Смерть великого князя Дмитрия Донского", "Начало правления Василия I Дмитриевича", "Завещание Дмитрия о передаче великого княжения без Орды", "Поездка Василия I в Золотую Орду", "Утверждение позиций нового московского князя"]};
-let player={name:"",surname:"",nickname:"",starterRank:"",job:"",age:0,storyCore:"",hp:50,silver:20,glory:10,perkCounts:{},currentPerk:null,perkHistory:[],family:{wife:"цела",son:"цел",daughter:"цела",father:"цел"},chronicle:[],plaques:[],songsKnown:0,lastEvent:null,iron:false,stanislavFate:""};
+let player={name:"",surname:"",nickname:"",starterRank:"",job:"",age:0,storyCore:"",hp:50,silver:20,glory:10,perkCounts:{},currentPerk:null,perkHistory:[],family:{wife:"цела",son:"цел",daughter:"цела",father:"цел"},chronicle:[],plaques:[],songsKnown:0,lastEvent:null,iron:false,stanislavFate:"",hasSoap:false};
 
 function animateValue(el,start,end,duration){
   if(start===end){el.textContent=end;return}
@@ -1783,6 +1787,7 @@ function startGame(){
   player.songsKnown=0;
   player.lastEvent=null;
   player.stanislavFate="";
+  player.hasSoap=false;
   gameOver=false;choiceLocked=false;historyWritten=false;lastHistoryId=null;
   if(endGameTimer){clearTimeout(endGameTimer);endGameTimer=null;}
   currentYear=1320+Math.floor(Math.random()*45); // 1320..1364
@@ -2046,7 +2051,9 @@ function getQuestionOpts(q){
 }
 function optAvailable(o){
   // Варианты с minS/minHp всегда показываем; нехватка серебра/сил — при выборе (gateOpt)
-  return !!o;
+  if(!o) return false;
+  if(o.needSoap && !player.hasSoap) return false;
+  return true;
 }
 function gateOpt(opt){
   if(!opt) return opt;
@@ -2271,6 +2278,8 @@ function makeChoice(idx){
   const opt=gateOpt(resolveOpt(raw));
   window._currentOpts[idx]=opt;
   const q=availableQuestions[currentQuestionIndex];
+  if(opt.grantSoap) player.hasSoap=true;
+  if(opt.dropSoap) player.hasSoap=false;
   // «Особо подлые» ответы: должны быть выгодны по деньгам,
   // при этом честь сильно падает, а жизнь чуть проседает.
   // Требование пользователя: добавленная сумма золота > (потеря чести + потеря жизни).
@@ -2290,13 +2299,15 @@ function makeChoice(idx){
     if(g0<0) g0 = g0 - Math.max(8, Math.floor(Math.abs(g0)*0.35));
     else g0 = g0 - 14;
 
-    // Жизнь чуть режем (не превращаем в мгновенную смерть):
-    // ориентируемся на величину потери чести.
-    const honorLossAbs=Math.abs(Math.min(0,g0));
-    const addHpLoss = honorLossAbs>=40 ? 4 : (honorLossAbs>=22 ? 3 : 2);
-    if(hp0>=0) hp0 = -addHpLoss;
-    else hp0 = hp0 - addHpLoss;
+    // Жизнь чуть режем — кроме вопросов без телесного вреда (обычаи, этикет).
+    if(!(q&&q.noHpPenalty)){
+      const honorLossAbs=Math.abs(Math.min(0,g0));
+      const addHpLoss = honorLossAbs>=40 ? 4 : (honorLossAbs>=22 ? 3 : 2);
+      if(hp0>=0) hp0 = -addHpLoss;
+      else hp0 = hp0 - addHpLoss;
+    }
 
+    const honorLossAbs=Math.abs(Math.min(0,g0));
     const lifeLossAbs=Math.abs(Math.min(0,hp0));
 
     // Серебро (золото по смыслу) делаем выгодным:
@@ -2323,7 +2334,7 @@ function makeChoice(idx){
     bad=applyDirtyGetaway(opt,tags,appliedOptG);
   }
   if(!bad){
-    bad=applyBadLuck(opt,tags);
+    if(!(q&&q.noHpPenalty)) bad=applyBadLuck(opt,tags);
     if(player.iron && !bad && tags.some(t=>badTags.has(t)) && Math.random()<0.35){
       const ironHard=tags.some(t=>t==="nehoroshiy"||t==="zhuk"||t==="nasilnik");
       const dg=applyGloryDelta(-4, ironHard);
@@ -2713,7 +2724,7 @@ function renderChronicleList(list,meId){
   return '<div class="chronicle-wrap" id="chronicleWrap"><div class="chronicle-title">'+title+'</div><div class="chronicle-list">'+rows+'</div></div>';
 }
 function writeToHistory(){
-  if(historyWritten||!gameOver||chronicleAdmissionDenied) return;
+  if(historyWritten||!gameOver||chronicleAdmissionDenied||isChronicleForbiddenName(player.name)) return;
   const entry={
     id:"r"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),
     name:player.name,
@@ -2883,6 +2894,10 @@ function endGame(){
   if(isStanislav){
     chronicleAdmissionDenied=true;
     showReloadOnlyEndActions();
+  }else if(isChronicleForbiddenName(player.name)){
+    chronicleAdmissionDenied=true;
+    fillChronicleSlot(null,false);
+    showEndActions(false,CHRONICLE_REJECT_NOTE,true);
   }else{
     chronicleAdmissionDenied=false;
     showEndActions(true,"Проверяем летопись…");
