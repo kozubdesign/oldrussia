@@ -7,8 +7,9 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kurale&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 *{box-sizing:border-box}
+:root{--play-ref-w:871;--play-ref-h:895;--play-scale:min(1,calc((100dvh - 24px) / 895),calc((100vw - 24px) / 871))}
 body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 100%,rgba(255,130,45,.2) 0%,transparent 58%),radial-gradient(ellipse 35% 28% at 12% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse 35% 28% at 88% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse at 50% 15%,#1a1208 0%,#0a0604 72%);color:#e8d4b0;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:center;height:100vh;height:100dvh;margin:0;padding:12px 10px;overflow:hidden}
-.play-layout{position:relative;width:871px;max-width:min(871px,calc(100vw - 24px));height:min(895px,calc(100vh - 24px));height:min(895px,calc(100dvh - 24px));filter:drop-shadow(0 22px 48px rgba(0,0,0,.75))}
+.play-layout{position:relative;width:871px;height:895px;transform:scale(var(--play-scale));transform-origin:center center;filter:drop-shadow(0 22px 48px rgba(0,0,0,.75))}
 .game-container{background:linear-gradient(180deg,rgba(255,180,90,.05) 0%,transparent 28%),repeating-linear-gradient(92deg,rgba(0,0,0,.04) 0,rgba(0,0,0,.04) 2px,transparent 2px,transparent 9px),linear-gradient(168deg,#3a2818 0%,#2a1c10 42%,#1a1008 100%);border:12px solid #120a06;outline:2px solid #7a6038;border-radius:9px;width:100%;height:100%;overflow:hidden;padding:15px 32px 30px;box-shadow:inset 0 0 90px rgba(255,150,60,.07),inset 0 0 140px rgba(0,0,0,.55),0 0 50px rgba(255,120,40,.12);position:relative;display:flex;flex-direction:column;z-index:1}
 .plaques-rail{position:absolute;left:calc(100% + 12px);top:0;bottom:0;width:242px;display:flex;flex-direction:column;gap:8px;overflow-x:hidden;overflow-y:auto;padding:2px 2px 10px;scrollbar-width:thin;z-index:2;pointer-events:auto}
 .plaques-rail::-webkit-scrollbar{width:4px}
@@ -34,16 +35,25 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
   .plaques-rail{width:206px}
 }
 @media (max-width:850px){
-  body{overflow:auto;height:auto;min-height:100dvh;align-items:flex-start}
-  .play-layout{width:100%;max-width:100%;height:auto;max-height:none}
-  .game-container{height:min(895px,calc(100dvh - 24px))}
-  .plaques-rail{position:static;width:100%;max-height:145px;flex-direction:row;flex-wrap:wrap;margin-top:10px}
-  .plaque{flex:1 1 145px}
+  body{overflow:hidden;height:100dvh;align-items:center}
+  .plaques-rail{position:absolute;left:calc(100% + 12px);top:0;bottom:0;width:min(206px,calc(100vw - 100% - 36px));max-height:none;flex-direction:column;flex-wrap:nowrap;margin-top:0}
+}
+@media (max-width:1100px){
+  .plaques-rail{display:none}
 }
 .game-container::before{content:"";position:absolute;top:9px;left:9px;right:9px;bottom:9px;border:none;pointer-events:none;border-radius:4px;z-index:0;box-shadow:inset 0 0 30px rgba(0,0,0,.35)}
 .game-container::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:7px;background:linear-gradient(135deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(225deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(315deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(45deg,rgba(184,148,90,.35) 0,transparent 17px);z-index:0}
 .game-main{flex:1 1 auto;min-height:0;overflow:hidden;position:relative;z-index:1;display:flex;flex-direction:column}
-.game-footer{flex:0 0 auto;height:252px;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;position:relative;z-index:1;padding-top:3px;padding-bottom:6px;box-sizing:border-box}
+.game-footer{flex:0 0 auto;height:252px;max-height:252px;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;position:relative;z-index:1;padding-top:3px;padding-bottom:6px;box-sizing:border-box;overflow:hidden}
+.game-container.playing .game-main{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.game-container.playing .name-line{margin:24px 0 4px;flex:0 0 auto}
+.game-container.playing .q-visual{flex:1 1 auto;height:auto;min-height:min(180px,22vh);max-height:min(402px,43.7dvh)}
+.game-container.playing .q-visual.splash{flex:1 1 auto;height:auto;min-height:min(180px,22vh);max-height:min(402px,43.7dvh)}
+.game-container.playing .prompt-area{flex:0 0 auto;min-height:0;padding:4px 0 0;gap:0}
+.game-container.playing .question-box{flex:0 0 auto;max-height:4.2em;overflow:hidden}
+.game-container.playing .game-footer{flex:0 0 auto;height:auto;min-height:196px;max-height:252px}
+.game-container.playing .choices{flex:0 0 auto;justify-content:flex-end}
+.game-container.playing button.choice-btn{padding:9px 14px;font-size:19px;line-height:1.2;flex-shrink:0}
 .game-container.playing .game-footer{justify-content:flex-end}
 .game-container.playing .game-footer .next-btn{margin-top:0}
 .game-container.playing.showing-result .game-footer{height:auto;min-height:0;justify-content:flex-end;padding-top:8px}
@@ -75,8 +85,8 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .bio-text{padding:0;border:none;border-radius:0;background:transparent;font-size:22px;margin:0;line-height:1.4;text-align:center;color:#f0e0c8;flex:0 1 auto;min-height:0;overflow:hidden;text-shadow:0 1px 3px rgba(0,0,0,.5)}
 .stats{display:none}
 .stat-item span{color:#e87868;display:inline-block;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
-.q-visual{position:relative;flex:0 0 auto;width:100%;height:min(402px,43.7vh);margin:0 auto 0;border-radius:7px;overflow:hidden;display:none;border:2px solid #5a4028;box-shadow:inset 0 0 50px rgba(0,0,0,.5),0 0 16px rgba(255,140,50,.06)}
-.q-visual.splash{flex:0 0 auto;height:min(402px,43.7vh);min-height:0;max-height:min(402px,43.7vh)}
+.q-visual{position:relative;flex:0 0 auto;width:100%;height:min(402px,43.7dvh);margin:0 auto 0;border-radius:7px;overflow:hidden;display:none;border:2px solid #5a4028;box-shadow:inset 0 0 50px rgba(0,0,0,.5),0 0 16px rgba(255,140,50,.06)}
+.q-visual.splash{flex:0 0 auto;height:min(402px,43.7dvh);min-height:0;max-height:min(402px,43.7dvh)}
 .q-visual.end{flex:1 1 0;height:auto;min-height:121px;max-height:min(472px,50.8vh)}
 .game-container.ending .q-visual.end{flex:1 1 0;height:auto;min-height:109px;max-height:min(472px,50.8vh)}
 .q-image{display:block;width:100%;height:100%;object-fit:cover;border:none;background:#120a06}
