@@ -543,9 +543,6 @@ function isLegendStartName(name){
   const n=String(name||"").trim().toLowerCase();
   return n==="борат"||n==="павел";
 }
-function isChronicleForbiddenName(name){
-  return String(name||"").trim().toLowerCase()==="павел";
-}
 function rollLegendStat(){
   return 100+Math.floor(Math.random()*51);
 }
@@ -1844,11 +1841,18 @@ function beginLife(){
   hideDeckIds();
   player.iron=!!(document.getElementById("ironMode")&&document.getElementById("ironMode").checked);
   if(player.iron){
-    const extra=Math.max(0,player.silver-15);
-    player.silver=15+Math.floor(extra*0.35);
-    player.hp=Math.max(15,player.hp-5);
-    const sum=player.hp+player.silver;
-    player.glory=Math.max(15,100-sum);
+    if(isLegendStartName(player.name)){
+      // Легендарный старт не схлопываем формулой «сумма=100»
+      player.hp=Math.max(80,player.hp-20);
+      player.silver=Math.max(80,player.silver-20);
+      player.glory=Math.max(80,player.glory-20);
+    }else{
+      const extra=Math.max(0,player.silver-15);
+      player.silver=15+Math.floor(extra*0.35);
+      player.hp=Math.max(15,player.hp-5);
+      const sum=player.hp+player.silver;
+      player.glory=Math.max(15,100-sum);
+    }
     updateStats();
   }
   document.getElementById("bioBox").style.display="none";
@@ -2706,7 +2710,7 @@ function renderChronicleList(list,meId){
   return '<div class="chronicle-wrap" id="chronicleWrap"><div class="chronicle-title">'+title+'</div><div class="chronicle-list">'+rows+'</div></div>';
 }
 function writeToHistory(){
-  if(historyWritten||!gameOver||chronicleAdmissionDenied||isChronicleForbiddenName(player.name)) return;
+  if(historyWritten||!gameOver||chronicleAdmissionDenied) return;
   const entry={
     id:"r"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),
     name:player.name,
@@ -2876,12 +2880,8 @@ function endGame(){
   if(isStanislav){
     chronicleAdmissionDenied=true;
     showReloadOnlyEndActions();
-  }else if(isChronicleForbiddenName(player.name)){
-    chronicleAdmissionDenied=true;
-    fillChronicleSlot(null,false);
-    showEndActions(false,CHRONICLE_REJECT_NOTE,true);
   }else{
-    chronicleAdmissionDenied=true;
+    chronicleAdmissionDenied=false;
     showEndActions(true,"Проверяем летопись…");
     checkChronicleAdmission(function(admitted){
       chronicleAdmissionDenied=!admitted;
