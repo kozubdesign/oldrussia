@@ -52,12 +52,12 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-container.playing.showing-result .prompt-area{justify-content:center;gap:0}
 .game-container.playing.showing-result .result-box{margin:0;max-height:100%}
 .game-container.ending .game-footer{height:auto;min-height:0;padding-top:10px}
-.life-rail{position:absolute;top:8px;left:14px;right:14px;height:24px;z-index:2;pointer-events:none}
-.life-rail-track{position:absolute;inset:0;border:1px solid #6a5030;border-radius:5px;background:rgba(12,8,4,.72);overflow:hidden;box-shadow:inset 0 0 12px rgba(0,0,0,.45),0 0 8px rgba(255,140,50,.06)}
+.life-rail{position:absolute;top:8px;left:14px;right:14px;height:24px;z-index:2;pointer-events:none;display:flex;align-items:stretch;gap:10px}
+.life-rail-track{flex:1 1 120px;min-width:72px;height:24px;border:1px solid #6a5030;border-radius:5px;background:rgba(12,8,4,.72);overflow:hidden;box-shadow:inset 0 0 12px rgba(0,0,0,.45),0 0 8px rgba(255,140,50,.06)}
 .life-rail-fill{position:relative;height:100%;width:0%;border-radius:4px;transition:width .5s ease;background-color:#7a1810;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24' viewBox='0 0 48 24'%3E%3Cpath fill='%23c42818' d='M0 0h48v24H0z'/%3E%3Cpath fill='none' stroke='%23e8c878' stroke-width='1.2' d='M0 12h48M24 0v24'/%3E%3Cpath fill='%23e8c878' d='M12 4l4 4-4 4-4-4zm24 0l4 4-4 4-4-4zM12 12l4 4-4 4-4-4zm24 0l4 4-4 4-4-4z'/%3E%3Cpath fill='none' stroke='%23f0d090' stroke-width='1' d='M6 6l6 6-6 6M18 6l-6 6 6 6M30 6l6 6-6 6M42 6l-6 6 6 6'/%3E%3Ccircle cx='24' cy='12' r='2.2' fill='%23f5e0a8'/%3E%3C/svg%3E");background-size:48px 24px;background-repeat:repeat-x;box-shadow:inset 0 1px 0 rgba(255,220,140,.28),inset 0 -1px 0 rgba(0,0,0,.35),0 0 10px rgba(200,60,40,.25);overflow:hidden}
 .life-rail-fill::after{content:"";position:absolute;top:0;right:0;bottom:0;width:14px;background:linear-gradient(90deg,transparent,rgba(255,220,140,.35));pointer-events:none}
-.progress-counter{position:absolute;top:0;right:0;height:24px;display:flex;align-items:center;font-size:13px;color:#e8c878;background:rgba(14,8,4,.82);border:1px solid #7a6038;border-radius:0 5px 5px 0;padding:0 10px;z-index:3;box-shadow:inset 0 0 8px rgba(0,0,0,.35);font-variant-numeric:tabular-nums;letter-spacing:.02em}
-.year-header{position:absolute;top:0;left:0;right:58px;height:24px;display:flex;align-items:center;padding:0 10px;font-size:13px;font-weight:400;color:#e8d4b0;margin:0;z-index:3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.75),0 0 8px rgba(0,0,0,.4)}
+.progress-counter{flex:0 0 auto;height:24px;display:flex;align-items:center;font-size:13px;color:#e8c878;background:rgba(14,8,4,.82);border:1px solid #7a6038;border-radius:5px;padding:0 10px;box-shadow:inset 0 0 8px rgba(0,0,0,.35);font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:nowrap}
+.year-header{flex:0 1 auto;min-width:0;max-width:min(360px,44%);height:24px;display:flex;align-items:center;font-size:12px;font-weight:400;color:#e8d4b0;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.75),0 0 8px rgba(0,0,0,.4)}
 .year-header span{color:#f0e0c8}
 .year-event{display:none}
 
@@ -132,8 +132,9 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-container:not(.playing):not(.ending) .mode-bar{margin-top:4px;font-size:22px;gap:14px 34px}
 .game-container.ending .question-box{flex:0 1 auto;overflow:hidden}
 .game-container.ending .end-block{max-height:100%;overflow:hidden;display:flex;flex-direction:column;min-height:0}
-.game-container.ending .end-block .chronicle-wrap{flex:1 1 auto;min-height:97px;max-height:min(290px,38vh)}
-.game-container.ending.chronicle-open .q-visual.end{max-height:min(218px,26vh);min-height:73px}
+.game-container.ending .end-block .chronicle-wrap{flex:1 1 auto;min-height:120px;max-height:min(340px,44vh)}
+.game-container.ending.chronicle-open .q-visual.end{max-height:min(180px,22vh);min-height:64px}
+.game-container.ending.chronicle-open .end-block{overflow:hidden}
 .question-box{font-size:21px;line-height:1.4;margin:0;min-height:0;max-height:100%;width:100%;color:#f0e0c8;text-align:center;flex:0 1 auto;overflow:hidden;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 .question-box:empty{display:none}
 .choices{display:flex;flex-direction:column;align-items:stretch;gap:7px;flex-shrink:0;width:100%}
@@ -162,13 +163,18 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 .end-block p{margin:7px 0;font-size:20px;line-height:1.4}
 .end-block .end-iron{font-size:16px;color:#e87868;margin:4px 0}
 .end-block .end-score{font-size:18px;color:#c4a878}
-.chronicle-wrap{margin:8px 0 0;text-align:left;max-height:min(266px,34vh);overflow-y:auto;border:1px solid #6a5030;border-radius:7px;background:rgba(20,12,6,.78);padding:8px 10px;scrollbar-width:thin;box-shadow:inset 0 0 20px rgba(0,0,0,.35)}
+.chronicle-wrap{margin:8px 0 0;text-align:left;max-height:min(320px,42vh);overflow-y:auto;border:1px solid #6a5030;border-radius:7px;background:rgba(20,12,6,.78);padding:8px 10px;scrollbar-width:thin;box-shadow:inset 0 0 20px rgba(0,0,0,.35)}
 .chronicle-wrap::-webkit-scrollbar{width:7px}
 .chronicle-wrap::-webkit-scrollbar-thumb{background:#6a5030;border-radius:3px}
 .chronicle-title{text-align:center;font-size:19px;font-weight:700;margin:0 0 8px;color:#e8c878}
-.chronicle-row{font-size:15px;line-height:1.35;padding:3px 4px;border-radius:3px;color:#e8d4b0;font-variant-numeric:tabular-nums}
+.chronicle-row{font-size:15px;line-height:1.45;padding:5px 4px;border-radius:3px;color:#e8d4b0;font-variant-numeric:tabular-nums}
+.chronicle-row+.chronicle-row{border-top:1px solid rgba(106,80,48,.35)}
+.chronicle-place{font-weight:700;color:#c4a878;margin-right:2px}
+.chronicle-score{display:inline-block;font-size:20px;font-weight:700;color:#f0e0c8;margin:0 6px 0 2px;line-height:1.1}
+.chronicle-score-label{font-size:14px;font-weight:700;color:#e8c878}
 .chronicle-row.me{font-weight:700;background:rgba(212,160,53,.15)}
 .chronicle-empty{text-align:center;font-size:17px;color:#a89070;padding:10px;font-style:italic}
+.chronicle-prompt{margin:8px 0 0;font-size:15px;color:#c4a878;text-align:center}
 .choices.ending-actions{gap:6px}
 .choices.ending-actions .choice-btn{width:100%}
 .choices.ending-actions .choice-btn.secondary{background:linear-gradient(180deg,#4a5a68 0%,#343e48 100%);border-color:#6a7a88}
@@ -180,10 +186,10 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 <div class="play-layout">
 <div class="game-container" id="gameScreen">
   <div class="life-rail" id="lifeRail" aria-hidden="true">
+    <div class="year-header" id="yearHeader">Лето <span id="year">1354</span> — <span id="yearEvent">…</span></div>
     <div class="life-rail-track">
       <div class="life-rail-fill" id="lifeRailFill"></div>
     </div>
-    <div class="year-header" id="yearHeader">Лето <span id="year">1354</span> — <span id="yearEvent">…</span></div>
     <div class="progress-counter" id="progressCounter">0/0</div>
   </div>
   <div class="game-main">
@@ -2135,16 +2141,34 @@ function jobTitle(job,fallbackRank){
   if(!j) return fallbackRank||"Смерд";
   return j.charAt(0).toUpperCase()+j.slice(1);
 }
-function formatChronicleWho(e){
-  return [e.name,e.surname,e.nickname].filter(Boolean).join(" ");
+function scoreWord(n){
+  n=Math.abs(n|0);
+  const m10=n%10,m100=n%100;
+  if(m100>=11&&m100<=14) return "баллов";
+  if(m10===1) return "балл";
+  if(m10>=2&&m10<=4) return "балла";
+  return "баллов";
 }
-function formatChronicleLine(e,place){
+function formatChronicleWho(e){
+  return formatFullName(e);
+}
+function renderChronicleRow(e,place,me){
   const rank=e.rank||getRank(e.glory|0);
   const score=e.score!=null?e.score|0:scoreOf(e);
-  return place+" "+score+" "+formatChronicleWho(e)+", "+rank+" "+(e.age|0)+" лет ❤️"+e.hp+" 🪙"+e.silver+"🏅"+e.glory;
+  const who=escapeHtml(formatChronicleWho(e));
+  return '<div class="chronicle-row'+(me?" me":"")+'"'+(me?' id="chronicleMe"':"")+'>'+
+    '<span class="chronicle-place">'+place+'</span> '+
+    '<span class="chronicle-score">'+score+' <span class="chronicle-score-label">'+scoreWord(score)+'</span></span> '+
+    who+', '+escapeHtml(rank)+' '+(e.age|0)+' лет ❤️'+(e.hp|0)+' 🪙'+(e.silver|0)+'🏅'+(e.glory|0)+
+    '</div>';
+}
+function chroniclePromptHtml(){
+  return firebaseConfigured()
+    ?'<p class="chronicle-prompt">Сохрани результат — он попадёт в общую летопись топ-'+HISTORY_MAX+'.</p>'
+    :'<p class="chronicle-prompt">Сохрани результат — и сравнишь себя с другими в топ-'+HISTORY_MAX+'.</p>';
 }
 function chronicleRejectNoteHtml(){
-  return '<p style="font-size:15px;margin:8px 0 0;color:#e87868;">'+CHRONICLE_REJECT_NOTE+'</p>';
+  return '<p class="chronicle-prompt" style="color:#e87868;">'+CHRONICLE_REJECT_NOTE+'</p>';
 }
 function wouldEnterTop(list,entry){
   const merged=sortChronicle((list||[]).concat([entry]));
@@ -2156,9 +2180,7 @@ function renderChronicleList(list,meId){
     return '<div class="chronicle-wrap"><div class="chronicle-title">Летопись игроков</div><div class="chronicle-empty">Пока пусто — сохрани результат первым.</div></div>';
   }
   const rows=list.slice(0,HISTORY_MAX).map(function(e,i){
-    const place=i+1;
-    const me=e.id===meId;
-    return '<div class="chronicle-row'+(me?" me":"")+'"'+(me?' id="chronicleMe"':"")+'>'+escapeHtml(formatChronicleLine(e,place))+'</div>';
+    return renderChronicleRow(e,i+1,e.id===meId);
   }).join("");
   const title=firebaseConfigured()
     ?'Летопись игроков · общая · топ-'+HISTORY_MAX+' по сумме ❤️+🪙+🏅'
@@ -2245,11 +2267,7 @@ function fillChronicleSlot(meId,promptSave,listOpt,rejected){
   if(!slot) return;
   function paint(list){
     let note="";
-    if(promptSave){
-      note=firebaseConfigured()
-        ?'<p style="font-size:15px;margin:8px 0 0;color:#c4a878;">Сохрани результат — он попадёт в общую летопись топ-'+HISTORY_MAX+'.</p>'
-        :'<p style="font-size:15px;margin:8px 0 0;color:#c4a878;">Сохрани результат — и сравнишь себя с другими в топ-'+HISTORY_MAX+'.</p>';
-    }else if(rejected){
+    if(rejected){
       note=chronicleRejectNoteHtml();
     }else if(meId){
       const inList=(list||[]).some(function(e){ return e.id===meId; });
@@ -2262,6 +2280,10 @@ function fillChronicleSlot(meId,promptSave,listOpt,rejected){
         me.scrollIntoView({block:"center",behavior:"smooth"});
       });
     }
+  }
+  if(promptSave){
+    slot.innerHTML=chroniclePromptHtml();
+    return;
   }
   if(listOpt){
     paint(sortChronicle(listOpt).slice(0,HISTORY_MAX));
@@ -2291,6 +2313,7 @@ function endGame(){
   hideNameGate();
   document.getElementById("gameScreen").classList.remove("playing");
   document.getElementById("gameScreen").classList.remove("showing-result");
+  document.getElementById("gameScreen").classList.remove("chronicle-open");
   const destiny=getDestiny();
   const fateStory=getLastFateStory();
   const perkBit=player.perkHistory.length?(' За глаза называли: <i>'+player.perkHistory.join(', ')+'</i>.'):'';
