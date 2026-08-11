@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Житие на Руси</title>
+<title>Русь: Четверть века</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kurale&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 *{box-sizing:border-box}
@@ -52,12 +52,16 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-container.playing.showing-result .prompt-area{justify-content:center;gap:0}
 .game-container.playing.showing-result .result-box{margin:0;max-height:100%}
 .game-container.ending .game-footer{height:auto;min-height:0;padding-top:10px}
-.progress-counter{position:absolute;top:10px;right:14px;font-size:14px;color:#e8c878;background:rgba(20,12,6,.75);border:1px solid #7a6038;border-radius:4px;padding:2px 9px;z-index:2;box-shadow:0 0 10px rgba(255,140,50,.08)}
-.year-header{position:absolute;top:10px;left:14px;right:85px;font-size:13px;font-weight:400;color:#c4a878;margin:0;z-index:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.6)}
-.year-header span{color:#e8d4b0}
+.life-rail{position:absolute;top:8px;left:14px;right:14px;height:24px;z-index:2;pointer-events:none}
+.life-rail-track{position:absolute;inset:0;border:1px solid #6a5030;border-radius:5px;background:rgba(12,8,4,.72);overflow:hidden;box-shadow:inset 0 0 12px rgba(0,0,0,.45),0 0 8px rgba(255,140,50,.06)}
+.life-rail-fill{position:relative;height:100%;width:0%;border-radius:4px;transition:width .5s ease;background-color:#7a1810;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24' viewBox='0 0 48 24'%3E%3Cpath fill='%23c42818' d='M0 0h48v24H0z'/%3E%3Cpath fill='none' stroke='%23e8c878' stroke-width='1.2' d='M0 12h48M24 0v24'/%3E%3Cpath fill='%23e8c878' d='M12 4l4 4-4 4-4-4zm24 0l4 4-4 4-4-4zM12 12l4 4-4 4-4-4zm24 0l4 4-4 4-4-4z'/%3E%3Cpath fill='none' stroke='%23f0d090' stroke-width='1' d='M6 6l6 6-6 6M18 6l-6 6 6 6M30 6l6 6-6 6M42 6l-6 6 6 6'/%3E%3Ccircle cx='24' cy='12' r='2.2' fill='%23f5e0a8'/%3E%3C/svg%3E");background-size:48px 24px;background-repeat:repeat-x;box-shadow:inset 0 1px 0 rgba(255,220,140,.28),inset 0 -1px 0 rgba(0,0,0,.35),0 0 10px rgba(200,60,40,.25);overflow:hidden}
+.life-rail-fill::after{content:"";position:absolute;top:0;right:0;bottom:0;width:14px;background:linear-gradient(90deg,transparent,rgba(255,220,140,.35));pointer-events:none}
+.progress-counter{position:absolute;top:0;right:0;height:24px;display:flex;align-items:center;font-size:13px;color:#e8c878;background:rgba(14,8,4,.82);border:1px solid #7a6038;border-radius:0 5px 5px 0;padding:0 10px;z-index:3;box-shadow:inset 0 0 8px rgba(0,0,0,.35);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.year-header{position:absolute;top:0;left:0;right:58px;height:24px;display:flex;align-items:center;padding:0 10px;font-size:13px;font-weight:400;color:#e8d4b0;margin:0;z-index:3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.75),0 0 8px rgba(0,0,0,.4)}
+.year-header span{color:#f0e0c8}
 .year-event{display:none}
 
-.name-line{color:#f0e0c8;margin:26px 0 7px;line-height:1.3;flex-shrink:0;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+.name-line{color:#f0e0c8;margin:28px 0 7px;line-height:1.3;flex-shrink:0;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 .name-line .header-row{display:flex;align-items:center;gap:12px;justify-content:space-between;width:100%}
 .name-line .header-left{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto}
 .name-line .header-right{display:flex;align-items:center;gap:0;flex:0 0 auto;font-size:20px;font-weight:700;white-space:nowrap;margin-left:14px}
@@ -102,8 +106,7 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .name-gate-hint{margin:0;min-height:1.3em;font-size:16px;color:#e87868}
 .name-gate-reveal{margin:0;font-size:20px;line-height:1.4;color:#c4a878;font-style:italic;text-shadow:0 1px 2px rgba(0,0,0,.45)}
 .game-container.booting .name-line,
-.game-container.booting .year-header,
-.game-container.booting .progress-counter,
+.game-container.booting .life-rail,
 .game-container.booting .q-visual,
 .game-container.booting .bio-text,
 .game-container.booting .pitch-text,
@@ -112,8 +115,7 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-container.booting .name-gate{display:none!important}
 .game-container.booting .prompt-area{flex:1 1 auto;justify-content:center;padding:0;gap:0}
 .game-container.naming .name-line,
-.game-container.naming .year-header,
-.game-container.naming .progress-counter,
+.game-container.naming .life-rail,
 .game-container.naming .bio-text,
 .game-container.naming .pitch-text,
 .game-container.naming .mode-bar{display:none!important}
@@ -177,15 +179,20 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 <body>
 <div class="play-layout">
 <div class="game-container" id="gameScreen">
-  <div class="progress-counter" id="progressCounter">0/0</div>
-  <div class="year-header" id="yearHeader">Лето <span id="year">1354</span> — <span id="yearEvent">…</span></div>
+  <div class="life-rail" id="lifeRail" aria-hidden="true">
+    <div class="life-rail-track">
+      <div class="life-rail-fill" id="lifeRailFill"></div>
+    </div>
+    <div class="year-header" id="yearHeader">Лето <span id="year">1354</span> — <span id="yearEvent">…</span></div>
+    <div class="progress-counter" id="progressCounter">0/0</div>
+  </div>
   <div class="game-main">
     <div class="name-line" id="nameLine">
       <div class="header-row">
         <div class="header-left">
           <img class="avatar" id="avatarImg" src="avatars/1.png" alt="" onerror="this.style.visibility='hidden'">
           <div class="name-stats">
-            <span id="bioName">-</span> <span id="bioNickname">-</span>, <span id="bioAge">-</span> лет
+            <span id="bioName">-</span> <span id="bioNickname">-</span> <span id="bioSurname">-</span>, <span id="bioAge">-</span> лет
             <span class="rank-label" id="rankLabel">-</span>
             <span id="perksContainer"></span>
           </div>
@@ -206,7 +213,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
     </div>
     <div class="prompt-area">
       <div class="boot-load" id="bootLoad" aria-live="polite">
-        <p class="boot-title">Житие на Руси</p>
+        <p class="boot-title">Русь: Четверть века</p>
         <div class="boot-meter">
           <div class="boot-bar" aria-hidden="true"><div class="boot-bar-fill" id="bootFill"></div></div>
           <p class="boot-pct" id="bootPct">0%</p>
@@ -215,7 +222,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
       </div>
       <div class="name-gate" id="nameGate">
         <p class="name-gate-label">Как тебя зовут?</p>
-        <input class="name-gate-input" id="playerNameInput" type="text" maxlength="18" placeholder="Твоё имя" autocomplete="given-name" spellcheck="false">
+        <input class="name-gate-input" id="playerNameInput" type="text" maxlength="36" placeholder="Имя Фамилия" autocomplete="name" spellcheck="false">
         <p class="name-gate-hint" id="nameGateHint"></p>
         <p class="name-gate-reveal" id="nameGateReveal" hidden></p>
       </div>
@@ -236,7 +243,10 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
 <aside class="plaques-rail" id="plaquesRail" aria-label="Перки"></aside>
 </div>
 
-<script src="questions.js?v=20260810av"></script>
+<script src="questions.js?v=20260811a"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script>
 const names=["Богдан","Добрыня","Всеволод","Ярополк","Святослав","Владимир","Мстислав","Ростислав","Изяслав","Глеб","Борис","Юрий","Андрей","Микула","Ратибор","Жирослав","Путята","Творимир","Станимир","Бронислав","Вячеслав","Олег","Игорь","Роман","Василий","Пётр","Иван","Максим","Кирилл","Алексей","Дмитрий","Павел","Фома","Лука","Клим","Лазарь","Савва","Тихон","Фрол","Евстафий","Архип","Гордей","Евсей","Захар","Игнат","Кондрат","Макар","Назар","Прохор","Савелий"];
 const nicknames=["Косой","Рябой","Молчун","Бешеный","Храбрый","Меньшой","Большой","Хитрый","Рыжий","Чернявый","Белый","Костлявый","Шило","Тяжелый","Шустрый","Угрюмый","Веселый","Зубатый","Губатый","Костень","Береза","Дуб","Медведь","Волк","Лисица","Кот","Бык","Петух","Зяблик","Крепыш","Глухой","Немой","Слепой","Хромой","Ломаный","Дикий","Удод","Сорока","Филин","Княжич","Скоморох","Пыжик","Ерш","Опаленный","Гроза","Буян","Смелый","Тихий","Борзый","Удалой"];
@@ -314,11 +324,12 @@ const blackEvents=[
 const badTags=new Set(["nehoroshiy","zhuk","nasilnik","greedy","coward"]);
 let currentQuestionIndex=0,availableQuestions=[],currentYear=1320,totalQuestions=0;
 let gameOver=false,choiceLocked=false,endGameTimer=null,historyWritten=false,lastHistoryId=null;
-const HISTORY_KEY="oldrussia_chronicle_v1";
-const HISTORY_MAX=200;
+const HISTORY_KEY="oldrussia_chronicle_v2";
+const HISTORY_MAX=50;
 const LAST_NAME_KEY="oldrussia_last_name";
+const CHRONICLE_REJECT_NOTE="Ты прожил слишком незаметную жизнь, и тебя не добавляют в списки…";
 const yearEvents={"1320": ["Новгородский поход на Торжок", "Усиление позиций Ивана Калиты", "Литовский набег на псковичей", "Каменное строительство в Ростове", "Борьба Дмитрия в Орде"], "1321": ["Закладка храма Спаса на Бору", "Конфликт Твери с Новгородом", "Княжеские поездки в Сарай", "Ревизия баскаков на Руси", "Набеги кочевников на юг"], "1322": ["Ярлык передан Дмитрию Тверскому", "Строительство новгородского Орешка", "Поддержка ордынских договорённостей Калитой", "Отражение литовских набегов", "Приток переселенцев в Москву"], "1323": ["Отеховский мирный договор", "Завершение строительства крепости Орешек", "Убийство Юрия Московского", "Арест Дмитрия Тверского ханом", "Переход руководства к Калите"], "1324": ["Поездка Калиты к хану", "Напряжение в Тверском княжестве", "Внутриполитическая борьба в Новгороде", "Литовская экспансия на запад", "Рост производства оружия"], "1325": ["Воцарение Ивана Калиты", "Москва — резиденция митрополита", "Казнь Дмитрия Тверского", "Замедление литовских набегов", "Оживление Волжской торговли"], "1326": ["Закладка московского Успенского собора", "Александру Тверскому дали ярлык", "Сотрудничество Калиты с Ордой", "Новые храмы Кремля", "Отражение литовского набега Псковом"], "1327": ["Антиордынское восстание в Твери", "Карательный поход Калиты", "Разорение Твери, бегство Александра", "Ярлык передан Ивану Калите", "Временный раздел великокняжеских земель"], "1328": ["Калита стал великим князем", "Требования выдачи Александра Псковом", "Угроза отлучения Пскова от церкви", "Наступление «великой тишины»", "Концентрация дани в Москве"], "1329": ["Бегство Александра Тверского в Литву", "Поездка Калиты в Сарай", "Освящение Успенского собора", "Новгород признал старшинство Москвы", "Усмирение удельных князей"], "1330": ["Возведение укреплений Московского Кремля", "Возвращение Александра в Тверь", "Въезд Калиты во Владимир", "Рост ремесленных слобод", "Династические браки московского дома"], "1331": ["Споры вокруг митрополии", "Суд князей в Сарае", "Присоединение волостей к Москве", "Осада пригородов Гедимином", "Ведение летописных сводов"], "1332": ["Отказ Новгорода платить дань", "Занятие Торжка и Белоозера", "Расширение влияния на севере", "Возобновление стройки в Твери", "Укрепление стен псковского Крома"], "1333": ["Мир Москвы с Новгородом", "Закладка Архангельского собора", "Бегство новгородской оппозиции", "Подтверждение привилегий Калиты", "Локальный голод на Руси"], "1334": ["Поездка Калиты в Орду", "Попытки восстановления Твери", "Отражение нападений Ливонии", "Централизация церковных доходов", "Развитие дорожной сети"], "1335": ["Рост напряжения вокруг Твери", "Постройка церкви Иоанна Лествичника", "Укрепление Костромы с Переяславлем", "Перемирие с Литовским княжеством", "Контроль сбора дани Калитой"], "1336": ["Паломничество Калиты в Сарай", "Споры с новгородским вече", "Основание новых монастырей", "Рост числа московских ремесленников", "Литовский набег на Смоленск"], "1337": ["Основание Троице-Сергиева монастыря", "Поездка Александра в Сарай", "Доносы Калиты на тверского князя", "Лавирование смоленских князей", "Закрепление статуса Москвы"], "1338": ["Неудачная литовская осада Смоленска", "Постройка Сергием деревянной Троицкой церкви", "Покупка части Ростовского княжества", "Торговые соглашения с Ордой", "Подготовка удара по Твери"], "1339": ["Казнь Александра Тверского", "Раздробление Тверского княжества", "Завершение строительства Архангельского собора", "Смерть Ивана I Калиты", "Воцарение Семёна Гордого"], "1340": ["Начало правления Семёна Гордого", "Получение ярлыка Семёном", "Поход русской рати на Смоленск", "Набег Ольгерда на Торжок", "Смерть хана Узбека, смуты"], "1341": ["Джанибек воцарился в Орде", "Переговоры Семёна с Новгородом", "Отражение татарских набегов", "Отстаивание княжеских прав Семёном", "Украшение Московского Кремля"], "1342": ["Поход Семёна на Торжок", "Подтверждение церковных привилегий", "Московское влияние на Белоозере", "Литовские походы на Псков", "Рост каменных построек"], "1343": ["Ливонская осада Пскова", "Помощь Семёна псковичам", "Княжеский съезд в Москве", "Укрепление денежного обращения", "Строительство новых храмов"], "1344": ["Мир Пскова с Ливонией", "Поездка Семёна в Сарай", "Совершенствование сбора пошлин", "Создание тверских летописей", "Укрепление авторитета Семёна"], "1345": ["Начало правления Ольгерда в Литве", "Поездка Семёна к хану", "Стычки на литовской границе", "Рост торговых пошлин Москвы", "Укрепление обороны южных рубежей"], "1346": ["Смена власти в Орде (хан Джанибек)", "Подтверждение великокняжеских прав Симеона", "Поход литовцев на Псков", "Укрепление позиций Москвы на Севере", "Развитие церковного строительства"], "1347": ["Отражение набегов кочевников", "Дипломатическая миссия Москвы в Орду", "Разграничение земель с Новгородом", "Укрепление союза с уделами", "Расширение московских ремесленных слобод"], "1348": ["Болотовский договор Пскова с Новгородом", "Потеря Новгородом части самостоятельности", "Нападение шведов на земли карел", "Усиление контроля Москвы над севером", "Строительство новых каменных церквей"], "1349": ["Династический союз Москвы и Твери", "Поездка Семёна Гордого в Сарай", "Отражение набегов литовских отрядов", "Рост влияния митрополичьей кафедры", "Развитие внутренней торговли"], "1350": ["Эпидемия чумы («Чёрная смерть») в Европе", "Проникновение эпидемии на Русь", "Строительство новых храмов-молебнов", "Дипломатические контакты с Ордой", "Стабилизация границ после моровой язвы"], "1351": ["Литовский поход Ольгерда на Ржев", "Ответный поход Семёна Гордого", "Возобновление укрепления Ржева", "Переговоры о мире с Литвой", "Укрепление московских гарнизонов"], "1352": ["Эпидемия чумы в Пскове и Новгороде", "Начало каменного строительства в Пскове", "Смерть псковского князя Ивана Александровича", "Осада Пскова литовскими войсками", "Дипломатическая поддержка Пскова Москвой"], "1353": ["Смерть князя Семёна Гордого от чумы", "Смерть сыновей Семёна от мора", "Смерть митрополита Феогноста", "Борьба за ярлык между Москвой и Суздалем", "Переход престола к Ивану II Красному"], "1354": ["Поездка Ивана II в Сарай за ярлыком", "Получение Иваном великого княжения", "Возведение Алексия в митрополиты", "Обострение борьбы за влияние в Новгороде", "Набеги литовцев на приграничные волости"], "1355": ["Усиление позиций Ивана II Красного", "Поездки митрополита Алексия в Орду", "Укрепление мира с Тверским княжеством", "Земельные приобретения московского дома", "Строительство новых монастырей"], "1356": ["Литовский захват Брянска Ольгердом", "Переход чернигово-северских земель под Литву", "Поездка Ивана II в Орду", "Внутренние усобицы в Рязанском княжестве", "Укрепление южных границ Московского княжества"], "1357": ["Поездка митрополита Алексия в Орду", "Чудесное исцеление Тайдулы митрополитом", "Убийство хана Джанибека, смуты в Орде", "Укрепление авторитета митрополичьей власти", "Дипломатические манёвры Москвы"], "1358": ["Набег литовских войск на южные земли", "Строительство Спасского монастыря в Москве", "Укрепление позиций митрополита Алексия", "Смерть хана Бердибека в Орде", "Ослабление центральной власти в Орде"], "1359": ["Смерть московского князя Ивана II Красного", "Начало правления Дмитрия Ивановича (Донского)", "Малолетство Дмитрия, усиление роли Алексия", "Переход ярлыка к суздальскому князю", "Начало «великой замятни» в Золотой Орде"], "1360": ["Переход великого владимирского ярлыка к Дмитрию Суздальскому", "Обострение борьбы за великокняжеский престол", "Московские бояре добиваются поддержки Орды", "Набеги нижегородцев и суздальцев", "Укрепление Москвы при поддержке митрополита"], "1361": ["Захват Владимиром московскими силами ярлыка", "Раздел ордынскими претендентами власти в Сарае", "Нападение татарских отрядов на Нижегородчину", "Дипломатические победы митрополита Алексия", "Рост влияния юного Дмитрия Московского"], "1362": ["Битва на Синих Водах (победа Ольгерда)", "Вхождение Юго-Западной Руси в состав Литвы", "Возвращение ярлыка Дмитрию Московскому", "Изгнание Дмитрия Суздальского из Владимира", "Объединение владимирского и московского престолов"], "1363": ["Поход москвичей на Суздаль и Нижний Новгород", "Окончательное закрепление великого княжения за Москвой", "Примирение Дмитрия Московского с Дмитрием Суздальским", "Литовские нападения на смоленские земли", "Строительство новых укреплений в городах"], "1364": ["Эпидемия чумы в ряде русских земель", "Поездка Дмитрия Московского в Орду", "Укрепление союза Москвы с Ростовом", "Набеги ушкуйников на волжские города", "Отражение литовских набегов на запад"], "1365": ["«Всехсвятский пожар» в Москве", "Начало обсуждения строительства каменного Кремля", "Сражение у Шишевского леса с рязанцами", "Пожар в Нижнем Новгороде", "Укрепление южных рубежей Рязанского княжества"], "1366": ["Нападение новгородских ушкуйников на Кострому", "Поход москвичей против новгородских ушкуйников", "Строительство новых оборонительных укреплений", "Обострение отношений с Тверским княжеством", "Дипломатические манёвры литовского князя Ольгерда"], "1367": ["Закладка белокаменного Московского Кремля", "Поход москвичей на Тверь", "Заключение мира с тверским князем", "Нападение литовцев на южные рубежи", "Отражение набегов объединённых сил"], "1368": ["Первый поход Ольгерда на Москву", "Осада белокаменного Кремля литовскими войсками", "Отступление Ольгерда без взятия Кремля", "Опустошение московских волостей литовцами", "Заключение временного перемирия с Литвой"], "1369": ["Союз Москвы с Тверью против Литвы", "Поход москвичей на владения Ольгерда", "Подготовка к новым столкновениям с Литвой", "Укрепление связей с северными землями", "Рост авторитета митрополита Алексия"], "1370": ["Второй поход Ольгерда на Москву", "Осада Волоколамска тверскими и литовскими войсками", "Переговоры Москвы с литовскими послами", "Поездка тверского князя Михаила в Орду за ярлыком", "Получение тверским князем ярлыка на великое княжение"], "1371": ["Отказ Дмитрия признать ярлык Твери", "Поездка Дмитрия Московского в Орду к хану", "Получение Дмитрием ярлыка обратно", "Конфликт с Олегом Рязанским", "Битва при Скорнищеве (победа москвичей над рязанцами)"], "1372": ["Поход Ольгерда на Москву в третий раз", "Стояние на реке Тьме под Любутском", "Заключение «вечного мира» с Литвой", "Признание Тверью старшинства Москвы", "Укрепление позиций Дмитрия Ивановича"], "1373": ["Набег ордынского мурзы Арапши на Рязань", "Поход московского войска к Оке", "Укрепление пограничной стражи на юге", "Стычки с литовскими отрядами на западе", "Строительство новых монастырей вокруг Москвы"], "1374": ["Съезд русских князей в Переяславле-Залесском", "Отказ Москвы платить дань Орде", "Избиение татарских купцов в Нижнем Новгороде", "Разрыв отношений с ханом Мамаем", "Поход тверского князя за ярлыком в Орду"], "1375": ["Общерусский поход на Тверское княжество", "Осада Твери соединёнными силами князей", "Подписание Тверского договора о подчинении Москве", "Окончательное признание старшинства Москвы над Тверью", "Укрепление антиордынской коалиции Северо-Востока"], "1376": ["Поход москвичей и суздальцев на Волжскую Булгарию", "Назначение московских таможенников в Булгаре", "Смерть митрополита Алексия Московского", "Укрепление позиций Дмитрия на Волге", "Стычки с отрядами Мамая на границах"], "1377": ["Битва на реке Пьяне (поражение от Арапши)", "Разорение Нижегородского и Рязанского княжеств татарами", "Внезапное нападение ордынцев на русские силы", "Усиление бдительности московских войск", "Сбор сил после поражения"], "1378": ["Битва на реке Воже (первая крупная победа над Ордой)", "Разгром ордынского войска Бегича москвичами", "Смерть литовского князя Ольгерда", "Начало междоусобиц в Литовском княжестве", "Подготовка Мамая к масштабному походу на Русь"], "1379": ["Поход москвичей на Брянск и Стародуб", "Переход князя Дмитрия Брянского на службу к Москве", "Нападение литовцев на московские границы", "Сбор сил общерусского ополчения", "Дипломатическая изоляция Мамая"], "1380": ["Куликовская битва (разгром Мамая)", "Объединение русских сил под Москвой", "Благословение Сергием Радонежским Дмитрия Донского", "Падение власти Мамая, воцарение Тохтамыша", "Начало восстановления после грандиозной битвы"], "1381": ["Восстановление ордынского единства при Тохтамыше", "Возвращение князя Дмитрия Тверского из Орды", "Подтверждение Тверью вассалитета от Москвы", "Поездка Дмитрия Донского в Орду с дарами", "Восстановление разрушенных войной городов"], "1382": ["Поход хана Тохтамыша на Москву", "Осада и взятие Москвы обманом", "Разорение города и окрестных земель ордынцами", "Восстановление выплаты дани Орде", "Временное ослабление позиций Москвы"], "1383": ["Получение тверским князем ярлыка на великое княжение", "Поездка князя Владимира Андреевича в Орду", "Восстановление разрушенного Кремля и Москвы", "Дипломатическая борьба за великокняжеские права", "Заключение союзов между русскими княжествами"], "1384": ["Строительство новых оборонительных линий на юге", "Переговоры Москвы с Литовским княжеством", "Укрепление волоцких и можайских рубежей", "Сбор средств на уплату ордынского выхода", "Развитие торговли с Новгородской землёй"], "1385": ["Кревская уния (союз Литвы и Польши)", "Нападение Олега Рязанского на Коломну", "Поход москвичей на Рязанское княжество", "Миротворческая миссия Сергия Радонежского в Рязани", "Заключение вечного мира с Рязанью"], "1386": ["Поход Дмитрия Донского на Новгород", "Осада Новгорода московским ополчением", "Выплата новгородцами огромной контрибуции («чёрный бор»)", "Укрепление позиций Москвы на Севере", "Заключение мира с Новгородской республикой"], "1387": ["Возвращение княжеских сыновей из ордынского заложничества", "Укрепление литовско-польского союза (Ягайло)", "Возобновление строительства каменных храмов", "Рост авторитета московского митрополита", "Стабилизация финансовой системы княжества"], "1388": ["Съезд русских князей в Москве", "Урегулирование споров о вотчинах и границах", "Подготовка к отражению угрозы со стороны Тамерлана", "Укрепление оборонительных сооружений Владимира", "Развитие летописного дела в Москве"], "1389": ["Смерть великого князя Дмитрия Донского", "Начало правления Василия I Дмитриевича", "Завещание Дмитрия о передаче великого княжения без Орды", "Поездка Василия I в Золотую Орду", "Утверждение позиций нового московского князя"]};
-let player={name:"",nickname:"",job:"",age:0,storyCore:"",hp:50,silver:20,glory:10,perkCounts:{},currentPerk:null,perkHistory:[],family:{wife:"цела",son:"цел",daughter:"цела",father:"цел"},chronicle:[],plaques:[],songsKnown:0,lastEvent:null,iron:false};
+let player={name:"",surname:"",nickname:"",job:"",age:0,storyCore:"",hp:50,silver:20,glory:10,perkCounts:{},currentPerk:null,perkHistory:[],family:{wife:"цела",son:"цел",daughter:"цела",father:"цел"},chronicle:[],plaques:[],songsKnown:0,lastEvent:null,iron:false};
 
 function animateValue(el,start,end,duration){
   if(start===end){el.textContent=end;return}
@@ -401,27 +412,27 @@ function updateYearEvent(){
 function getRank(g){
   if(g<0) return "Изгой";
   if(g<15) return "Смерд";
-  if(g<30) return "Огородник";
-  if(g<45) return "Пахарь";
-  if(g<60) return "Зажиточный";
-  if(g<75) return "Десятник";
+  if(g<30) return "Зажиточный";
+  if(g<45) return "Староста";
+  if(g<60) return "Десятник";
+  if(g<75) return "Сотник";
   if(g<90) return "Дружинник";
-  if(g<110) return "Посадский";
-  if(g<130) return "Боярин";
-  if(g<155) return "Воевода";
+  if(g<110) return "Боярин";
+  if(g<130) return "Воевода";
+  if(g<155) return "Удельный князь";
   return "Князь";
 }
 function getRankEmoji(g){
   if(g<0) return "💀";
   if(g<15) return "🌾";
-  if(g<30) return "🥬";
-  if(g<45) return "🐂";
-  if(g<60) return "🏡";
+  if(g<30) return "🏡";
+  if(g<45) return "🪵";
+  if(g<60) return "⚖️";
   if(g<75) return "🗡️";
   if(g<90) return "⚔️";
-  if(g<110) return "🏛️";
-  if(g<130) return "🎖️";
-  if(g<155) return "🛡️";
+  if(g<110) return "🎖️";
+  if(g<130) return "🛡️";
+  if(g<155) return "🏰";
   return "👑";
 }
 function getRankDisplay(g){
@@ -660,18 +671,38 @@ function addChronicle(opt,q){
 }
 
 function getAgeAdjective(age){return ageAdjectives[age]||(age+"-летний")}
-function generateBioText(){
-  return "Ты — "+getAgeAdjective(player.age).toLowerCase()+" "+player.name+" по прозвищу "+player.nickname+". "+player.storyCore.charAt(0).toUpperCase()+player.storyCore.slice(1)+". Теперь ты известен как "+player.job+", готовый к трудной жизни на русской земле.";
+function formatFullName(p){
+  p=p||player;
+  return [p.name,p.nickname,p.surname].filter(Boolean).join(" ");
 }
-function normalizePlayerName(raw){
+function generateBioText(){
+  const craft=player.job||"смерд";
+  return "Ты — "+getAgeAdjective(player.age).toLowerCase()+" "+formatFullName()+". "+player.storyCore.charAt(0).toUpperCase()+player.storyCore.slice(1)+". Возмужав, ты стал известен как "+craft+", готовый к трудной жизни на русской земле.";
+}
+function capitalizeWord(w){
+  if(!w) return w;
+  return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();
+}
+function parsePlayerName(raw){
   let s=String(raw||"").replace(/\s+/g," ").trim();
-  if(!s) return "";
-  s=s.slice(0,18);
-  if(!/^[A-Za-zА-Яа-яЁёІіЇїЄєҐґ][A-Za-zА-Яа-яЁёІіЇїЄєҐґ'’\- ]{0,17}$/.test(s)) return "";
-  return s.split(" ").map(function(w){
-    if(!w) return w;
-    return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();
-  }).join(" ");
+  if(!s) return null;
+  s=s.slice(0,36);
+  if(!/^[A-Za-zА-Яа-яЁёІіЇїЄєҐґ][A-Za-zА-Яа-яЁёІіЇїЄєҐґ'’\- ]{1,35}$/.test(s)) return null;
+  const parts=s.split(" ").filter(Boolean).map(capitalizeWord);
+  if(parts.length<2) return null;
+  if(parts[0].length<2||parts[parts.length-1].length<2) return null;
+  return {name:parts[0], surname:parts.slice(1).join(" ")};
+}
+function refreshNameLine(){
+  const n=document.getElementById("bioName");
+  const nick=document.getElementById("bioNickname");
+  const sur=document.getElementById("bioSurname");
+  const age=document.getElementById("bioAge");
+  if(n) n.textContent=player.name||"-";
+  if(nick) nick.textContent=player.nickname||"";
+  if(sur) sur.textContent=player.surname||"";
+  if(age) age.textContent=player.age||"-";
+  updateRankDisplay();
 }
 function hideNameGate(){
   const screen=document.getElementById("gameScreen");
@@ -688,8 +719,6 @@ function showNameGate(){
   const mb=document.getElementById("modeBar");
   const next=document.getElementById("nextBtn");
   const nameLine=document.getElementById("nameLine");
-  const progress=document.getElementById("progressCounter");
-  const yh=document.querySelector(".year-header");
   const splash=document.getElementById("qVisual");
   const input=document.getElementById("playerNameInput");
   const hint=document.getElementById("nameGateHint");
@@ -704,8 +733,7 @@ function showNameGate(){
   if(pitch) pitch.style.display="none";
   if(mb) mb.style.display="none";
   if(nameLine) nameLine.style.display="none";
-  if(progress) progress.style.display="none";
-  if(yh) yh.style.display="none";
+  setLifeRailVisible(false);
   if(splash) splash.style.display="block";
   if(hint) hint.textContent="";
   if(reveal){ reveal.hidden=true; reveal.textContent=""; }
@@ -730,20 +758,15 @@ function showIntroAfterName(){
   const mb=document.getElementById("modeBar");
   const next=document.getElementById("nextBtn");
   const nameLine=document.getElementById("nameLine");
-  const progress=document.getElementById("progressCounter");
-  const yh=document.querySelector(".year-header");
   const splash=document.getElementById("qVisual");
-  document.getElementById("bioName").innerText=player.name;
-  document.getElementById("bioNickname").innerText=player.nickname;
-  document.getElementById("bioAge").innerText=player.age;
+  refreshNameLine();
   if(bio){ bio.innerText=generateBioText(); bio.style.display="block"; }
   if(pitch) pitch.style.display="block";
   if(mb) mb.style.display="flex";
   if(nameLine) nameLine.style.display="block";
-  if(progress) progress.style.display="block";
-  if(yh) yh.style.display="";
+  setLifeRailVisible(true);
+  updateProgress();
   if(splash) splash.style.display="block";
-  updateRankDisplay();
   updateStats();
   updateFamilyDisplay();
   updateProgress();
@@ -756,25 +779,18 @@ function showIntroAfterName(){
 function confirmPlayerName(){
   const input=document.getElementById("playerNameInput");
   const hint=document.getElementById("nameGateHint");
-  const reveal=document.getElementById("nameGateReveal");
-  const name=normalizePlayerName(input?input.value:"");
-  if(!name){
-    if(hint) hint.textContent="Напиши своё имя буквами — хотя бы два знака.";
+  const parsed=parsePlayerName(input?input.value:"");
+  if(!parsed){
+    if(hint) hint.textContent="Напиши имя и фамилию — например: Денис Петухов.";
     if(input) input.focus();
     return;
   }
-  player.name=name;
+  player.name=parsed.name;
+  player.surname=parsed.surname;
   player.nickname=nicknames[Math.floor(Math.random()*nicknames.length)];
-  try{ localStorage.setItem(LAST_NAME_KEY,name); }catch(e){}
-  if(input) input.disabled=true;
+  try{ localStorage.setItem(LAST_NAME_KEY,parsed.name+" "+parsed.surname); }catch(e){}
   if(hint) hint.textContent="";
-  if(reveal){
-    reveal.hidden=false;
-    reveal.textContent="Отныне ты "+player.name+" по прозвищу "+player.nickname+", "+player.age+" "+yearsWord(player.age)+".";
-  }
-  const next=document.getElementById("nextBtn");
-  if(next) next.style.display="none";
-  setTimeout(showIntroAfterName, 900);
+  showIntroAfterName();
 }
 function updatePerksDisplay(){
   const c=document.getElementById("perksContainer");
@@ -1125,7 +1141,19 @@ function applyBadLuck(tags){
   return {dh:0,ds:ds,dg:0,note:ds? "Промах дороже: серебро утекло впустую." : "Промах дороже, но в кошельке и так пусто."};
 }
 function updateProgress(){
-  document.getElementById("progressCounter").textContent=Math.min(currentQuestionIndex+1,totalQuestions)+"/"+totalQuestions;
+  const done=Math.min(currentQuestionIndex+1,totalQuestions);
+  const total=totalQuestions|0;
+  const counter=document.getElementById("progressCounter");
+  if(counter) counter.textContent=done+"/"+total;
+  const fill=document.getElementById("lifeRailFill");
+  if(fill){
+    const pct=total>0?Math.max(0,Math.min(100,(done/total)*100)):0;
+    fill.style.width=pct+"%";
+  }
+}
+function setLifeRailVisible(on){
+  const rail=document.getElementById("lifeRail");
+  if(rail) rail.style.display=on?"":"none";
 }
 const BOOT_LINES=[
   "Снимаем печати…",
@@ -1209,8 +1237,6 @@ function setBootUI(loading){
   const mb=document.getElementById("modeBar");
   const next=document.getElementById("nextBtn");
   const nameLine=document.getElementById("nameLine");
-  const progress=document.getElementById("progressCounter");
-  const yh=document.querySelector(".year-header");
   const splash=document.getElementById("qVisual");
   if(screen) screen.classList.toggle("booting",!!loading);
   if(boot) boot.classList.toggle("show",!!loading);
@@ -1219,8 +1245,7 @@ function setBootUI(loading){
   if(mb) mb.style.display=loading?"none":"flex";
   if(next) next.style.display=loading?"none":"block";
   if(nameLine) nameLine.style.display=loading?"none":"block";
-  if(progress) progress.style.display=loading?"none":"block";
-  if(yh) yh.style.display=loading?"none":"";
+  setLifeRailVisible(!loading);
   if(splash) splash.style.display=loading?"none":"block";
 }
 function runBootSequence(done){
@@ -1297,6 +1322,7 @@ function startGame(){
   clearBootTimer();
   hideNameGate();
   player.name="";
+  player.surname="";
   player.nickname=nicknames[Math.floor(Math.random()*nicknames.length)];
   player.job=jobs[Math.floor(Math.random()*jobs.length)];
   player.age=Math.floor(Math.random()*11)+25;
@@ -1325,6 +1351,8 @@ function startGame(){
   if(av){av.style.visibility="visible";av.src="avatars/"+avN+".png";}
   document.getElementById("bioName").innerText="…";
   document.getElementById("bioNickname").innerText="…";
+  const bioSur=document.getElementById("bioSurname");
+  if(bioSur) bioSur.innerText="";
   document.getElementById("bioAge").innerText=player.age;
   updateRankDisplay();
   updatePerksDisplay();
@@ -1992,15 +2020,104 @@ function escapeHtml(s){
     .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
 function scoreOf(e){ return (e.hp|0)+(e.silver|0)+(e.glory|0); }
-function loadChronicle(){
+let fbDb=null;
+let fbReady=false;
+function firebaseConfigured(){
+  const c=window.FIREBASE_CONFIG;
+  return !!(c&&c.apiKey&&c.projectId&&c.apiKey.indexOf("YOUR_")!==0&&c.projectId.indexOf("YOUR_")!==0);
+}
+function initFirebase(){
+  if(fbReady) return !!fbDb;
+  fbReady=true;
+  if(!firebaseConfigured()) return false;
+  if(typeof firebase==="undefined") return false;
+  try{
+    if(!firebase.apps.length) firebase.initializeApp(window.FIREBASE_CONFIG);
+    fbDb=firebase.firestore();
+    return true;
+  }catch(e){
+    console.warn("Firebase init failed",e);
+    fbDb=null;
+    return false;
+  }
+}
+function loadChronicleLocal(){
   try{
     const raw=localStorage.getItem(HISTORY_KEY);
     const arr=raw?JSON.parse(raw):[];
     return Array.isArray(arr)?arr:[];
   }catch(e){ return []; }
 }
-function saveChronicle(list){
+function saveChronicleLocal(list){
   try{ localStorage.setItem(HISTORY_KEY,JSON.stringify(list)); }catch(e){}
+}
+function normalizeChronicleEntry(raw,idFallback){
+  if(!raw||typeof raw!=="object") return null;
+  const e={
+    id:String(raw.id||idFallback||""),
+    name:String(raw.name||""),
+    surname:String(raw.surname||""),
+    nickname:String(raw.nickname||""),
+    job:String(raw.job||""),
+    rank:String(raw.rank||""),
+    age:raw.age|0,
+    hp:raw.hp|0,
+    silver:raw.silver|0,
+    glory:raw.glory|0,
+    iron:!!raw.iron,
+    ts:raw.ts|0,
+    score:raw.score!=null?raw.score|0:((raw.hp|0)+(raw.silver|0)+(raw.glory|0))
+  };
+  if(!e.id||!e.name) return null;
+  return e;
+}
+function fetchChronicleRemote(){
+  if(!initFirebase()||!fbDb) return Promise.resolve(null);
+  return fbDb.collection("chronicle")
+    .orderBy("score","desc")
+    .limit(HISTORY_MAX)
+    .get()
+    .then(function(snap){
+      const list=[];
+      snap.forEach(function(doc){
+        const e=normalizeChronicleEntry(doc.data(),doc.id);
+        if(e) list.push(e);
+      });
+      return sortChronicle(list);
+    });
+}
+function pushChronicleRemote(entry){
+  if(!initFirebase()||!fbDb) return Promise.resolve(false);
+  const hp=Math.max(0,Math.min(500,entry.hp|0));
+  const silver=Math.max(0,Math.min(2000,entry.silver|0));
+  const glory=Math.max(-200,Math.min(1000,entry.glory|0));
+  const payload={
+    id:String(entry.id).slice(0,36),
+    name:String(entry.name||"").slice(0,24),
+    surname:String(entry.surname||"").slice(0,24),
+    nickname:String(entry.nickname||"").slice(0,24),
+    job:String(entry.job||"").slice(0,32),
+    rank:String(entry.rank||"").slice(0,32),
+    age:Math.max(12,Math.min(120,entry.age|0)),
+    hp:hp,
+    silver:silver,
+    glory:glory,
+    iron:!!entry.iron,
+    ts:entry.ts|0,
+    score:hp+silver+glory
+  };
+  return fbDb.collection("chronicle").doc(payload.id).set(payload)
+    .then(function(){ return true; })
+    .catch(function(err){
+      console.warn("Firestore write failed",err);
+      return false;
+    });
+}
+function loadChronicle(){
+  return loadChronicleLocal();
+}
+function saveChronicle(list){
+  saveChronicleLocal(list);
 }
 function sortChronicle(list){
   return list.slice().sort(function(a,b){
@@ -2018,74 +2135,152 @@ function jobTitle(job,fallbackRank){
   if(!j) return fallbackRank||"Смерд";
   return j.charAt(0).toUpperCase()+j.slice(1);
 }
+function formatChronicleWho(e){
+  return [e.name,e.surname,e.nickname].filter(Boolean).join(" ");
+}
 function formatChronicleLine(e,place){
-  const job=jobTitle(e.job,"");
   const rank=e.rank||getRank(e.glory|0);
-  const who=job?(job+", "+rank):rank;
-  return place+" "+e.name+" "+e.nickname+", "+who+" "+e.age+" лет ❤️"+e.hp+" 🪙"+e.silver+"🏅"+e.glory;
+  const score=e.score!=null?e.score|0:scoreOf(e);
+  return place+" "+score+" "+formatChronicleWho(e)+", "+rank+" "+(e.age|0)+" лет ❤️"+e.hp+" 🪙"+e.silver+"🏅"+e.glory;
+}
+function chronicleRejectNoteHtml(){
+  return '<p style="font-size:15px;margin:8px 0 0;color:#e87868;">'+CHRONICLE_REJECT_NOTE+'</p>';
+}
+function wouldEnterTop(list,entry){
+  const merged=sortChronicle((list||[]).concat([entry]));
+  const idx=merged.findIndex(function(e){ return e.id===entry.id; });
+  return idx>=0 && idx<HISTORY_MAX;
 }
 function renderChronicleList(list,meId){
   if(!list.length){
     return '<div class="chronicle-wrap"><div class="chronicle-title">Летопись игроков</div><div class="chronicle-empty">Пока пусто — сохрани результат первым.</div></div>';
   }
-  const rows=list.map(function(e,i){
+  const rows=list.slice(0,HISTORY_MAX).map(function(e,i){
     const place=i+1;
     const me=e.id===meId;
     return '<div class="chronicle-row'+(me?" me":"")+'"'+(me?' id="chronicleMe"':"")+'>'+escapeHtml(formatChronicleLine(e,place))+'</div>';
   }).join("");
-  return '<div class="chronicle-wrap" id="chronicleWrap"><div class="chronicle-title">Летопись игроков · по сумме ❤️+🪙+🏅</div>'+rows+'</div>';
+  const title=firebaseConfigured()
+    ?'Летопись игроков · общая · топ-'+HISTORY_MAX+' по сумме ❤️+🪙+🏅'
+    :'Летопись игроков · топ-'+HISTORY_MAX+' по сумме ❤️+🪙+🏅';
+  return '<div class="chronicle-wrap" id="chronicleWrap"><div class="chronicle-title">'+title+'</div>'+rows+'</div>';
 }
 function writeToHistory(){
   if(historyWritten||!gameOver) return;
   const entry={
     id:"r"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),
     name:player.name,
+    surname:player.surname||"",
     nickname:player.nickname,
-    job:player.job,
+    job:player.job||"",
     rank:getRank(player.glory),
     age:player.age,
     hp:player.hp|0,
     silver:player.silver|0,
     glory:player.glory|0,
     iron:!!player.iron,
-    ts:Date.now()
+    ts:Date.now(),
+    score:scoreOf({hp:player.hp,silver:player.silver,glory:player.glory})
   };
-  let list=loadChronicle();
-  list.push(entry);
-  list=sortChronicle(list);
-  if(list.length>HISTORY_MAX) list=list.slice(0,HISTORY_MAX);
-  saveChronicle(list);
   historyWritten=true;
   lastHistoryId=entry.id;
-  showEndActions(true);
+  showEndActions(true,"Сохраняем…");
   document.getElementById("gameScreen").classList.add("chronicle-open");
-  fillChronicleSlot(entry.id,false);
+
+  function applyResult(baseList,remoteOk){
+    const base=sortChronicle(baseList||[]);
+    const admitted=wouldEnterTop(base,entry);
+    let top=base.slice(0,HISTORY_MAX);
+    if(admitted){
+      top=sortChronicle(base.concat([entry])).slice(0,HISTORY_MAX);
+      saveChronicleLocal(top);
+      const writePromise=pushChronicleRemote(entry);
+      writePromise.then(function(ok){
+        return fetchChronicleRemote().then(function(remote){
+          if(remote&&remote.length){
+            top=sortChronicle(remote).slice(0,HISTORY_MAX);
+            saveChronicleLocal(top);
+          }
+          const inList=top.some(function(e){ return e.id===entry.id; });
+          fillChronicleSlot(inList?entry.id:null,false,top,!inList);
+          showEndActions(true, inList?(ok||!firebaseConfigured()?"Результат сохранён":"Сохранено локально"):"Не вошёл в летопись");
+          if(firebaseConfigured()&&!ok&&inList){
+            const slot=document.getElementById("chronicleSlot");
+            if(slot) slot.insertAdjacentHTML("beforeend",'<p style="font-size:13px;margin:6px 0 0;color:#e87868;">Общая база недоступна — запись осталась на этом устройстве.</p>');
+          }
+        });
+      }).catch(function(){
+        fillChronicleSlot(entry.id,false,top,false);
+        showEndActions(true,"Сохранено локально");
+      });
+      return;
+    }
+    saveChronicleLocal(top);
+    fillChronicleSlot(null,false,top,true);
+    showEndActions(true,"Не вошёл в летопись");
+  }
+
+  const local=loadChronicleLocal();
+  if(initFirebase()){
+    fetchChronicleRemote().then(function(remote){
+      applyResult(remote&&remote.length?remote:local,true);
+    }).catch(function(){
+      applyResult(local,false);
+    });
+  }else{
+    applyResult(local,false);
+  }
 }
-function showEndActions(written){
+function showEndActions(written,label){
   const box=document.getElementById("choicesBox");
   if(!box) return;
   box.className="choices ending-actions";
   const writeBtn=written
-    ?'<button class="choice-btn secondary" disabled>Результат сохранён</button>'
+    ?'<button class="choice-btn secondary" disabled>'+(label||"Результат сохранён")+'</button>'
     :'<button class="choice-btn secondary" onclick="writeToHistory()">Сохранить результат</button>';
   box.innerHTML=writeBtn+'<button class="choice-btn" onclick="location.reload()">Начать новую жизнь</button>';
 }
-function fillChronicleSlot(meId,promptSave){
+function fillChronicleSlot(meId,promptSave,listOpt,rejected){
   const slot=document.getElementById("chronicleSlot");
   if(!slot) return;
-  const list=sortChronicle(loadChronicle());
-  let note="";
-  if(promptSave){
-    note='<p style="font-size:15px;margin:8px 0 0;color:#c4a878;">Сохрани результат — и сравнишь себя с другими игроками в этой летописи.</p>';
-  }else if(meId){
-    const inList=list.some(function(e){ return e.id===meId; });
-    if(!inList) note='<p style="font-size:13px;margin:6px 0 0;color:#e87868;">Счёт слишком мал — в топ-'+HISTORY_MAX+' не вошёл, но запись была учтена при отборе.</p>';
+  function paint(list){
+    let note="";
+    if(promptSave){
+      note=firebaseConfigured()
+        ?'<p style="font-size:15px;margin:8px 0 0;color:#c4a878;">Сохрани результат — он попадёт в общую летопись топ-'+HISTORY_MAX+'.</p>'
+        :'<p style="font-size:15px;margin:8px 0 0;color:#c4a878;">Сохрани результат — и сравнишь себя с другими в топ-'+HISTORY_MAX+'.</p>';
+    }else if(rejected){
+      note=chronicleRejectNoteHtml();
+    }else if(meId){
+      const inList=(list||[]).some(function(e){ return e.id===meId; });
+      if(!inList) note=chronicleRejectNoteHtml();
+    }
+    slot.innerHTML=renderChronicleList(list||[],meId)+note;
+    const me=document.getElementById("chronicleMe");
+    if(me){
+      requestAnimationFrame(function(){
+        me.scrollIntoView({block:"center",behavior:"smooth"});
+      });
+    }
   }
-  slot.innerHTML=renderChronicleList(list,meId)+note;
-  const me=document.getElementById("chronicleMe");
-  if(me){
-    requestAnimationFrame(function(){
-      me.scrollIntoView({block:"center",behavior:"smooth"});
+  if(listOpt){
+    paint(sortChronicle(listOpt).slice(0,HISTORY_MAX));
+    return;
+  }
+  paint(sortChronicle(loadChronicleLocal()).slice(0,HISTORY_MAX));
+  if(initFirebase()){
+    slot.insertAdjacentHTML("beforeend",'<p id="chronicleLoading" style="font-size:14px;margin:6px 0 0;color:#a89070;">Подгружаем общую летопись…</p>');
+    fetchChronicleRemote().then(function(remote){
+      const loading=document.getElementById("chronicleLoading");
+      if(loading) loading.remove();
+      if(remote){
+        const top=sortChronicle(remote).slice(0,HISTORY_MAX);
+        saveChronicleLocal(top);
+        paint(top);
+      }
+    }).catch(function(){
+      const loading=document.getElementById("chronicleLoading");
+      if(loading) loading.textContent="Общая летопись недоступна — показана локальная.";
     });
   }
 }
@@ -2099,16 +2294,14 @@ function endGame(){
   const destiny=getDestiny();
   const fateStory=getLastFateStory();
   const perkBit=player.perkHistory.length?(' За глаза называли: <i>'+player.perkHistory.join(', ')+'</i>.'):'';
-  const nickLine='<p><b>'+player.name+'</b> по прозвищу <b>'+player.nickname+'</b>, прожил '+player.age+' '+yearsWord(player.age)+'.'+perkBit+'</p>';
+  const nickLine='<p><b>'+escapeHtml(formatFullName())+'</b>, '+player.age+' '+yearsWord(player.age)+', '+getRank(player.glory)+'.'+perkBit+'</p>';
   document.getElementById("bioBox").style.display="none";
   document.getElementById("nameLine").style.display="none";
-  document.getElementById("progressCounter").style.display="none";
+  setLifeRailVisible(false);
   const mb=document.getElementById("modeBar"); if(mb) mb.style.display="none";
   const pitch=document.getElementById("pitchText"); if(pitch) pitch.style.display="none";
   const boot=document.getElementById("bootLoad"); if(boot) boot.classList.remove("show");
   document.getElementById("gameScreen").classList.remove("booting");
-  const yh=document.querySelector(".year-header"); if(yh) yh.style.display="none";
-  const ye=document.getElementById("yearEvent"); if(ye) ye.style.display="none";
   document.getElementById("historyBox").style.display="none";
   document.getElementById("gameScreen").classList.add("ending");
   const qv=document.getElementById("qVisual");

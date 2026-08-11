@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /chronicle/{id} {
+      allow read: if true;
+
+      allow create: if
+        request.resource.data.keys().hasAll([
+          'id', 'name', 'surname', 'nickname', 'rank', 'age',
+          'hp', 'silver', 'glory', 'score', 'ts', 'job', 'iron'
+        ])
+        && request.resource.data.id is string
+        && request.resource.data.id.size() > 4
+        && request.resource.data.id.size() < 40
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 64
+        && request.resource.data.surname is string
+        && request.resource.data.surname.size() > 0
+        && request.resource.data.surname.size() <= 64
+        && request.resource.data.nickname is string
+        && request.resource.data.nickname.size() > 0
+        && request.resource.data.nickname.size() <= 64
+        && request.resource.data.rank is string
+        && request.resource.data.rank.size() <= 64
+        && request.resource.data.job is string
+        && request.resource.data.job.size() <= 64
+        && request.resource.data.age is int
+        && request.resource.data.age >= 12
+        && request.resource.data.age <= 120
+        && request.resource.data.hp is int
+        && request.resource.data.hp >= 0
+        && request.resource.data.hp <= 500
+        && request.resource.data.silver is int
+        && request.resource.data.silver >= 0
+        && request.resource.data.silver <= 2000
+        && request.resource.data.glory is int
+        && request.resource.data.glory >= -200
+        && request.resource.data.glory <= 1000
+        && request.resource.data.score is int
+        && request.resource.data.score ==
+             request.resource.data.hp
+           + request.resource.data.silver
+           + request.resource.data.glory
+        && request.resource.data.ts is int
+        && request.resource.data.iron is bool;
+
+      allow update, delete: if false;
+    }
+  }
+}
