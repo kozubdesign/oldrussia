@@ -7,9 +7,9 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kurale&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 *{box-sizing:border-box}
-:root{--play-ref-w:871;--play-ref-h:895;--play-scale:1}
+:root{--play-ref-w:871;--play-ref-h:895;--play-scale:1;--play-fit-w:871;--q-img-w:642px;--q-img-h:358px;--q-img-ratio:642/358}
 body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 100%,rgba(255,130,45,.2) 0%,transparent 58%),radial-gradient(ellipse 35% 28% at 12% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse 35% 28% at 88% 96%,rgba(255,110,35,.14) 0%,transparent 52%),radial-gradient(ellipse at 50% 15%,#1a1208 0%,#0a0604 72%);color:#e8d4b0;font-family:"PT Serif","Times New Roman",serif;display:flex;justify-content:center;align-items:center;height:100vh;height:100dvh;margin:0;padding:0;overflow:hidden}
-.play-fit{display:flex;align-items:flex-start;justify-content:center;width:calc(871px * var(--play-scale));height:calc(895px * var(--play-scale));max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow:hidden;flex-shrink:0;margin:auto}
+.play-fit{display:flex;align-items:flex-start;justify-content:center;width:calc(var(--play-fit-w) * 1px * var(--play-scale));height:calc(895px * var(--play-scale));max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow:visible;flex-shrink:0;margin:auto}
 .play-layout{position:relative;width:871px;height:895px;transform:scale(var(--play-scale));transform-origin:top left;filter:drop-shadow(0 22px 48px rgba(0,0,0,.75))}
 .game-container{background:linear-gradient(180deg,rgba(255,180,90,.05) 0%,transparent 28%),repeating-linear-gradient(92deg,rgba(0,0,0,.04) 0,rgba(0,0,0,.04) 2px,transparent 2px,transparent 9px),linear-gradient(168deg,#3a2818 0%,#2a1c10 42%,#1a1008 100%);border:12px solid #120a06;outline:2px solid #7a6038;border-radius:9px;width:100%;height:100%;overflow:hidden;padding:15px 32px 30px;box-shadow:inset 0 0 90px rgba(255,150,60,.07),inset 0 0 140px rgba(0,0,0,.55),0 0 50px rgba(255,120,40,.12);position:relative;display:flex;flex-direction:column;z-index:1}
 .plaques-rail{position:absolute;left:calc(100% + 12px);top:0;bottom:0;width:242px;display:flex;flex-direction:column;gap:8px;overflow-x:hidden;overflow-y:auto;padding:2px 2px 10px;scrollbar-width:thin;z-index:2;pointer-events:auto}
@@ -39,17 +39,13 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
   body{overflow:hidden;height:100dvh;align-items:center}
   .plaques-rail{position:absolute;left:calc(100% + 12px);top:0;bottom:0;width:min(206px,calc(100vw - 100% - 36px));max-height:none;flex-direction:column;flex-wrap:nowrap;margin-top:0}
 }
-@media (max-width:1100px){
-  .plaques-rail{display:none}
-}
 .game-container::before{content:"";position:absolute;top:9px;left:9px;right:9px;bottom:9px;border:none;pointer-events:none;border-radius:4px;z-index:0;box-shadow:inset 0 0 30px rgba(0,0,0,.35)}
 .game-container::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:7px;background:linear-gradient(135deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(225deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(315deg,rgba(184,148,90,.35) 0,transparent 17px),linear-gradient(45deg,rgba(184,148,90,.35) 0,transparent 17px);z-index:0}
 .game-main{flex:1 1 auto;min-height:0;overflow:hidden;position:relative;z-index:1;display:flex;flex-direction:column}
 .game-footer{flex:0 0 auto;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;position:relative;z-index:1;padding-top:3px;padding-bottom:6px;box-sizing:border-box}
 .game-container.playing .game-main{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
 .game-container.playing .name-line{margin:20px 0 2px;flex:0 0 auto}
-.game-container.playing .q-visual{flex:0 0 auto;height:min(402px,43.7dvh);min-height:0;max-height:min(402px,43.7dvh);width:100%}
-.game-container.playing .q-visual.splash{flex:0 0 auto;height:min(402px,43.7dvh);min-height:0;max-height:min(402px,43.7dvh)}
+.game-container.playing .q-visual,.game-container.playing .q-visual.splash{flex:0 0 auto}
 .game-container.playing .prompt-area{flex:1 1 0;min-height:0;height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 0 2px;gap:0;overflow:hidden}
 .game-container.playing .question-box{flex:0 0 auto;max-height:100%;overflow:hidden;width:100%;display:flex;align-items:center;justify-content:center;text-align:center}
 .game-container.playing .game-footer{flex:0 0 auto;height:auto;min-height:0;padding-top:4px}
@@ -87,10 +83,10 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .bio-text{padding:0;border:none;border-radius:0;background:transparent;font-size:22px;margin:0;line-height:1.4;text-align:center;color:#f0e0c8;flex:0 1 auto;min-height:0;overflow:hidden;text-shadow:0 1px 3px rgba(0,0,0,.5)}
 .stats{display:none}
 .stat-item span{color:#e87868;display:inline-block;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
-.q-visual{position:relative;flex:0 0 auto;width:100%;height:min(402px,43.7dvh);margin:0 auto 0;border-radius:7px;overflow:hidden;display:none;border:2px solid #5a4028;box-shadow:inset 0 0 50px rgba(0,0,0,.5),0 0 16px rgba(255,140,50,.06)}
-.q-visual.splash{flex:0 0 auto;height:min(402px,43.7dvh);min-height:0;max-height:min(402px,43.7dvh)}
-.q-visual.end{flex:1 1 0;height:auto;min-height:121px;max-height:min(472px,50.8vh)}
-.game-container.ending .q-visual.end{flex:1 1 0;height:auto;min-height:109px;max-height:min(472px,50.8vh)}
+.q-visual{position:relative;flex:0 0 auto;width:min(var(--q-img-w),100%);max-width:var(--q-img-w);aspect-ratio:var(--q-img-ratio);height:auto;margin:0 auto;border-radius:7px;overflow:hidden;display:none;border:2px solid #5a4028;box-shadow:inset 0 0 50px rgba(0,0,0,.5),0 0 16px rgba(255,140,50,.06)}
+.q-visual.splash{flex:0 0 auto}
+.q-visual.end{flex:0 0 auto;width:min(var(--q-img-w),100%);max-width:var(--q-img-w);aspect-ratio:var(--q-img-ratio);height:auto;max-height:var(--q-img-h);margin:0 auto}
+.game-container.ending .q-visual.end{flex:0 0 auto;width:min(var(--q-img-w),100%);max-width:var(--q-img-w);aspect-ratio:var(--q-img-ratio);height:auto;max-height:var(--q-img-h);margin:0 auto}
 .q-image{display:block;width:100%;height:100%;object-fit:cover;border:none;background:#120a06}
 .delta-good{color:#98d878;font-weight:700}
 .delta-bad{color:#e87868;font-weight:700}
@@ -248,7 +244,7 @@ button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:
         <p class="boot-line" id="bootLine"></p>
       </div>
       <div class="name-gate" id="nameGate">
-        <p class="name-gate-label">Как тебя зовут?</p>
+        <p class="name-gate-label">Как имя твоё и фамилия, отрок?</p>
         <input class="name-gate-input" id="playerNameInput" type="text" maxlength="36" placeholder="Имя Фамилия" autocomplete="name" spellcheck="false">
         <p class="name-gate-hint" id="nameGateHint"></p>
         <p class="name-gate-reveal" id="nameGateReveal" hidden></p>
@@ -809,7 +805,7 @@ function confirmPlayerName(){
   const hint=document.getElementById("nameGateHint");
   const parsed=parsePlayerName(input?input.value:"");
   if(!parsed){
-    if(hint) hint.textContent="Напиши имя и фамилию — например: Денис Петухов.";
+    if(hint) hint.textContent="Напиши имя и фамилию.";
     if(input) input.focus();
     return;
   }
@@ -846,13 +842,15 @@ function updatePlaquesDisplay(flashIds){
   if(!rail) return;
   const flash=flashIds||[];
   const list=player.plaques||[];
-  if(!list.length){ rail.innerHTML=""; return; }
+  if(!list.length){ rail.innerHTML=""; requestAnimationFrame(fitPlayLayout); return; }
+  rail.style.display="flex";
   rail.innerHTML=list.map(function(p){
     const net=(p.hp|0)+(p.s|0)+(p.g|0);
     const cls=net>0?" good":(net<0?" bad":"");
     const flashCls=flash.indexOf(p.id)>=0?" plaque-flash":"";
     return '<div class="plaque'+cls+flashCls+'"><div class="plaque-title">'+escapeHtml(getPlaqueDisplayTitle(p))+'</div><div class="plaque-mods">'+plaqueModHtml(p)+'</div></div>';
   }).join("");
+  requestAnimationFrame(fitPlayLayout);
 }
 function addPlaque(def){
   if(!def||!def.id||!def.title) return null;
@@ -2377,12 +2375,25 @@ function endGame(){
   document.getElementById("resultBox").style.display="none";
   document.getElementById("nextBtn").style.display="none";
 }
-var PLAY_REF_W=871,PLAY_REF_H=895;
+var PLAY_REF_W=871,PLAY_REF_H=895,PLAQUES_GAP=12;
+function plaquesRailExtra(){
+  var rail=document.getElementById("plaquesRail");
+  if(!rail) return 0;
+  var list=player.plaques||[];
+  if(!list.length) return 0;
+  var st=getComputedStyle(rail);
+  if(st.display==="none"||st.visibility==="hidden") return 0;
+  var w=rail.offsetWidth;
+  if(!w) w=window.innerWidth<=1188?206:242;
+  return PLAQUES_GAP+w;
+}
 function fitPlayLayout(){
   var pad=24;
-  var s=Math.min(1,(window.innerWidth-pad)/PLAY_REF_W,(window.innerHeight-pad)/PLAY_REF_H);
+  var totalW=PLAY_REF_W+plaquesRailExtra();
+  var s=Math.min(1,(window.innerWidth-pad)/totalW,(window.innerHeight-pad)/PLAY_REF_H);
   if(!isFinite(s)||s<=0) s=1;
   document.documentElement.style.setProperty("--play-scale",String(s));
+  document.documentElement.style.setProperty("--play-fit-w",String(totalW));
 }
 window.addEventListener("resize",fitPlayLayout);
 window.addEventListener("orientationchange",fitPlayLayout);
