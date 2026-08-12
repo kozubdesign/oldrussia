@@ -7,6 +7,20 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>Слово смерда Кровь на снегу</title>
+<meta name="description" content="Текстовая игра о жизни крестьянина в Древней Руси: семья, налоги, голод, слава и случайная смерть. Выбирай судьбу — одна партия на экране.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Слово смерда">
+<meta property="og:title" content="Слово смерда — Кровь на снегу">
+<meta property="og:description" content="Текстовая игра о жизни крестьянина в Древней Руси: семья, налоги, голод, слава и случайная смерть.">
+<meta property="og:url" content="https://kozubdesign.github.io/oldrussia/">
+<meta property="og:image" content="https://kozubdesign.github.io/oldrussia/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Слово смерда — Кровь на снегу">
+<meta name="twitter:description" content="Текстовая игра о жизни крестьянина в Древней Руси.">
+<meta name="twitter:image" content="https://kozubdesign.github.io/oldrussia/og-image.jpg">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kurale&family=Ruslan+Display&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 *{box-sizing:border-box}
@@ -65,26 +79,22 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-container.playing .choices{
   display:flex;
   flex-direction:column;
-  gap:5px;
+  gap:7px;
   width:100%;
   max-width:none;
   align-items:stretch;
-  flex:0 1 auto;
-  min-height:0;
-  max-height:min(380px,42vh);
-  overflow-x:hidden;
-  overflow-y:auto;
-  scrollbar-width:thin;
+  flex:0 0 auto;
+  overflow:visible;
 }
 .game-container.playing button.choice-btn{
-  padding:7px 12px;
-  font-size:15px;
+  padding:11px 17px;
+  font-size:17px;
   line-height:1.3;
   flex-shrink:0;
   width:100%;
   max-width:none;
+  min-height:50px;
   height:auto;
-  min-height:0;
   max-height:none;
   box-sizing:border-box;
   white-space:normal;
@@ -97,7 +107,6 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
   text-align:center;
   overflow-wrap:break-word;
   word-break:normal;
-  hyphens:auto;
 }
 .game-container.playing:not(.showing-result) .next-btn{display:none!important}
 .game-container.playing .next-btn{
@@ -159,6 +168,7 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .stats{display:none}
 .stat-item span{color:#e87868;display:inline-block;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
 .q-visual{position:relative;flex:0 0 auto;width:min(var(--q-img-w),100%);max-width:var(--q-img-w);aspect-ratio:var(--q-img-ratio);height:auto;margin:0 auto;border-radius:7px;overflow:hidden;display:none;border:none;box-shadow:none}
+.q-visual::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 2px #6a5030;pointer-events:none;z-index:1}
 .q-visual.splash{flex:0 0 auto}
 .q-visual.end{flex:0 0 auto;width:min(var(--q-img-w),100%);max-width:var(--q-img-w);aspect-ratio:var(--q-img-end-ratio);height:auto;max-height:var(--q-img-end-h);margin:0 auto}
 .game-container.ending .q-visual.end{flex:0 0 auto;width:min(var(--q-img-w),100%);max-width:var(--q-img-w);aspect-ratio:var(--q-img-end-ratio);height:auto;max-height:var(--q-img-end-h);margin:0 auto}
@@ -356,7 +366,7 @@ body{background:#0a0604;background-image:radial-gradient(ellipse 85% 55% at 50% 
 .game-container.playing #questionText,.game-container.ending #questionText{visibility:visible}
 .choices{display:flex;flex-direction:column;align-items:center;gap:7px;flex-shrink:0;width:100%}
 .choices:empty{display:none}
-button.choice-btn{background:linear-gradient(180deg,#3d7a42 0%,#2a5a30 100%);color:#ffffff;border:1px solid #5a9a58;padding:11px 17px;border-radius:8px;font-family:Inter,system-ui,sans-serif;font-size:20px;font-weight:400;line-height:1.3;cursor:pointer;text-align:center;width:100%;max-width:none;transition:background .2s,border-color .2s,box-shadow .2s,transform .12s;box-shadow:inset 0 1px 0 rgba(200,255,180,.18),0 2px 8px rgba(0,0,0,.4);white-space:normal;overflow:visible;text-overflow:clip;display:block;-webkit-line-clamp:unset;line-clamp:unset;-webkit-box-orient:unset;overflow-wrap:break-word;word-break:normal;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+button.choice-btn{background:linear-gradient(180deg,#3d7a42 0%,#2a5a30 100%);color:#ffffff;border:1px solid #5a9a58;padding:11px 17px;border-radius:8px;font-family:Inter,system-ui,sans-serif;font-size:17px;font-weight:400;line-height:1.3;cursor:pointer;text-align:center;width:100%;max-width:none;transition:background .2s,border-color .2s,box-shadow .2s,transform .12s;box-shadow:inset 0 1px 0 rgba(200,255,180,.18),0 2px 8px rgba(0,0,0,.4);white-space:normal;overflow:visible;text-overflow:clip;display:block;-webkit-line-clamp:unset;line-clamp:unset;-webkit-box-orient:unset;overflow-wrap:break-word;word-break:normal;text-shadow:0 1px 2px rgba(0,0,0,.45)}
 button.choice-btn:hover{background:linear-gradient(180deg,#4a8f50 0%,#346a3a 100%);border-color:#78c070;transform:translateY(1px);box-shadow:inset 0 1px 0 rgba(220,255,200,.22),0 0 14px rgba(80,160,70,.25),0 2px 8px rgba(0,0,0,.4)}
 button.choice-btn.hero-btn,button.choice-btn.villain-btn{background:linear-gradient(180deg,#3d7a42 0%,#2a5a30 100%)}
 button.choice-btn.hero-btn:hover,button.choice-btn.villain-btn:hover{background:linear-gradient(180deg,#4a8f50 0%,#346a3a 100%)}
@@ -535,7 +545,7 @@ button.choice-btn .choice-preview-muted{opacity:.75;font-style:italic}
 </div>
 </div>
 
-  <script src="questions.js?v=20260813i"></script>
+  <script src="questions.js?v=20260814l"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js?v=20260811b"></script>
@@ -639,14 +649,14 @@ const blackEvents=[
   isBlack:true,
   imgs:["нападение татар","татары напали","осада города татарами"],
   opts:[
-    {t:"Отдать всё без боя",r:"Ты отдал всё без боя. Деревня цела, но казна пуста, а честь выжжена дотла.",hp:0,s:-20,g:-15,tags:["coward"],family:null},
-    {t:"Поднять мужиков на бой",r:"Ты поднял мужиков на бой. Отряд отогнали, многие полегли; имя гремит, тело в ранах.",hp:-25,s:0,g:25,tags:["brave","nasilnik"],family:{son:"болен"}},
-    {t:"Спрятать семью и добро",r:"Ты спрятал семью и часть добра. Близкие уцелели, двор разграбили дочиста.",hp:-5,s:-10,g:5,tags:["cunning"],family:{wife:"в бегах",son:"в бегах",daughter:"в бегах"}},
-    {t:"Сам в заложники",r:"Ты сам вышел в заложники. Тебя увели, зато семья и село остались целы.",hp:-10,s:0,g:18,tags:["brave","merciful"],family:null},
-    {t:"Засада в лесу",r:"Ты устроил засаду в лесу и сбил часть отряда. Победа малая — месть Орды теперь висит над волостью.",hp:-12,s:5,g:15,tags:["cunning","brave"],family:null},
-    {t:"Бежать одному",r:"Ты бежал один. Спасся сам, а семью увели и дом сожгли — позор тяжелее раны.",hp:5,s:-5,g:-25,tags:["coward","nehoroshiy"],family:{wife:"в бегах",son:"в бегах",daughter:"в бегах",father:"мертв"}},
-    {t:"🦸 Выйти один с кольём выкупить",r:"Ты вышел один с кольём к воротам. Тебя изрешетили, но отряд ушёл без полона — уцелевшие помнят твоё имя.",hp:-28,s:-5,g:32,tags:["brave","merciful"],extreme:"hero",family:null},
-    {t:"😈 Указать ордынцам богатые дворы чужих",r:"Ты указал ордынцам чужие богатые дворы и купил себе жизнь. Серебра вернули горсть — проклятие волости тяжелее ларца.",hp:2,s:10,g:-35,tags:["zhuk","nehoroshiy","coward"],extreme:"villain",family:null}
+    {t:"Отдать всё — серебро и людей — без боя",r:"Ты отдал всё без боя. Деревня цела, но казна пуста, а честь выжжена дотла.",hp:0,s:-20,g:-15,tags:["coward"],family:null},
+    {t:"Поднять всех мужиков на отчаянный бой",r:"Ты поднял мужиков на бой. Отряд отогнали, многие полегли; имя гремит, тело в ранах.",hp:-25,s:0,g:25,tags:["brave","nasilnik"],family:{son:"болен"}},
+    {t:"Спрятать семью и добро в лесной яме",r:"Ты спрятал семью и часть добра. Близкие уцелели, двор разграбили дочиста.",hp:-5,s:-10,g:5,tags:["cunning"],family:{wife:"в бегах",son:"в бегах",daughter:"в бегах"}},
+    {t:"Выйти самому в заложники за деревню",r:"Ты сам вышел в заложники. Тебя увели, зато семья и село остались целы.",hp:-10,s:0,g:18,tags:["brave","merciful"],family:null},
+    {t:"Устроить засаду в лесу на подходе",r:"Ты устроил засаду в лесу и сбил часть отряда. Победа малая — месть Орды теперь висит над волостью.",hp:-12,s:5,g:15,tags:["cunning","brave"],family:null},
+    {t:"Бежать одному, бросив семью и дом",r:"Ты бежал один. Спасся сам, а семью увели и дом сожгли — позор тяжелее раны.",hp:5,s:-5,g:-25,tags:["coward","nehoroshiy"],family:{wife:"в бегах",son:"в бегах",daughter:"в бегах",father:"мертв"}},
+    {t:"🦸 Выйти один с кольём — выкупить деревню",r:"Ты вышел один с кольём к воротам. Тебя изрешетили, но отряд ушёл без полона — уцелевшие помнят твоё имя.",hp:-28,s:-5,g:32,tags:["brave","merciful"],extreme:"hero",family:null},
+    {t:"😈 Указать ордынцам богатые чужие дворы",r:"Ты указал ордынцам чужие богатые дворы и купил себе жизнь. Серебра вернули горсть — проклятие волости тяжелее ларца.",hp:2,s:10,g:-35,tags:["zhuk","nehoroshiy","coward"],extreme:"villain",family:null}
   ]
 },
 {
@@ -1150,7 +1160,7 @@ function addChronicle(opt,q){
   const isKey=impact>=12 || (q&&q.isBlack) || (opt.tags&&opt.tags.some(t=>["brave","nasilnik","nehoroshiy","merciful","zhuk"].includes(t)));
   if(!isKey) return;
   let line=opt.t.replace(/\.$/,"");
-  if(line.length>48) line=line.slice(0,46)+"…";
+  if(line.length>72) line=line.slice(0,70)+"…";
   if(player.chronicle.length<8 && !player.chronicle.includes(line)){
     player.chronicle.push(line);
   }
