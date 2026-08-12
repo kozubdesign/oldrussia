@@ -16,7 +16,7 @@ service cloud.firestore {
         && request.resource.data.name.size() > 0
         && request.resource.data.name.size() <= 64
         && request.resource.data.surname is string
-        && request.resource.data.surname.size() > 0
+        && request.resource.data.surname.size() >= 0
         && request.resource.data.surname.size() <= 64
         && request.resource.data.nickname is string
         && request.resource.data.nickname.size() > 0
