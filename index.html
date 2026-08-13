@@ -545,7 +545,7 @@ button.choice-btn .choice-preview-muted{opacity:.75;font-style:italic}
 </div>
 </div>
 
-  <script src="questions.js?v=20260813c"></script>
+  <script src="questions.js?v=20260813d"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js?v=20260811b"></script>
@@ -2474,21 +2474,45 @@ function buildHordeDefeatOpts(y){
   };
   return wrong.concat([correct,hero,villain]);
 }
-function pickOpts(opts,n){
+function isQuizCorrect(opt){
+  if(!opt) return false;
+  if(opt.extreme==="hero"||opt.extreme==="villain") return false;
+  if(/^[🦸😈]/.test(opt.t||"")) return false;
+  if(opt.pinned) return true;
+  const r=opt.r||"";
+  return /Затянул верно|Спел верно|Ты сказал верно|Ты верно сказал|Верно:/.test(r);
+}
+function pickOpts(opts,n,q){
   const list=Array.isArray(opts)?opts.filter(Boolean).filter(optAvailable):[];
   const want=n||4;
   const isHero=o=>o.extreme==="hero"||/^🦸/.test(o.t||"");
   const isVillain=o=>o.extreme==="villain"||/^😈/.test(o.t||"");
   const heroes=list.filter(isHero);
   const villains=list.filter(isVillain);
+  const normal=list.filter(o=>!isHero(o)&&!isVillain(o));
+  // Викторина: всегда 1 верный + 3 неверных, без 🦸/😈 на кнопках
+  if(isKnowledgeQuiz(q)||isSongQuiz(q)){
+    let right=normal.filter(isQuizCorrect);
+    if(!right.length && normal.length){
+      right=[normal.slice().sort(function(a,b){ return (b.g|0)-(a.g|0); })[0]];
+    }
+    const chosenRight=shuffleArray(right).slice(0,1);
+    const wrong=normal.filter(o=>chosenRight.indexOf(o)<0);
+    let base=chosenRight.concat(shuffleArray(wrong)).slice(0,want);
+    if(base.length<want){
+      const rest=list.filter(o=>base.indexOf(o)<0);
+      base=base.concat(shuffleArray(rest)).slice(0,want);
+    }
+    return shuffleArray(base).slice(0,want);
+  }
   const pinned=list.filter(o=>o.pinned&&!isHero(o)&&!isVillain(o));
-  const normal=list.filter(o=>!isHero(o)&&!isVillain(o)&&!o.pinned);
+  const fillPool=list.filter(o=>!isHero(o)&&!isVillain(o)&&!o.pinned);
   // Герой и подлец по отдельности, шанс 5% на каждого
   const special=[];
   if(heroes[0]&&Math.random()<0.05) special.push(heroes[0]);
   if(villains[0]&&Math.random()<0.05) special.push(villains[0]);
   const need=Math.max(0,want-special.length);
-  const fill=shuffleArray(normal);
+  const fill=shuffleArray(fillPool);
   let base=pinned.concat(fill).slice(0,need);
   // Если мало обычных (всё отфильтровали) — добираем из оставшихся не-extreme
   if(base.length<need){
@@ -2609,7 +2633,7 @@ function showQuestion(){
   document.getElementById("questionText").style.display="";
   document.getElementById("gameScreen").classList.remove("showing-result");
   showQuestionImage(q);
-  const shuffled=pickOpts(getQuestionOpts(q),4);
+  const shuffled=pickOpts(getQuestionOpts(q),4,q);
   window._currentOpts=shuffled;
   document.getElementById("choicesBox").innerHTML=shuffled.map((opt,i)=>'<button class="'+choiceBtnClass(opt)+'" onclick="makeChoice('+i+')">'+choiceBtnLabel(opt,q)+'</button>').join("");
   document.getElementById("resultBox").style.display="none";
